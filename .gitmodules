@@ -1,0 +1,3 @@
+[submodule "remote-control"]
+	path = remote-control
+	url = gitea@calvin.home.vijfendertig.be:maarten/earth-rover-remote-control.git

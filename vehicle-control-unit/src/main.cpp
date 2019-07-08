@@ -19,7 +19,7 @@ void setup()
   digitalWrite(LED_BUILTIN, 1);
   // Setup SPI.
   SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
-  // Setup nRF24L01+.
+  // Configure nRF24L01+.
   nrf24l01.begin();
   nrf24l01.setPALevel(RF24_PA_LOW);
   nrf24l01.setDataRate(RF24_250KBPS);
@@ -57,9 +57,10 @@ void loop()
 {
   if(nrf24l01.available())
   {
-    ControlMessage control_message;
-    nrf24l01.read(&control_message, 8);
-    Serial.printf("received: message type: %2x steering: %4u , throttle = %4u.\n",
-      control_message.message_type, control_message.input_steering, control_message.input_throttle);
+    uint8_t buffer[8];
+    nrf24l01.read(buffer, 8);
+    int16_t steering = (buffer[1] << 8 ) | buffer[2];
+    int16_t throttle = (buffer[3] << 8 ) | buffer[4];
+    Serial.printf("received: steering: %4d , throttle = %4d.\n", steering, throttle);
   }
 }

@@ -10,7 +10,7 @@ constexpr uint8_t spi_sck_pin = 14;
 constexpr uint8_t rf24_csn_pin = 15;
 
 
-earth_rover::HmiCommunicator<rf24_ce_pin, rf24_csn_pin, 8u> communicator;
+earth_rover::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin};
 
 
 template<typename T>
@@ -60,5 +60,5 @@ void loop()
   int16_t throttle = limit_value((analogRead(input_throttle_pin) - 512) * 2, -1000, 1000);
   Serial.printf("sending: steering: %4u , throttle = %4u ... ", steering, throttle);
   communicator.sendControlMessage(steering, throttle);
-  delay(100);
+  delay(50);
 }

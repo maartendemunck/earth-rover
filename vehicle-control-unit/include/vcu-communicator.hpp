@@ -19,6 +19,10 @@ namespace earth_rover
 
       RF24 nrf24l01;
       static constexpr uint8_t nrf24l01_payload_size {8u};
+      uint32_t nrf24l01_timestamp_last_message;
+      std::function<void()> timeout_callback;
+      uint32_t timeout;
+      bool timeout_callback_called;
       std::function<void(int16_t, int16_t)> control_message_callback;
 
     public:
@@ -27,6 +31,7 @@ namespace earth_rover
 
       void setup();
       void spinOnce();
+      void setTimeoutCallback(std::function<void(void)> callback, uint32_t timeout_us);
       void setControlMessageCallback(std::function<void(int16_t, int16_t)> callback);
 
   };

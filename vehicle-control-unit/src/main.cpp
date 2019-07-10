@@ -1,6 +1,9 @@
 #include <Arduino.h>
-#include "configured_servo.hpp"
+#include "configured-servo.hpp"
 #include "vcu-communicator.hpp"
+
+
+// #define SERIAL_DEBUG
 
 
 // Pin assignments.
@@ -15,6 +18,12 @@ earth_rover::VcuCommunicator communicator {rf24_ce_pin, rf24_csn_pin};
 
 earth_rover::ConfiguredServo steering_servo {steering_servo_pin};
 earth_rover::ConfiguredServo throttle_servo {throttle_servo_pin};
+
+
+void TimeoutCallback()
+{
+  throttle_servo.setPosition(0);
+}
 
 
 void ControlMessageCallback(int16_t steering, int16_t throttle)
@@ -33,20 +42,19 @@ void setup()
   SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
   // Configure nRF24L01+ communication module.
   communicator.setup();
+  communicator.setTimeoutCallback(&TimeoutCallback, 500u);
   communicator.setControlMessageCallback(&ControlMessageCallback);
   // Configure servos.
   steering_servo.setup();
   throttle_servo.setup();
   // Setup debug console.
-  Serial.begin(9600);
-  // DEBUG.
-  /*
-  while(!Serial)
-  {
-    ;
-  }
-  */
-  // END DEBUG.
+  #ifdef SERIAL_DEBUG
+    Serial.begin(9600);
+    while(!Serial)
+    {
+      ;
+    }
+  #endif
   // Initialisation finished, switch off built in LED.
   digitalWrite(LED_BUILTIN, 0);
 }

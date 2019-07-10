@@ -37,7 +37,10 @@ namespace earth_rover
     while(nrf24l01.available())
     {
       uint8_t buffer[nrf24l01_payload_size];
+      digitalWrite(LED_BUILTIN, 1);
       nrf24l01.read(buffer, nrf24l01_payload_size);
+      auto message_timestamp = micros();
+      auto message_processed = false;
       switch(static_cast<MessageType>(buffer[0]))
       {
         case MessageType::Control:
@@ -49,15 +52,41 @@ namespace earth_rover
           {
             control_message_callback(steering, throttle);
           }
+          message_processed = true;
         } break;
         default:
         {
-          Serial.printf("ignored received message with type %u", buffer[0]);
+          message_processed = false;
         } break;
       }
+      if(message_processed == true)
+      {
+        digitalWrite(LED_BUILTIN, 0);
+        nrf24l01_timestamp_last_message = message_timestamp;
+        timeout_callback_called = false;
+      }
+    }
+    if(timeout_callback_called == false
+       && (micros() - nrf24l01_timestamp_last_message) > timeout)
+    {
+      if(timeout_callback)
+      {
+        timeout_callback();
+      }
+      timeout_callback_called = true;
     }
   }
 
+
+  void
+  VcuCommunicator::setTimeoutCallback(
+    std::function<void()> callback,
+    uint32_t timeout_ms)
+  {
+    timeout_callback = std::move(callback);
+    timeout = timeout_ms * 1000;
+    timeout_callback_called = false;  // If we're in a timeout, call the new callback, even if we called the old one.
+  }
 
   void
   VcuCommunicator::setControlMessageCallback(

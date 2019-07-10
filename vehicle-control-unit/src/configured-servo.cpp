@@ -1,4 +1,4 @@
-#include "configured_servo.hpp"
+#include "configured-servo.hpp"
 #include <algorithm>
 
 

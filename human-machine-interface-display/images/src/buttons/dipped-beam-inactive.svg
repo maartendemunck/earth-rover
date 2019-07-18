@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64mm"
+   height="64mm"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="dipped-beam-inactive.svg"
+   inkscape:export-filename="/home/maarten/projecten/persoonlijk/earth-rover/remote-control/human-machine-interface-display/images/high-beam-inactive.png"
+   inkscape:export-xdpi="25.4"
+   inkscape:export-ydpi="25.4">
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2463"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2459"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2455"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2463-7"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2463-9"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2463-6"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2463-2"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.4811134"
+     inkscape:cx="42.352894"
+     inkscape:cy="102.00153"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:showpageshadow="false"
+     inkscape:window-width="3832"
+     inkscape:window-height="2114"
+     inkscape:window-x="4"
+     inkscape:window-y="4"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Laag 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-233)">
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#3f3f3f;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.01608586;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect825"
+       width="64"
+       height="64"
+       x="0"
+       y="233"
+       rx="5.0267997"
+       ry="5.0267997" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 34,281 C 32.666667,275.66667 31.333257,270.33303 31.333319,264.99975 31.333382,259.66648 32.666667,254.33334 34,249 c 8.666667,0.66667 17.333566,1.33335 21.666783,6.33322 C 60,260.33308 60,269.66598 55.666613,274.66633 51.333225,279.66668 42.666667,280.33333 34,281 Z"
+       id="path2457"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2459"
+       inkscape:original-d="m 34,281 c 0,0 -2.666432,-10.66705 -4,-16 1.333568,-5.33348 4,-16 4,-16 0,0 17.333588,1.33307 26,2 2.65e-4,9.33308 2.65e-4,18.66598 0,28 -8.666794,0.66643 -26,2 -26,2 z"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/maarten/projecten/persoonlijk/earth-rover/remote-control/human-machine-interface-display/images/high-beam-active.png"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#fffffd;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 5,271 c 6.666982,-2.00009 13.333648,-4.00009 20,-6"
+       id="path2461"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2463"
+       inkscape:original-d="m 5,271 c 6.666932,-2.00026 13.333598,-4.00026 20,-6"
+       sodipodi:nodetypes="cc" />
+    <path
+       transform="translate(0.97797339,-4.65202)"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#fffffd;stroke-width:1.89999998;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 4.0220266,268.65202 c 6.9169814,-2.00009 13.8336474,-4.00009 20.7500004,-6"
+       id="path2461-0"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2463-7"
+       inkscape:original-d="m 4.0220266,268.65202 c 6.9169324,-2.00026 13.8335984,-4.00026 20.7500004,-6"
+       sodipodi:nodetypes="cc" />
+    <path
+       transform="translate(2.3295844,-8.91365)"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#fffffd;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 2.6704156,265.91365 c 7.3336474,-2.00009 14.6669804,-4.00009 22.0000004,-6"
+       id="path2461-3"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2463-9"
+       inkscape:original-d="m 2.6704156,265.91365 c 7.3335994,-2.00026 14.6669324,-4.00026 22.0000004,-6"
+       sodipodi:nodetypes="cc" />
+    <path
+       transform="translate(2.0882253,5.1263)"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#fffffd;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 2.9117747,272.8737 c 6.9169806,-2.00009 13.8336473,-4.00009 20.7500003,-6"
+       id="path2461-06"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2463-6"
+       inkscape:original-d="m 2.9117747,272.8737 c 6.9169317,-2.00026 13.8335983,-4.00026 20.7500003,-6"
+       sodipodi:nodetypes="cc" />
+    <path
+       transform="translate(4.0673701,12.42905)"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#fffffd;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0.9326299,272.57095 c 7.3336461,-2.00009 14.6669791,-4.00009 22.0000001,-6"
+       id="path2461-6"
+       inkscape:connector-curvature="0"
+       inkscape:path-effect="#path-effect2463-2"
+       inkscape:original-d="m 0.9326299,272.57095 c 7.3335984,-2.00026 14.6669311,-4.00026 22.0000001,-6"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>

@@ -19,6 +19,20 @@ namespace earth_rover
   }
 
 
+  ConfiguredServo::ConfiguredServo(uint8_t pin_number,
+                                   uint16_t minimum_pulse_width,
+                                   uint16_t maximum_pulse_width,
+                                   uint16_t center_pulse_width,
+                                   bool enforce_pulse_width_limits):
+    configuration {pin_number,
+                   minimum_pulse_width, maximum_pulse_width, center_pulse_width,
+                   center_pulse_width,
+                   enforce_pulse_width_limits},
+    current_pulse_width {configuration.initial_pulse_width}
+  {
+    ;
+  }
+
   ConfiguredServo::~ConfiguredServo()
   {
     servo.writeMicroseconds(configuration.initial_pulse_width);

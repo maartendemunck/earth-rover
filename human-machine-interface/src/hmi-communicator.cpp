@@ -1,22 +1,21 @@
 #include "hmi-communicator.hpp"
-#include "to-integral.hpp"
+#include "from-to-integral.hpp"
 
 
 namespace earth_rover
 {
 
   HmiCommunicator::HmiCommunicator(
-    uint8_t ce_pin,
-    uint8_t csn_pin)
-  :
-    nrf24l01 {ce_pin, csn_pin}
+    uint8_t ce_pin, uint8_t csn_pin, CarConfiguration & car_configuration, CarState & car_state):
+    nrf24l01 {ce_pin, csn_pin},
+    car_configuration {car_configuration},
+    car_state {car_state}
   {
     ;
   }
 
 
-  void
-  HmiCommunicator::setup()
+  void HmiCommunicator::setup()
   {
     // Setup nRF24L01+.
     nrf24l01.begin();
@@ -32,32 +31,33 @@ namespace earth_rover
   }
 
 
-  void
-  HmiCommunicator::spinOnce()
+  void HmiCommunicator::spinOnce()
   {
     ;
   }
 
 
-  bool
-  HmiCommunicator::sendControlMessage(
-    int16_t steering,
-    int16_t throttle)
+  bool HmiCommunicator::sendControlMessage()
   {
     static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
     uint8_t buffer[nrf24l01_payload_size];
-    buffer[0] = to_integral(MessageType::Control);
-    buffer[1] = (steering >> 8) & 0xff;
-    buffer[2] = (steering) & 0xff;
-    buffer[3] = (throttle >> 8) & 0xff;
-    buffer[4] = (throttle) & 0xff;
+    auto drive = car_state.getDriveInputs();
+    auto car_id = car_configuration.getCarId();
+    buffer[0] = car_id & 0xff;
+    buffer[1] = ((car_id & 0x300) >> 2) + (to_integral(MessageType::Control) & 0x3f);
+    buffer[2] = (drive.steering) & 0xff;
+    buffer[3] = (drive.steering >> 8) & 0xff;
+    buffer[4] = (drive.throttle) & 0xff;
+    buffer[5] = (drive.throttle >> 8) & 0xff;
+    buffer[6] = drive.gear;
+    buffer[7] = 0;  // TODO: lighting!
+    // buffer[8] = 0;  // Padding.
+    // buffer[9] = 0;  // Padding.
     return sendMessage(buffer);
   }
 
 
-  bool
-  HmiCommunicator::sendMessage(
-    uint8_t buffer[nrf24l01_payload_size])
+  bool HmiCommunicator::sendMessage(uint8_t buffer[nrf24l01_payload_size])
   {
     digitalWrite(LED_BUILTIN, 1);
     nrf24l01.stopListening();

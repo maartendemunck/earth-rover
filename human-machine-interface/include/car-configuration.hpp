@@ -13,27 +13,31 @@ namespace earth_rover
   {
     private:
 
-      ServoConfiguration steering_servo_configuration;
-      ServoConfiguration speed_controller_configuration;
-      ServoConfiguration gearbox_servo_configuration;
+      uint16_t car_id;
+      ServoConfiguration steering_configuration;
+      ServoConfiguration throttle_configuration;
+      ServoConfiguration gearbox_configuration;
       RadioConfiguration radio_configuration;
 
     public:
 
-      CarConfiguration();
-      CarConfiguration(const ServoConfiguration & steering_servo_configuration,
-                       const ServoConfiguration & speed_controller_configuration,
-                       const ServoConfiguration & gearbox_servo_configuration,
+      CarConfiguration(uint16_t car_id);
+      CarConfiguration(uint16_t car_id,
+                       const ServoConfiguration & steering_configuration,
+                       const ServoConfiguration & throttle_configuration,
+                       const ServoConfiguration & gearbox_configuration,
                        const RadioConfiguration & radio_configuration);
-      CarConfiguration(ServoConfiguration && steering_servo_configuration,
-                       ServoConfiguration && speed_controller_configuration,
-                       ServoConfiguration && gearbox_servo_configuration,
+      CarConfiguration(uint16_t car_id,
+                       ServoConfiguration && steering_configuration,
+                       ServoConfiguration && throttle_configuration,
+                       ServoConfiguration && gearbox_configuration,
                        RadioConfiguration && radio_configuration);
 
-      ServoConfiguration & getSteeringServoConfiguration() { return steering_servo_configuration; };
-      ServoConfiguration & getSpeedControllerConfiguration() { return speed_controller_configuration; };
-      ServoConfiguration & getGearboxServoConfiguration() { return gearbox_servo_configuration; };
-      RadioConfiguration & getRadioConfiguration() { return radio_configuration; };
+      uint16_t getCarId() { return car_id; };
+      ServoConfiguration & getSteeringConfig() { return steering_configuration; };
+      ServoConfiguration & getThrottleConfig() { return throttle_configuration; };
+      ServoConfiguration & getGearboxConfig() { return gearbox_configuration; };
+      RadioConfiguration & getRadioConfig() { return radio_configuration; };
 
   };
 

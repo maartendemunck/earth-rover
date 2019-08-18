@@ -37,6 +37,8 @@ namespace earth_rover
     public:
 
       ConfiguredServo(uint8_t pin_number);
+      ConfiguredServo(uint8_t pin_number, uint16_t minimum_pulse_width, uint16_t maximum_pulse_width,
+                      uint16_t center_pulse_width, bool enforce);
       ~ConfiguredServo();
       void setup();
       void setup(const Configuration & new_configuration);

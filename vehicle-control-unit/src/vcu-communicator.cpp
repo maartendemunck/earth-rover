@@ -41,23 +41,29 @@ namespace earth_rover
       nrf24l01.read(buffer, nrf24l01_payload_size);
       auto message_timestamp = micros();
       auto message_processed = false;
-      switch(static_cast<MessageType>(buffer[0]))
+      uint16_t car_id = buffer[0] | ((buffer[1] & 0xc0) << 2);
+      if(car_id == 202u)
       {
-        case MessageType::Control:
+        switch(static_cast<MessageType>(buffer[1] & 0x3f))
         {
-          static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
-          int16_t steering = (buffer[1] << 8 ) | buffer[2];
-          int16_t throttle = (buffer[3] << 8 ) | buffer[4];
-          if(control_message_callback)
+          case MessageType::Control:
           {
-            control_message_callback(steering, throttle);
-          }
-          message_processed = true;
-        } break;
-        default:
-        {
-          message_processed = false;
-        } break;
+            static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 7 bytes");
+            int16_t steering = buffer[2] | (buffer[3] << 8 );
+            int16_t throttle = buffer[4] | (buffer[5] << 8 );
+            int8_t gearbox = buffer[6];
+            uint8_t lighting = buffer[7];
+            if(control_message_callback)
+            {
+              control_message_callback(steering, throttle, gearbox, lighting);
+            }
+            message_processed = true;
+          } break;
+          default:
+          {
+            message_processed = false;
+          } break;
+        }
       }
       if(message_processed == true)
       {
@@ -90,7 +96,7 @@ namespace earth_rover
 
   void
   VcuCommunicator::setControlMessageCallback(
-    std::function<void(int16_t, int16_t)> callback)
+    std::function<void(int16_t, int16_t, int8_t, uint8_t)> callback)
   {
     control_message_callback = std::move(callback);
   }

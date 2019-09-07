@@ -30,8 +30,8 @@ void setup()
 {
   // BEGIN DEBUG.
   // Setup debug console.
-  Serial.begin(9600);
   /*
+  Serial.begin(9600);
   while(!Serial)
   {
     ;
@@ -76,10 +76,7 @@ void loop()
   car_state.setGearboxInput(inputs[gearbox_channel - 1]);
 
   // Send drive command.
-  communicator.sendControlMessage();
-
-  //digitalWrite(LED_BUILTIN, 0);
-  delay(100);
+  communicator.spinOnce();
 }
 
 

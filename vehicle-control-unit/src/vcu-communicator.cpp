@@ -4,11 +4,13 @@
 namespace earth_rover
 {
 
-  VcuCommunicator::VcuCommunicator(
-    uint8_t ce_pin,
-    uint8_t csn_pin)
-  :
-    nrf24l01 {ce_pin, csn_pin}
+  constexpr uint8_t VcuCommunicator::nrf24l01_fhss_channels[];  // Initialised in header file.
+
+
+  VcuCommunicator::VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin):
+    nrf24l01_device {ce_pin, csn_pin},
+    nrf24l01_fhss_channel_index {0u}
+
   {
     ;
   }
@@ -18,28 +20,35 @@ namespace earth_rover
   VcuCommunicator::setup()
   {
     // Setup nRF24L01+.
-    nrf24l01.begin();
-    nrf24l01.setPALevel(RF24_PA_LOW);
-    nrf24l01.setDataRate(RF24_250KBPS);
-    nrf24l01.setChannel(0x01);
-    nrf24l01.setRetries(4, 10);
-    nrf24l01.setAddressWidth(4);
-    nrf24l01.setPayloadSize(nrf24l01_payload_size);
-    nrf24l01.openWritingPipe((uint8_t *)"VCU0");
-    nrf24l01.openReadingPipe(1, (uint8_t *)"HMI0");
-    nrf24l01.startListening();
+    nrf24l01_device.begin();
+    nrf24l01_device.setPALevel(RF24_PA_HIGH);
+    nrf24l01_device.setDataRate(RF24_250KBPS);
+    nrf24l01_device.setChannel(0x01);
+    nrf24l01_device.setRetries(4, 10);
+    nrf24l01_device.setAddressWidth(4);
+    nrf24l01_device.setPayloadSize(nrf24l01_payload_size);
+    nrf24l01_device.openWritingPipe((uint8_t *)"VCU0");
+    nrf24l01_device.openReadingPipe(1, (uint8_t *)"HMI0");
+    nrf24l01_device.startListening();
   }
 
 
   void
   VcuCommunicator::spinOnce()
   {
-    while(nrf24l01.available())
+    if((fhss_synced == true && since_channel_change >= update_interval)
+       || (fhss_synced == false && since_channel_change >= fhss_timeout))
+    {
+      // If we're synced, switch channel together with the sender. If we're not synced, switch channel every
+      // 'fhss_timeout', to prevent waiting on channel which is too noisy to receive anything.
+      changeChannel();
+      since_channel_change -= update_interval;
+    }
+    while(nrf24l01_device.available())
     {
       uint8_t buffer[nrf24l01_payload_size];
       digitalWrite(LED_BUILTIN, 1);
-      nrf24l01.read(buffer, nrf24l01_payload_size);
-      auto message_timestamp = micros();
+      nrf24l01_device.read(buffer, nrf24l01_payload_size);
       auto message_processed = false;
       uint16_t car_id = buffer[0] | ((buffer[1] & 0xc0) << 2);
       if(car_id == 202u)
@@ -53,6 +62,10 @@ namespace earth_rover
             int16_t throttle = buffer[4] | (buffer[5] << 8 );
             int8_t gearbox = buffer[6];
             uint8_t lighting = buffer[7];
+            // Sync FHSS with sender.
+            fhss_synced = true;
+            since_channel_change = 10u;  // Sync FHSS with sender (control message is sent 10ms after channel change).
+            // Call callback.
             if(control_message_callback)
             {
               control_message_callback(steering, throttle, gearbox, lighting);
@@ -68,12 +81,15 @@ namespace earth_rover
       if(message_processed == true)
       {
         digitalWrite(LED_BUILTIN, 0);
-        nrf24l01_timestamp_last_message = message_timestamp;
+        since_last_message = 0;
         timeout_callback_called = false;
       }
     }
-    if(timeout_callback_called == false
-       && (micros() - nrf24l01_timestamp_last_message) > timeout)
+    if(fhss_synced == true && since_last_message > fhss_timeout)
+    {
+      fhss_synced = false;
+    }
+    if(timeout_callback_called == false && fail_safe_timeout > 0 && since_last_message > fail_safe_timeout)
     {
       if(timeout_callback)
       {
@@ -84,21 +100,24 @@ namespace earth_rover
   }
 
 
-  void
-  VcuCommunicator::setTimeoutCallback(
-    std::function<void()> callback,
-    uint32_t timeout_ms)
+  void VcuCommunicator::setTimeoutCallback(std::function<void()> callback, uint32_t timeout_ms)
   {
     timeout_callback = std::move(callback);
-    timeout = timeout_ms * 1000;
     timeout_callback_called = false;  // If we're in a timeout, call the new callback, even if we called the old one.
   }
 
-  void
-  VcuCommunicator::setControlMessageCallback(
-    std::function<void(int16_t, int16_t, int8_t, uint8_t)> callback)
+
+  void VcuCommunicator::setControlMessageCallback(std::function<void(int16_t, int16_t, int8_t, uint8_t)> callback)
   {
     control_message_callback = std::move(callback);
+  }
+
+
+  void VcuCommunicator::changeChannel()
+  {
+    nrf24l01_fhss_channel_index = (nrf24l01_fhss_channel_index + 1)
+                                  % (sizeof(nrf24l01_fhss_channels) / sizeof(nrf24l01_fhss_channels[0]));
+    nrf24l01_device.setChannel(nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
   }
 
 }

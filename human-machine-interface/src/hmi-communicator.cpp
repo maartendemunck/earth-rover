@@ -23,7 +23,7 @@ namespace earth_rover
   {
     // Setup nRF24L01+.
     nrf24l01_device.begin();
-    nrf24l01_device.setPALevel(RF24_PA_HIGH);
+    nrf24l01_device.setPALevel(RF24_PA_LOW);
     nrf24l01_device.setDataRate(RF24_250KBPS);
     nrf24l01_device.setChannel(nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
     nrf24l01_device.setRetries(4, 10);
@@ -81,12 +81,10 @@ namespace earth_rover
     {
       digitalWrite(LED_BUILTIN, 0);
     }
-    /*
     else
     {
-      Serial.printf("F: %3d\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
+      Serial.printf("F: %3d (%2d)\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index], nrf24l01_fhss_channel_index);
     }
-    */
     
     return result;
   }

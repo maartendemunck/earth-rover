@@ -19,9 +19,10 @@ namespace earth_rover
 
       RF24 nrf24l01_device;
       static constexpr uint8_t nrf24l01_payload_size {10u};
+      // This sequence seems to work reliably with the Velleman nRF24L01+ modules.
       static constexpr uint8_t nrf24l01_fhss_channels[]
-        { 76, 56, 28, 74, 16, 50, 62, 22, 90, 49, 10, 30, 32, 72,  2, 37,
-          21, 36, 89, 73,  9, 68, 92, 13, 51,  7, 31, 61, 17, 84,  1, 86 };
+        {  0,  4,  8, 12, 16, 20, 24, 28, 32, 36,  1,  5,  9, 13, 17, 21, 25, 29, 33, 37,
+           2,  6, 10, 14, 18, 22, 26, 30, 34, 38,  3,  7, 11, 15, 19, 23, 27, 31, 35, 39 };
       uint8_t nrf24l01_fhss_channel_index;
       static constexpr uint8_t update_interval {50u};
       elapsedMillis since_channel_change;
@@ -31,7 +32,7 @@ namespace earth_rover
 
       elapsedMillis since_last_message;
       std::function<void()> timeout_callback;
-      uint32_t fail_safe_timeout {1000u};
+      uint32_t fail_safe_timeout {500u};
       bool timeout_callback_called;
       std::function<void(int16_t, int16_t, int8_t, uint8_t)> control_message_callback;
 

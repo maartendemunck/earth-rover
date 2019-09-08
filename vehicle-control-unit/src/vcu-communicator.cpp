@@ -21,7 +21,7 @@ namespace earth_rover
   {
     // Setup nRF24L01+.
     nrf24l01_device.begin();
-    nrf24l01_device.setPALevel(RF24_PA_HIGH);
+    nrf24l01_device.setPALevel(RF24_PA_LOW);
     nrf24l01_device.setDataRate(RF24_250KBPS);
     nrf24l01_device.setChannel(0x01);
     nrf24l01_device.setRetries(4, 10);
@@ -36,13 +36,18 @@ namespace earth_rover
   void
   VcuCommunicator::spinOnce()
   {
-    if((fhss_synced == true && since_channel_change >= update_interval)
-       || (fhss_synced == false && since_channel_change >= fhss_timeout))
+    if(fhss_synced == true && since_channel_change >= update_interval)
     {
-      // If we're synced, switch channel together with the sender. If we're not synced, switch channel every
-      // 'fhss_timeout', to prevent waiting on channel which is too noisy to receive anything.
+      // If we're synced, switch channel together with the sender.
       changeChannel();
       since_channel_change -= update_interval;
+    }
+    if(fhss_synced == false && since_channel_change >= fhss_timeout)
+    {
+      // If we're not synced, switch channel every 'fhss_timeout', to prevent waiting on channel which is too noisy to
+      // receive anything.
+      changeChannel();
+      since_channel_change -= fhss_timeout;
     }
     while(nrf24l01_device.available())
     {
@@ -118,6 +123,7 @@ namespace earth_rover
     nrf24l01_fhss_channel_index = (nrf24l01_fhss_channel_index + 1)
                                   % (sizeof(nrf24l01_fhss_channels) / sizeof(nrf24l01_fhss_channels[0]));
     nrf24l01_device.setChannel(nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
+    Serial.printf("RX C: %3d\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
   }
 
 }

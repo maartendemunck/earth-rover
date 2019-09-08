@@ -6,9 +6,10 @@
 #include "limit-value.hpp"
 
 
+// #define SERIAL_DEBUG
+
+
 // Pin assignments.
-//constexpr uint8_t input_steering_pin = 2;
-//constexpr uint8_t input_throttle_pin = 3;
 constexpr uint8_t input_pins[] = {2, 3, 4, 5};
 constexpr uint8_t rf24_ce_pin = 6;
 constexpr uint8_t spi_sck_pin = 14;
@@ -28,16 +29,14 @@ earth_rover::HmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, 
 
 void setup()
 {
-  // BEGIN DEBUG.
   // Setup debug console.
-  /*
-  Serial.begin(9600);
-  while(!Serial)
-  {
-    ;
-  }
-  */
-  // END DEBUG.
+  #ifdef SERIAL_DEBUG
+    Serial.begin(9600);
+    while(!Serial)
+    {
+      ;
+    }
+  #endif
   // Initialisation started, switch on built in LED.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, 1);

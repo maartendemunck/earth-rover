@@ -56,17 +56,20 @@ namespace earth_rover
     static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
     uint8_t buffer[nrf24l01_payload_size];
     auto drive = car_state.getDriveInputs();
-    auto car_id = car_configuration.getCarId();
-    buffer[0] = car_id & 0xff;
-    buffer[1] = ((car_id & 0x300) >> 2) + (to_integral(MessageType::Control) & 0x3f);
-    buffer[2] = (drive.steering) & 0xff;
-    buffer[3] = (drive.steering >> 8) & 0xff;
-    buffer[4] = (drive.throttle) & 0xff;
-    buffer[5] = (drive.throttle >> 8) & 0xff;
-    buffer[6] = drive.gear;
-    buffer[7] = 0;  // TODO: lighting!
+    auto lighting = car_state.getLighting();
+    buffer[0] = to_integral(MessageType::Control);
+    buffer[1] = (drive.steering) & 0xff;
+    buffer[2] = (drive.steering >> 8) & 0xff;
+    buffer[3] = (drive.throttle) & 0xff;
+    buffer[4] = (drive.throttle >> 8) & 0xff;
+    buffer[5] = drive.gear;
+    buffer[6] = lighting.turn_signal_right
+                | (lighting.turn_signal_left << 1)
+                | (lighting.dipped_beam << 2)
+                | (lighting.high_beam << 3)
+                | (lighting.hazard_flashers << 4);
+    // buffer[7] = 0;  // Padding.
     // buffer[8] = 0;  // Padding.
-    // buffer[9] = 0;  // Padding.
     return sendMessage(buffer);
   }
 
@@ -83,7 +86,7 @@ namespace earth_rover
     }
     else
     {
-      Serial.printf("F: %3d (%2d)\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index], nrf24l01_fhss_channel_index);
+      // Serial.printf("F: %3d (%2d)\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index], nrf24l01_fhss_channel_index);
     }
     
     return result;

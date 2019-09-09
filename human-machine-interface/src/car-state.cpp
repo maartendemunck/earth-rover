@@ -14,6 +14,44 @@ namespace earth_rover
   void CarState::setSteeringInput(int16_t steering)
   {
     drive.steering = limit_value(steering, int16_t(-1000), int16_t(1000));
+    if(lighting.turn_signal_right && !lighting.turn_signal_left)
+    {
+      // If the steering input is moved more than 50% right, unlock the right turn signal.
+      if(steering > 500 && turn_signal_free != 1)
+      {
+        turn_signal_free = 1;
+      }
+      // If the steering input is moved back to the center (less than 10% right), shut off the right turn signal.
+      else if(turn_signal_free == 1 && steering < 100)
+      {
+        setTurnSignalRight(false);
+        turn_signal_free = 0;
+        turn_signal_right_cancelled = true;
+      }
+    }
+    else if(lighting.turn_signal_left && !lighting.turn_signal_right)
+    {
+      // If the steering input is moved more than 50% left, unlock the left turn signal.
+      if(steering < -500 && turn_signal_free != -1)
+      {
+        turn_signal_free = -1;
+      }
+      // If the steering input is moved back to the center (less than 10% left), shut off the left turn signal.
+      else if(turn_signal_free == -1 && steering > -100)
+      {
+        setTurnSignalLeft(false);
+        turn_signal_free = 0;
+        turn_signal_left_cancelled = true;
+      }
+    }
+    else if(!lighting.turn_signal_right && !lighting.turn_signal_left)
+    {
+      // If no turn signal is active, deactivate the auto shut off function.
+      if(turn_signal_free != 0)
+      {
+        turn_signal_free = 0;
+      }
+    }
   }
 
 
@@ -46,51 +84,53 @@ namespace earth_rover
 
   void CarState::setTurnSignalRight(bool state)
   {
-    if(state != lighting.turn_signal_right)
-    {
       lighting.turn_signal_right = state;
-      lighting_changed = true;
+  }
+
+
+  bool CarState::getTurnSignalRightCancelled(bool reset)
+  {
+    auto return_value = turn_signal_right_cancelled;
+    if(reset)
+    {
+      turn_signal_right_cancelled = false;
     }
+    return return_value;
   }
 
 
   void CarState::setTurnSignalLeft(bool state)
   {
-    if(state != lighting.turn_signal_left)
-    {
       lighting.turn_signal_left = state;
-      lighting_changed = true;
+  }
+
+
+  bool CarState::getTurnSignalLeftCancelled(bool reset)
+  {
+    auto return_value = turn_signal_left_cancelled;
+    if(reset)
+    {
+      turn_signal_left_cancelled = false;
     }
+    return return_value;
   }
 
 
   void CarState::setDippedBeam(bool state)
   {
-    if(state != lighting.dipped_beam)
-    {
       lighting.dipped_beam = state;
-      lighting_changed = true;
-    }
   }
 
 
   void CarState::setHighBeam(bool state)
   {
-    if(state != lighting.high_beam)
-    {
       lighting.high_beam = state;
-      lighting_changed = true;
-    }
   }
 
 
   void CarState::setHazardFlashers(bool state)
   {
-    if(state != lighting.hazard_flashers)
-    {
       lighting.hazard_flashers = state;
-      lighting_changed = true;
-    }
   }
 
 }

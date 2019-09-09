@@ -50,7 +50,9 @@ namespace earth_rover
       Drive drive;
       int8_t gearbox_locked = 0;  //!< Used to implement the hysteresis in the shift down and up commands.
       Lighting lighting;
-      bool lighting_changed;
+      int8_t turn_signal_free {0};  //!< Used to implement the hysteresis to automatically shut off the turn signals.
+      bool turn_signal_left_cancelled {false};  //!< Used to shut off the turn signal using the steering command.
+      bool turn_signal_right_cancelled {false};  //!< used to shut off the turn signal using the steering command.
 
       Speedometer speedometer;
       bool speedometer_changed;
@@ -68,10 +70,13 @@ namespace earth_rover
       void setGearboxInput(int16_t gearbox);
       const Drive & getDriveInputs() { return drive; };
       void setTurnSignalRight(bool state);
+      bool getTurnSignalRightCancelled(bool reset = true);
       void setTurnSignalLeft(bool state);
+      bool getTurnSignalLeftCancelled(bool reset = true);
       void setDippedBeam(bool state);
       void setHighBeam(bool state);
       void setHazardFlashers(bool state);
+      const Lighting & getLighting() { return lighting; };
 
   };
 

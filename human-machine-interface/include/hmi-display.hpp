@@ -52,6 +52,7 @@ namespace earth_rover
       ~HmiDisplay();
 
       void setup();
+      void spinOnce();
 
       void publishVelocity(float velocity);
       void publishOdometer(float odometer);
@@ -61,7 +62,9 @@ namespace earth_rover
 
     private:
 
-      void updateSettingsOnDisplay (bool force_update = false);
+      void setTurnSignalRight(bool state);
+      void setTurnSignalLeft(bool state);
+      void updateSettingsOnDisplay(bool force_update = false);
 
   };
 
@@ -114,6 +117,21 @@ namespace earth_rover
 
 
   template <typename SerialDevice>
+  void HmiDisplay<SerialDevice>::spinOnce()
+  {
+    if(car_state.getTurnSignalRightCancelled(true))
+    {
+      setTurnSignalRight(false);
+    }
+    if(car_state.getTurnSignalLeftCancelled(true))
+    {
+      setTurnSignalLeft(false);
+    }
+    updateSettingsOnDisplay();
+  }
+
+
+  template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::publishVelocity(float velocity)
   {
     uint16_t angle = (320u + uint16_t(26 * limit_value(velocity, 0., 10.))) % 360;
@@ -124,14 +142,16 @@ namespace earth_rover
   template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::publishOdometer(float odometer)
   {
-
+    int32_t odometer_raw = int32_t(odometer * 100) % 1000000;
+    serial_device.printf("speedometer.x_odo.val=%d\xff\xff\xff", odometer_raw);
   }
 
 
   template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::publishTripmeter(float tripmeter)
   {
-
+    int32_t tripmeter_raw = int32_t(tripmeter * 1000) % 1000000;
+    serial_device.printf("speedometer.x_trip.val=%d\xff\xff\xff", tripmeter_raw);
   }
 
 
@@ -168,9 +188,11 @@ namespace earth_rover
           {
             case Light::TurnSignalRight:
               car_state.setTurnSignalRight(state);
+              Serial.printf("Turn signal right: %d\n", int16_t(state));
               break;
             case Light::TurnSignalLeft:
               car_state.setTurnSignalLeft(state);
+              Serial.printf("Turn signal left: %d\n", int16_t(state));
               break;
             case Light::DippedBeam:
               car_state.setDippedBeam(state);
@@ -260,9 +282,6 @@ namespace earth_rover
                 case 2:
                   car_configuration.getRadioConfig().setRxPower(value, Configuration::Changed::Display);
                   break;
-                case 3:
-                  car_configuration.getRadioConfig().setChannel(value, Configuration::Changed::Display);
-                  break;
               }
               break;
           }
@@ -285,6 +304,20 @@ namespace earth_rover
 
 
   template <typename SerialDevice>
+  void HmiDisplay<SerialDevice>::setTurnSignalRight(bool state)
+  {
+    serial_device.printf("speedometer.var_tsright.val=%d\xff\xff\xff", int16_t(state));
+  }
+
+
+  template <typename SerialDevice>
+  void HmiDisplay<SerialDevice>::setTurnSignalLeft(bool state)
+  {
+    serial_device.printf("speedometer.var_tsleft.val=%d\xff\xff\xff", int16_t(state));
+  }
+
+
+  template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::updateSettingsOnDisplay (bool force_update)
   {
     // Update steering servo settings.
@@ -301,7 +334,7 @@ namespace earth_rover
         serial_device.print("page set_steering\xff\xff\xff");
       }
     }
-    // Update speed controller settings.
+    // Update electronic speed controller settings.
     if(force_update || car_configuration.getThrottleConfig().isConfigurationChanged())
     {
       auto speed_controller_config = car_configuration.getThrottleConfig().resetConfigurationChanged();
@@ -335,7 +368,6 @@ namespace earth_rover
       auto radio_config = car_configuration.getRadioConfig().resetConfigurationChanged();
       serial_device.printf("set_radio.var_tx_power.val=%d\xff\xff\xff", radio_config.tx_power);
       serial_device.printf("set_radio.var_rx_power.val=%d\xff\xff\xff", radio_config.rx_power);
-      serial_device.printf("set_radio.var_channel.val=%d\xff\xff\xff", radio_config.channel);
       serial_device.flush();
       if(current_page == HmiPage::RadioSettings)
       {

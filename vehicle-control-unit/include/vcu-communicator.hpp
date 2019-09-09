@@ -18,7 +18,7 @@ namespace earth_rover
       enum class MessageType: uint8_t { Control = 0x00 };
 
       RF24 nrf24l01_device;
-      static constexpr uint8_t nrf24l01_payload_size {10u};
+      static constexpr uint8_t nrf24l01_payload_size {9u};
       // This sequence seems to work reliably with the Velleman nRF24L01+ modules.
       static constexpr uint8_t nrf24l01_fhss_channels[]
         {  0,  4,  8, 12, 16, 20, 24, 28, 32, 36,  1,  5,  9, 13, 17, 21, 25, 29, 33, 37,

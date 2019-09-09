@@ -17,11 +17,10 @@ constexpr uint8_t rf24_csn_pin = 15;
 
 
 // Global objects.
-earth_rover::CarConfiguration car_configuration {202u,
-                                                 earth_rover::ServoConfiguration{1000u, 1500u, 2000u, true, 1u},
+earth_rover::CarConfiguration car_configuration {earth_rover::ServoConfiguration{1000u, 1500u, 2000u, true, 1u},
                                                  earth_rover::ServoConfiguration{1000u, 1500u, 2000u, true, 4u},
                                                  earth_rover::ServoConfiguration{1150u, 1500u, 1850u, true, 3u},
-                                                 earth_rover::RadioConfiguration{202u, 1u, 1u, 101u}};
+                                                 earth_rover::RadioConfiguration{1u, 1u}};
 earth_rover::CarState car_state;
 earth_rover::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_configuration, car_state};
 earth_rover::HmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, car_state};
@@ -76,6 +75,9 @@ void loop()
 
   // Send drive command.
   communicator.spinOnce();
+
+  // Update display.
+  display.spinOnce();
 }
 
 

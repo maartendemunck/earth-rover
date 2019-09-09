@@ -55,33 +55,29 @@ namespace earth_rover
       digitalWrite(LED_BUILTIN, 1);
       nrf24l01_device.read(buffer, nrf24l01_payload_size);
       auto message_processed = false;
-      uint16_t car_id = buffer[0] | ((buffer[1] & 0xc0) << 2);
-      if(car_id == 202u)
+      switch(static_cast<MessageType>(buffer[0]))
       {
-        switch(static_cast<MessageType>(buffer[1] & 0x3f))
+        case MessageType::Control:
         {
-          case MessageType::Control:
+          static_assert(nrf24l01_payload_size >= 7, "control message requires a payload size of at least 7 bytes");
+          int16_t steering = buffer[1] | (buffer[2] << 8 );
+          int16_t throttle = buffer[3] | (buffer[4] << 8 );
+          int8_t gearbox = buffer[5];
+          uint8_t lighting = buffer[6];
+          // Sync FHSS with sender.
+          fhss_synced = true;
+          since_channel_change = 10u;  // Sync FHSS with sender (control message is sent 10ms after channel change).
+          // Call callback.
+          if(control_message_callback)
           {
-            static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 7 bytes");
-            int16_t steering = buffer[2] | (buffer[3] << 8 );
-            int16_t throttle = buffer[4] | (buffer[5] << 8 );
-            int8_t gearbox = buffer[6];
-            uint8_t lighting = buffer[7];
-            // Sync FHSS with sender.
-            fhss_synced = true;
-            since_channel_change = 10u;  // Sync FHSS with sender (control message is sent 10ms after channel change).
-            // Call callback.
-            if(control_message_callback)
-            {
-              control_message_callback(steering, throttle, gearbox, lighting);
-            }
-            message_processed = true;
-          } break;
-          default:
-          {
-            message_processed = false;
-          } break;
-        }
+            control_message_callback(steering, throttle, gearbox, lighting);
+          }
+          message_processed = true;
+        } break;
+        default:
+        {
+          message_processed = false;
+        } break;
       }
       if(message_processed == true)
       {

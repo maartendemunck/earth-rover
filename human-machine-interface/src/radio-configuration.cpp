@@ -5,7 +5,7 @@ namespace earth_rover
 {
 
   RadioConfiguration::RadioConfiguration():
-    current_configuration {0u, 0u, 0u, 0u},
+    current_configuration {0u, 0u},
     configuration_changed {false},
     display_changed {false}
   {
@@ -22,8 +22,8 @@ namespace earth_rover
   }
 
 
-  RadioConfiguration::RadioConfiguration(uint16_t id, uint16_t tx_power, uint16_t rx_power, uint16_t channel):
-    current_configuration {id, tx_power, rx_power, channel},
+  RadioConfiguration::RadioConfiguration(uint16_t tx_power, uint16_t rx_power):
+    current_configuration {tx_power, rx_power},
     configuration_changed {false},
     display_changed {false}
   {
@@ -38,20 +38,10 @@ namespace earth_rover
   }
 
 
-  void RadioConfiguration::setConfiguration(uint16_t id, uint16_t tx_power, uint16_t rx_power, uint16_t channel,
-                                            Changed change_source)
+  void RadioConfiguration::setConfiguration(uint16_t tx_power, uint16_t rx_power, Changed change_source)
   {
-    current_configuration.id = id;
     current_configuration.tx_power = tx_power;
     current_configuration.rx_power = rx_power;
-    current_configuration.channel = channel;
-    updateChanged(change_source);
-  }
-
-
-  void RadioConfiguration::setId (uint16_t id, Changed change_source)
-  {
-    current_configuration.id = id;
     updateChanged(change_source);
   }
 
@@ -66,13 +56,6 @@ namespace earth_rover
   void RadioConfiguration::setRxPower(uint16_t rx_power, Changed change_source)
   {
     current_configuration.rx_power = rx_power;
-    updateChanged(change_source);
-  }
-
-
-  void RadioConfiguration::setChannel(uint16_t channel, Changed change_source)
-  {
-    current_configuration.channel = channel;
     updateChanged(change_source);
   }
 

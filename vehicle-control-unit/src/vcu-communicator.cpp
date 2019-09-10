@@ -119,7 +119,6 @@ namespace earth_rover
     nrf24l01_fhss_channel_index = (nrf24l01_fhss_channel_index + 1)
                                   % (sizeof(nrf24l01_fhss_channels) / sizeof(nrf24l01_fhss_channels[0]));
     nrf24l01_device.setChannel(nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
-    Serial.printf("RX C: %3d\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
   }
 
 }

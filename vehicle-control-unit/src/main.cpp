@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "configured-servo.hpp"
+#include "lighting.hpp"
 #include "vcu-communicator.hpp"
 
 
@@ -7,6 +8,10 @@
 
 
 // Pin assignments.
+constexpr uint8_t head_lamp_pin = 3u;
+constexpr uint8_t tail_lamp_pin = 4u;
+constexpr uint8_t turn_signal_right_pin = 5u;
+constexpr uint8_t turn_signal_left_pin = 6u;
 constexpr uint8_t rf24_ce_pin = 10u;
 constexpr uint8_t spi_sck_pin = 14u;
 constexpr uint8_t rf24_csn_pin = 15u;
@@ -20,11 +25,13 @@ earth_rover::VcuCommunicator communicator {rf24_ce_pin, rf24_csn_pin};
 earth_rover::ConfiguredServo steering_servo {steering_servo_pin, 2000u, 1000u, 1500u, true};
 earth_rover::ConfiguredServo throttle_servo {throttle_servo_pin};
 earth_rover::ConfiguredServo gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1460u, true};
+earth_rover::Lighting automotive_lighting { head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin };
 
 
 void TimeoutCallback()
 {
   throttle_servo.setPosition(0);
+  automotive_lighting.setHazardFlashers(true);
 }
 
 
@@ -44,6 +51,12 @@ void ControlMessageCallback(int16_t steering, int16_t throttle, int8_t gearbox, 
       gearbox_servo.setPosition(0);
       break;
   }
+  automotive_lighting.setTurnSignalRight(lighting & 0x01);
+  automotive_lighting.setTurnSignalLeft(lighting & 0x02);
+  automotive_lighting.setDippedBeam(lighting & 0x04);
+  automotive_lighting.setHighBeam(lighting & 0x08);
+  automotive_lighting.setHazardFlashers(lighting & 0x10);
+  automotive_lighting.setStopLamps(throttle > -50 && throttle < 50);
 }
 
 
@@ -78,4 +91,5 @@ void setup()
 void loop()
 {
   communicator.spinOnce();
+  automotive_lighting.spinOnce();
 }

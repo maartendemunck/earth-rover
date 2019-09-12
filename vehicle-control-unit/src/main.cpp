@@ -32,20 +32,41 @@ void TimeoutCallback()
 {
   throttle_servo.setPosition(0);
   automotive_lighting.setHazardFlashers(true);
+  automotive_lighting.setStopLamps(true);
 }
 
 
 void ControlMessageCallback(int16_t steering, int16_t throttle, int8_t gearbox, int8_t lighting)
 {
+  // TODO: Move this function and these variables to the CarState object.
+  static bool is_driving = false;
+  static elapsedMillis since_driving;
+
   steering_servo.setPosition(steering);
   throttle_servo.setPosition(throttle);
+  if(!is_driving && abs(throttle) >= 150)
+  {
+    since_driving = 0;
+    is_driving = true;
+  }
+  else if(abs(throttle) < 100)
+  {
+    is_driving = false;
+  }
+  
   switch(gearbox)
   {
     case 1:  // Low
-      gearbox_servo.setPosition(-1000);
+      if(is_driving && since_driving > 500u)
+      {
+        gearbox_servo.setPosition(-1000);
+      }
       break;
     case 2:  // High
-      gearbox_servo.setPosition(1000);
+      if(is_driving && since_driving > 200u)
+      {
+        gearbox_servo.setPosition(1000);
+      }
       break;
     default:  // Neutral
       gearbox_servo.setPosition(0);
@@ -71,10 +92,13 @@ void setup()
   communicator.setup();
   communicator.setTimeoutCallback(&TimeoutCallback, 500u);
   communicator.setControlMessageCallback(&ControlMessageCallback);
-  // Configure servos.
+  // Configure servos (the steering servo requires an explicit setPosition (on top of the one in the setup function)).
   steering_servo.setup();
+  steering_servo.setPosition(0);
   throttle_servo.setup();
+  throttle_servo.setPosition(0);
   gearbox_servo.setup();
+  gearbox_servo.setPosition(0);
   // Setup debug console.
   #ifdef SERIAL_DEBUG
     Serial.begin(9600);

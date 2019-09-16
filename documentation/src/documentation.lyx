@@ -2731,8 +2731,8 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-Each message consists of 80 bits (10 bytes): a 10 bit unique vehicle ID,
- a 6 bit command and 64 bit command-specific data.
+The payload of each message consists of 72 bits (9 bytes): a 8 bit (1 byte)
+ command and 64 bit (8 bytes) command-specific data.
  Tables
 \begin_inset space ~
 \end_inset
@@ -2836,7 +2836,7 @@ Control
 \begin_inset Newline newline
 \end_inset
 
-000000b = 00h
+00000000b = 00h
 \end_layout
 
 \end_inset
@@ -3221,7 +3221,7 @@ Request state
 \begin_inset Newline newline
 \end_inset
 
-001000b = 08h
+00010000b = 10h
 \end_layout
 
 \end_inset
@@ -3370,7 +3370,7 @@ Request configuration
 \begin_inset Newline newline
 \end_inset
 
-001001b = 09h
+0011000b = 30h
 \end_layout
 
 \end_inset
@@ -3548,7 +3548,7 @@ Configure steering servo
 \begin_inset Newline newline
 \end_inset
 
-011000b = 18h
+0010000b = 20h
 \end_layout
 
 \end_inset
@@ -3813,7 +3813,7 @@ Configure ESC
 \begin_inset Newline newline
 \end_inset
 
-011001b = 19h
+00100001b = 21h
 \end_layout
 
 \end_inset
@@ -4123,7 +4123,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="15" columns="3">
+<lyxtabular version="3" rows="14" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="26mm">
 <column alignment="right" valignment="top" width="0pt">
@@ -4166,7 +4166,7 @@ Configure gearbox servo
 \begin_inset Newline newline
 \end_inset
 
-011010b = 1Ah
+00100010b = 22h
 \end_layout
 
 \end_inset
@@ -4431,7 +4431,7 @@ Configure radio
 \begin_inset Newline newline
 \end_inset
 
-011110b = 1Eh
+00100100b = 24h
 \end_layout
 
 \end_inset
@@ -4498,36 +4498,7 @@ VCU (RX) power (uint8)
 \begin_inset Text
 
 \begin_layout Plain Layout
-16 bits
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Channel (uint16)
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-32 bits
+48 bits
 \end_layout
 
 \end_inset
@@ -4551,7 +4522,7 @@ Save current configuration to EEPROM
 \begin_inset Newline newline
 \end_inset
 
-011111b = 1Fh
+00101111b = 2Fh
 \end_layout
 
 \end_inset
@@ -4629,7 +4600,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="43" columns="3">
+<lyxtabular version="3" rows="42" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="26mm">
 <column alignment="right" valignment="top" width="0pt">
@@ -4668,11 +4639,11 @@ Data
 \begin_inset Text
 
 \begin_layout Plain Layout
-Speed, odometer and tripmeter
+Speed and distance
 \begin_inset Newline newline
 \end_inset
 
-101000b = 28h
+10010000b = 90h
 \end_layout
 
 \end_inset
@@ -4792,7 +4763,7 @@ Orientation
 \begin_inset Newline newline
 \end_inset
 
-101001b = 29h
+10010001b = 91h
 \end_layout
 
 \end_inset
@@ -4912,7 +4883,7 @@ Location
 \begin_inset Newline newline
 \end_inset
 
-101010b = 2Ah
+10010002b = 92h
 \end_layout
 
 \end_inset
@@ -5003,7 +4974,7 @@ Steering servo configuration
 \begin_inset Newline newline
 \end_inset
 
-111000b = 38h
+10110000b = B0h
 \end_layout
 
 \end_inset
@@ -5268,7 +5239,7 @@ ESC configuration
 \begin_inset Newline newline
 \end_inset
 
-111001b = 39h
+10110001b = B1h
 \end_layout
 
 \end_inset
@@ -5533,7 +5504,7 @@ Gearbox servo configuration
 \begin_inset Newline newline
 \end_inset
 
-111010b = 3Ah
+10110010b = B2h
 \end_layout
 
 \end_inset
@@ -5794,11 +5765,11 @@ Padding
 \begin_inset Text
 
 \begin_layout Plain Layout
-Radio configuration
+Radio config
 \begin_inset Newline newline
 \end_inset
 
-111110b = 3Eh
+10110100 = B4h
 \end_layout
 
 \end_inset
@@ -5852,35 +5823,6 @@ VCU (RX) power (uint8)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-16 bits
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Channel (uint16)
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
 <cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -5894,7 +5836,7 @@ Channel (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-32 bits
+48 bits
 \end_layout
 
 \end_inset

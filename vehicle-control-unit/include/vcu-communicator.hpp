@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <RF24.h>
 #undef printf  // RF24.h defined 'printf' as 'Serial.printf', expanding 'Serial.printf' to 'Serial.Serial.printf'.
+#include "vcu.hpp"
 
 
 namespace earth_rover
@@ -29,21 +30,16 @@ namespace earth_rover
       bool channel_changed;
       uint32_t fhss_timeout {(sizeof(nrf24l01_fhss_channels) / sizeof(nrf24l01_fhss_channels[0])) * update_interval};
       bool fhss_synced;
-
       elapsedMillis since_last_message;
-      std::function<void()> timeout_callback;
-      uint32_t fail_safe_timeout {500u};
-      bool timeout_callback_called;
-      std::function<void(int16_t, int16_t, int8_t, uint8_t)> control_message_callback;
+      
+      Vcu & vcu;
 
     public:
 
-      VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin);
+      VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin, Vcu & vcu);
 
       void setup();
       void spinOnce();
-      void setTimeoutCallback(std::function<void()> callback, uint32_t timeout_us);
-      void setControlMessageCallback(std::function<void(int16_t, int16_t, int8_t, uint8_t)> callback);
 
     private:
 

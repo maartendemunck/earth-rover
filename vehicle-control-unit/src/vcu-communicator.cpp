@@ -7,10 +7,10 @@ namespace earth_rover
   constexpr uint8_t VcuCommunicator::nrf24l01_fhss_channels[];  // Initialised in header file.
 
 
-  VcuCommunicator::VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin):
+  VcuCommunicator::VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin, Vcu & vcu):
     nrf24l01_device {ce_pin, csn_pin},
-    nrf24l01_fhss_channel_index {0u}
-
+    nrf24l01_fhss_channel_index {0u},
+    vcu {vcu}
   {
     ;
   }
@@ -67,11 +67,8 @@ namespace earth_rover
           // Sync FHSS with sender.
           fhss_synced = true;
           since_channel_change = 10u;  // Sync FHSS with sender (control message is sent 10ms after channel change).
-          // Call callback.
-          if(control_message_callback)
-          {
-            control_message_callback(steering, throttle, gearbox, lighting);
-          }
+          // Send message to VCU.
+          vcu.handleControlMessage(steering, throttle, gearbox, lighting);
           message_processed = true;
         } break;
         default:
@@ -83,34 +80,12 @@ namespace earth_rover
       {
         digitalWrite(LED_BUILTIN, 0);
         since_last_message = 0;
-        timeout_callback_called = false;
       }
     }
     if(fhss_synced == true && since_last_message > fhss_timeout)
     {
       fhss_synced = false;
     }
-    if(timeout_callback_called == false && fail_safe_timeout > 0 && since_last_message > fail_safe_timeout)
-    {
-      if(timeout_callback)
-      {
-        timeout_callback();
-      }
-      timeout_callback_called = true;
-    }
-  }
-
-
-  void VcuCommunicator::setTimeoutCallback(std::function<void()> callback, uint32_t timeout_ms)
-  {
-    timeout_callback = std::move(callback);
-    timeout_callback_called = false;  // If we're in a timeout, call the new callback, even if we called the old one.
-  }
-
-
-  void VcuCommunicator::setControlMessageCallback(std::function<void(int16_t, int16_t, int8_t, uint8_t)> callback)
-  {
-    control_message_callback = std::move(callback);
   }
 
 

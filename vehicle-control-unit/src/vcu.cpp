@@ -9,7 +9,8 @@ namespace earth_rover
     steering_servo {steering_servo_pin, 2000u, 1000u, 1500u, true},
     throttle_servo {throttle_servo_pin, 1000u, 2000u, 1500u, true},
     gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1480u, true},
-    automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin}
+    automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin},
+    bno055_imu {&Wire, AdafruitBNO055<i2c_t3>::BNO055_ADDRESS_A}
   {
     ;
   }
@@ -28,6 +29,9 @@ namespace earth_rover
     // Start with stop lamps and hazard flashers on, until we receive something from the HMI.
     automotive_lighting.setStopLamps(true);
     automotive_lighting.setHazardFlashers(true);
+    // Initialize the Bosch BNO055 IMU. TODO: get I²C configuration as a parameter?
+    Wire.begin(I2C_MASTER, 0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, 400000, I2C_OP_MODE_ISR);
+    bno055_imu.setup();
     // This is a safe state, no need to call the timeout handler.
     timeout_handler_called = true;
   }
@@ -35,7 +39,6 @@ namespace earth_rover
 
   void Vcu::spinOnce()
   {
-
     if(since_last_control_message > 500u && !timeout_handler_called)
     {
       handleTimeout();

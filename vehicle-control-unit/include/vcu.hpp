@@ -3,6 +3,8 @@
 
 
 #include <cstdint>
+#include <i2c_t3.h>
+#include "adafruit_bno055.hpp"
 #include "configured-servo.hpp"
 #include "lighting.hpp"
 
@@ -17,6 +19,7 @@ namespace earth_rover
     ConfiguredServo throttle_servo;
     ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
+    AdafruitBNO055<i2c_t3> bno055_imu;
 
     elapsedMillis since_last_control_message;
     bool timeout_handler_called;

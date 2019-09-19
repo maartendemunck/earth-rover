@@ -37,6 +37,9 @@ namespace earth_rover
 
       void handleControlMessage(int16_t steering, int16_t throttle, int8_t gearbox, int8_t lighting);
 
+      AdafruitBNO055<i2c_t3>::bno055_euler_angles_t getOrientation();
+      AdafruitBNO055<i2c_t3>::bno055_calibration_status_t getImuCalibrationStatus();
+
     private:
 
       void handleTimeout();

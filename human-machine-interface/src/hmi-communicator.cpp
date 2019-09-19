@@ -12,6 +12,7 @@ namespace earth_rover
     uint8_t ce_pin, uint8_t csn_pin, CarConfiguration & car_configuration, CarState & car_state):
     nrf24l01_device {ce_pin, csn_pin},
     nrf24l01_fhss_channel_index {0u},
+    update_sequence_id {0u},
     car_configuration {car_configuration},
     car_state {car_state}
   {
@@ -44,9 +45,38 @@ namespace earth_rover
     }
     else if(channel_changed == true && since_update >= update_interval)
     {
-      sendControlMessage();
+      bool control_message_sent = sendControlMessage();
       since_update -= update_interval;
+      if(control_message_sent && update_sequence_id % 20 == 0)  // Request GPS position every second.
+      {
+        sendRequestStateMessage(0x04);
+      }
+      if(control_message_sent && update_sequence_id % 5 == 1)  // Request velocity, odometer and tripmeter four times per second.
+      {
+        sendRequestStateMessage(0x01);
+      }
+      if(control_message_sent && update_sequence_id % 5 == 2)  // Requence orientation four times per second.
+      {
+        sendRequestStateMessage(0x02);
+      }
+      ++ update_sequence_id;
       channel_changed = false;
+    }
+    while(nrf24l01_device.available())
+    {
+      uint8_t buffer[nrf24l01_payload_size];
+      nrf24l01_device.read(buffer, nrf24l01_payload_size);
+      switch(static_cast<ResponseMessageType>(buffer[0]))
+      {
+        case ResponseMessageType::Orientation:
+        {
+          CarState::Orientation orientation;
+          orientation.yaw = float(uint16_t(buffer[1] | (buffer[2] << 8))) / 100.;
+          orientation.pitch = float(int16_t(buffer[3] | (buffer[4] << 8))) / 100.;
+          orientation.roll = float(int16_t(buffer[5] | (buffer[6] << 8))) / 100.;
+          car_state.setOrientation(orientation);
+        } break;
+      }
     }
   }
 
@@ -57,7 +87,7 @@ namespace earth_rover
     uint8_t buffer[nrf24l01_payload_size];
     auto drive = car_state.getDriveInputs();
     auto lighting = car_state.getLighting();
-    buffer[0] = to_integral(MessageType::Control);
+    buffer[0] = to_integral(RequestMessageType::Control);
     buffer[1] = (drive.steering) & 0xff;
     buffer[2] = (drive.steering >> 8) & 0xff;
     buffer[3] = (drive.throttle) & 0xff;
@@ -68,6 +98,24 @@ namespace earth_rover
                 | (lighting.dipped_beam << 2)
                 | (lighting.high_beam << 3)
                 | (lighting.hazard_flashers << 4);
+    // buffer[7] = 0;  // Padding.
+    // buffer[8] = 0;  // Padding.
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendRequestStateMessage(uint8_t requested_state)
+  {
+    static_assert(nrf24l01_payload_size >= 2,
+                  "the 'request state' message requires a payload size of at least 2 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::RequestState);
+    buffer[1] = requested_state;
+    // buffer[2] = 0;  // Padding.
+    // buffer[3] = 0;  // Padding.
+    // buffer[4] = 0;  // Padding.
+    // buffer[5] = 0;  // Padding.
+    // buffer[6] = 0;  // Padding.
     // buffer[7] = 0;  // Padding.
     // buffer[8] = 0;  // Padding.
     return sendMessage(buffer);

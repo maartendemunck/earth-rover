@@ -55,11 +55,12 @@ namespace earth_rover
       digitalWrite(LED_BUILTIN, 1);
       nrf24l01_device.read(buffer, nrf24l01_payload_size);
       auto message_processed = false;
-      switch(static_cast<MessageType>(buffer[0]))
+      switch(static_cast<RequestMessageType>(buffer[0]))
       {
-        case MessageType::Control:
+        case RequestMessageType::Control:
         {
-          static_assert(nrf24l01_payload_size >= 7, "control message requires a payload size of at least 7 bytes");
+          static_assert(nrf24l01_payload_size >= 7,
+                        "the control message requires a payload size of at least 7 bytes");
           int16_t steering = buffer[1] | (buffer[2] << 8 );
           int16_t throttle = buffer[3] | (buffer[4] << 8 );
           int8_t gearbox = buffer[5];
@@ -70,6 +71,16 @@ namespace earth_rover
           // Send message to VCU.
           vcu.handleControlMessage(steering, throttle, gearbox, lighting);
           message_processed = true;
+        } break;
+        case RequestMessageType::RequestState:
+        {
+          static_assert(nrf24l01_payload_size >= 2,
+                        "the 'request state' message requires a payload size of at least 2 bytes");
+          uint8_t state_requested = buffer[1];
+          if(state_requested & 0x02)  // Orientation.
+          {
+            sendOrientationMessage();
+          }
         } break;
         default:
         {
@@ -86,6 +97,42 @@ namespace earth_rover
     {
       fhss_synced = false;
     }
+  }
+
+
+  bool VcuCommunicator::sendOrientationMessage()
+  {
+    static_assert(nrf24l01_payload_size >= 8,
+                  "the 'orientation' message requires a payload of size of at least 8 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    // Compose orientation message.
+    buffer[0] = static_cast<uint8_t>(ResponseMessageType::Orientation);
+    auto orientation = vcu.getOrientation();
+    auto calibration_status = vcu.getImuCalibrationStatus();
+    uint16_t yaw = uint16_t(orientation.yaw * 180. / M_PI * 100.);
+    buffer[1] = yaw & 0x00ff;
+    buffer[2] = (yaw & 0xff00) >> 8;
+    int16_t pitch = int16_t(orientation.pitch * 180. / M_PI * 100.);
+    buffer[3] = pitch & 0x00ff;
+    buffer[4] = (pitch & 0xff00) >> 8;
+    int16_t roll =  int16_t(orientation.roll * 180. / M_PI * 100.);
+    buffer[5] = roll & 0x00ff;
+    buffer[6] = (roll & 0xff00) >> 8;
+    buffer[7] = (calibration_status.magnetometer & 0x03) |
+                ((calibration_status.accelerometer & 0x03) << 2) |
+                ((calibration_status.gyroscope & 0x03) << 4) |
+                ((calibration_status.system & 0x03) << 6);
+    // Transmit orientation message.
+    return sendMessage(buffer);
+  }
+
+
+  bool VcuCommunicator::sendMessage(uint8_t buffer[nrf24l01_payload_size])
+  {
+    nrf24l01_device.stopListening();
+    auto result = nrf24l01_device.write(buffer, nrf24l01_payload_size);
+    nrf24l01_device.startListening();
+    return result;
   }
 
 

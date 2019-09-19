@@ -94,6 +94,28 @@ namespace earth_rover
   }
   
 
+  AdafruitBNO055<i2c_t3>::bno055_euler_angles_t Vcu::getOrientation()
+  {
+    // Get Euler angles.
+    auto angles = bno055_imu.getEulerAngles();
+    // Adjust Euler angles for the orientation of the Adafruit BNO055 IMU in the car.
+    angles.yaw = - angles.yaw - 90.;
+    while(angles.yaw < 0)
+    {
+      angles.yaw += 2. * M_PI;
+    }
+    angles.pitch = angles.pitch;
+    angles.roll = - angles.roll;
+    return angles;
+  }
+
+
+  AdafruitBNO055<i2c_t3>::bno055_calibration_status_t Vcu::getImuCalibrationStatus()
+  {
+    return bno055_imu.getCalibrationStatus();
+  }
+
+
   void Vcu::handleTimeout ()
   {
     // Stop car and turn stop lamps and hazard flashers on.
@@ -103,5 +125,6 @@ namespace earth_rover
     // Timeout handler called.
     timeout_handler_called = true;
   }
+
 
 }

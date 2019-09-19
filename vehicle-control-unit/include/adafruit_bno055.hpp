@@ -53,6 +53,13 @@ namespace earth_rover
         float z;
       };
 
+      struct bno055_euler_angles_t
+      {
+        float yaw;
+        float pitch;
+        float roll;
+      };
+
     private:
 
       enum class bno055_register_t: uint8_t
@@ -268,6 +275,27 @@ namespace earth_rover
         result.y = int16_t((uint16_t(buffer[5]) << 8) | uint16_t(buffer[4])) * scale;
         result.z = int16_t((uint16_t(buffer[7]) << 8) | uint16_t(buffer[6])) * scale;
         return result;
+      }
+
+      bno055_euler_angles_t getEulerAngles()
+      {
+        // Get orientation as a quaternion.
+        auto q = getQuaternion();
+        // Convert the quaternion to Euler angles.
+        bno055_euler_angles_t angles;
+        // Roll (x-axis rotation).
+        float sinr_cosp = +2.0 * (q.w * q.x + q.y * q.z);
+        float cosr_cosp = +1.0 - 2.0 * (q.x * q.x + q.y * q.y);
+        angles.roll = atan2f(sinr_cosp, cosr_cosp);
+        // Pitch (y-axis rotation).
+        float sinp = +2.0 * (q.w * q.y - q.z * q.x);
+        angles.pitch = fabs(sinp) >= 1? copysign(M_PI / 2, sinp): asinf(sinp);
+        // Yaw (z-axis rotation).
+        float siny_cosp = +2.0 * (q.w * q.z + q.x * q.y);
+        float cosy_cosp = +1.0 - 2.0 * (q.y * q.y + q.z * q.z);  
+        angles.yaw = atan2(siny_cosp, cosy_cosp);
+        // Return Euler angles.
+        return angles;
       }
 
       bno055_vector_t getAngularVelocity()

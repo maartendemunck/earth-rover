@@ -133,4 +133,21 @@ namespace earth_rover
       lighting.hazard_flashers = state;
   }
 
+
+  void CarState::setOrientation(const Orientation & new_orientation)
+  {
+    orientation = new_orientation;
+    orientation_changed = true;
+  }
+
+
+  const CarState::Orientation & CarState::getOrientation(bool reset)
+  {
+    if(reset)
+    {
+      orientation_changed = false;
+    }
+    return orientation;
+  }
+
 }

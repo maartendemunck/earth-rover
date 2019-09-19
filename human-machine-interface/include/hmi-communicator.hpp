@@ -16,7 +16,8 @@ namespace earth_rover
   {
     private:
 
-      enum class MessageType: uint8_t { Control = 0x00 };
+      enum class RequestMessageType: uint8_t { Control = 0x00, RequestState = 0x10 };
+      enum class ResponseMessageType: uint8_t { Orientation = 0x91 };
 
       RF24 nrf24l01_device;
       static constexpr uint8_t nrf24l01_payload_size {9u};
@@ -27,6 +28,7 @@ namespace earth_rover
       uint8_t nrf24l01_fhss_channel_index;
       static constexpr uint8_t update_interval {50u};
       elapsedMillis since_update;
+      uint8_t update_sequence_id;
       bool channel_changed;
 
       CarConfiguration & car_configuration;
@@ -41,7 +43,8 @@ namespace earth_rover
     private:
 
       bool sendControlMessage();
-      bool sendMessage(uint8_t buffer[]);
+      bool sendRequestStateMessage(uint8_t requested_state);
+      bool sendMessage(uint8_t buffer[nrf24l01_payload_size]);
       void changeChannel();
 
   };

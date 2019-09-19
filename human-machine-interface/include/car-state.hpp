@@ -77,6 +77,9 @@ namespace earth_rover
       void setHighBeam(bool state);
       void setHazardFlashers(bool state);
       const Lighting & getLighting() { return lighting; };
+      void setOrientation(const Orientation & new_orientation);
+      const Orientation & getOrientation(bool reset = true);
+      bool getOrientationChanged() { return orientation_changed; };
 
   };
 

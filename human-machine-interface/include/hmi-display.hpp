@@ -178,7 +178,12 @@ namespace earth_rover
         // Process response.
         if(rx_buffer[0] == 0xa0u && rx_buffer_pointer == 5)  // Page change.
         {
-          current_page = from_integral<HmiPage>(rx_buffer[1]);
+          auto new_page = from_integral<HmiPage>(rx_buffer[1]);
+          if(new_page != current_page)
+          {
+            current_page = new_page;
+            updateSettingsOnDisplay(true);
+          }
         }
         else if(rx_buffer[0] == 0xa1u && rx_buffer_pointer == 6)  // Lighting.
         {
@@ -320,6 +325,17 @@ namespace earth_rover
   template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::updateSettingsOnDisplay (bool force_update)
   {
+    // Update orientation.
+    if(current_page == HmiPage::Orientation && (force_update || car_state.getOrientationChanged()))
+    {
+      auto orientation = car_state.getOrientation();
+      serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.yaw)) % 360);
+      serial_device.printf("z_pitch.val=%d\xff\xff\xff",
+          (90 + 2 * int16_t(limit_value(orientation.pitch, -60., 60.))) % 360);
+      serial_device.printf("z_roll.val=%d\xff\xff\xff",
+          (90 + 2 * int16_t(limit_value(orientation.roll, -60., 60.))) % 360);
+      serial_device.flush();
+    }
     // Update steering servo settings.
     if(force_update || car_configuration.getSteeringConfig().isConfigurationChanged())
     {

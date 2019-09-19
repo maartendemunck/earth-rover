@@ -1396,7 +1396,7 @@ name "tab:pin-assignment-controller-hmi"
 \end_layout
 
 \begin_layout Section
-Car Controller (RC 
+VCU (RC 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1419,14 +1419,14 @@ reference "tab:pin-assignment-controller-car"
 
 \end_inset
 
- shows the pin assignment on the car's Teensy 3.2 microcontroller.
+ shows the pin assignment on the VCU's Teensy 3.2 microcontroller.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset ERT
@@ -2600,7 +2600,7 @@ Voltage reference
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Pin assignment on the car's Teensy 3.2 microcontroller.
+Pin assignment on the VCU's Teensy 3.2 microcontroller.
 \end_layout
 
 \end_inset
@@ -2793,7 +2793,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="43" columns="3">
+<lyxtabular version="3" rows="40" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="26mm">
 <column alignment="right" valignment="top" width="0pt">
@@ -3264,7 +3264,7 @@ Requested state:
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3293,7 +3293,7 @@ Bit 0: speed, odometer and tripmeter
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3322,7 +3322,7 @@ Bit 1: orientation
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3776,6 +3776,35 @@ Input (uint8):
 </cell>
 </row>
 <row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4: shift buttons
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -3918,123 +3947,15 @@ Pulse width forward (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Input (uint8):
-\end_layout
-
+Input (uint8) (see 
+\begin_inset Quotes eld
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
+configure steering servo
+\begin_inset Quotes erd
 \end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0: horizontal movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1: vertical movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2: horizontal movement of left stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3: vertical movement of left stick
+)
 \end_layout
 
 \end_inset
@@ -4123,7 +4044,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="14" columns="3">
+<lyxtabular version="3" rows="10" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="26mm">
 <column alignment="right" valignment="top" width="0pt">
@@ -4271,123 +4192,15 @@ Pulse width high speed (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Input (uint8):
-\end_layout
-
+Input (uint8) (see 
+\begin_inset Quotes eld
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
+configure steering servo
+\begin_inset Quotes erd
 \end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0: horizontal movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1: vertical movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2: horizontal movement of left stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell multirow="4" alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3: vertical movement of left stick
+)
 \end_layout
 
 \end_inset
@@ -4600,7 +4413,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="42" columns="3">
+<lyxtabular version="3" rows="40" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="26mm">
 <column alignment="right" valignment="top" width="0pt">
@@ -4810,7 +4623,7 @@ Yaw (compass, 0.01°) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Yaw (compass, 0.01°) (int16)
+Pitch (0.01°) (int16)
 \end_layout
 
 \end_inset
@@ -4855,16 +4668,161 @@ Roll (0.01°) (int16)
 
 \end_inset
 </cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="right" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
-16 bits
+8 bits
 \end_layout
 
 \end_inset
 </cell>
 <cell alignment="left" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Calibration status (uint8):
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bits 0-1: Magnetometer calibration status
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bits 2-3: Accelerometer calibration status
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bits 4-5: Gyroscope calibration status
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bits 6-7: System calibration status
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8 bits
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5066,7 +5024,7 @@ Pulse width right (uint16)
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="right" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5095,7 +5053,7 @@ Input (uint8):
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5124,7 +5082,7 @@ Input (uint8):
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5153,7 +5111,7 @@ Input (uint8):
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5182,7 +5140,7 @@ Input (uint8):
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5196,6 +5154,35 @@ Input (uint8):
 
 \begin_layout Plain Layout
 3: vertical movement of left stick
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4: shift buttons
 \end_layout
 
 \end_inset
@@ -5344,123 +5331,15 @@ Pulse width forward (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Input (uint8):
-\end_layout
-
+Input (uint8) (see 
+\begin_inset Quotes eld
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
+steering servo configuration
+\begin_inset Quotes erd
 \end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0: horizontal movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1: vertical movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2: horizontal movement of left stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3: vertical movement of left stick
+)
 \end_layout
 
 \end_inset
@@ -5609,123 +5488,15 @@ Pulse width high speed (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Input (uint8):
-\end_layout
-
+Input (uint8) (see 
+\begin_inset Quotes eld
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
+steering servo configuration
+\begin_inset Quotes erd
 \end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0: horizontal movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1: vertical movement of right stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2: horizontal movement of left stick
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3: vertical movement of left stick
+)
 \end_layout
 
 \end_inset
@@ -5952,7 +5723,7 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="41" columns="3">
+<lyxtabular version="3" rows="40" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="middle" width="33mm">
 <column alignment="right" valignment="top">
@@ -6336,7 +6107,7 @@ Light ID (uint8):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1: right turn signals
+Bit 0: right turn signals
 \end_layout
 
 \end_inset
@@ -6365,7 +6136,7 @@ Light ID (uint8):
 \begin_inset Text
 
 \begin_layout Plain Layout
-2: left turn signals
+Bit 1: left turn signals
 \end_layout
 
 \end_inset
@@ -6394,7 +6165,7 @@ Light ID (uint8):
 \begin_inset Text
 
 \begin_layout Plain Layout
-3: dipped beam and tail lamps
+Bit 2: dipped beam and tail lamps
 \end_layout
 
 \end_inset
@@ -6423,7 +6194,7 @@ Light ID (uint8):
 \begin_inset Text
 
 \begin_layout Plain Layout
-4: high beam
+Bit 3: high beam
 \end_layout
 
 \end_inset
@@ -6452,7 +6223,7 @@ Light ID (uint8):
 \begin_inset Text
 
 \begin_layout Plain Layout
-5: hazard flashers
+Bit 4: hazard flashers
 \end_layout
 
 \end_inset
@@ -6659,7 +6430,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1100h: steering servo input channel
+11h 00h: steering servo input channel
 \end_layout
 
 \end_inset
@@ -6688,7 +6459,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1101h: pulse width left
+11h 01h: pulse width left
 \end_layout
 
 \end_inset
@@ -6717,7 +6488,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1102h: pulse width center
+11h 02h: pulse width center
 \end_layout
 
 \end_inset
@@ -6746,7 +6517,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1103h: pulse width right
+11h 03h: pulse width right
 \end_layout
 
 \end_inset
@@ -6775,7 +6546,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1200h: ESC input channel
+12h 00h: ESC input channel
 \end_layout
 
 \end_inset
@@ -6804,7 +6575,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1201h: pulse width backwards
+12h 01h: pulse width backwards
 \end_layout
 
 \end_inset
@@ -6833,7 +6604,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1202h: pulse width stop
+12h 02h: pulse width stop
 \end_layout
 
 \end_inset
@@ -6862,7 +6633,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1203h: pulse width forward
+12h 03h: pulse width forward
 \end_layout
 
 \end_inset
@@ -6891,7 +6662,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1300h: gearbox servo input channel
+13h 00h: gearbox servo input channel
 \end_layout
 
 \end_inset
@@ -6920,7 +6691,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1301h: pulse width neutral
+13h 01h: pulse width neutral
 \end_layout
 
 \end_inset
@@ -6949,7 +6720,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1302h: pulse width low speed
+13h 02h: pulse width low speed
 \end_layout
 
 \end_inset
@@ -6978,7 +6749,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1303h: pulse width high speed
+13h 03h: pulse width high speed
 \end_layout
 
 \end_inset
@@ -7007,7 +6778,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-1401h: HMI (
+14h 01h: HMI (
 \begin_inset Quotes eld
 \end_inset
 
@@ -7044,7 +6815,7 @@ transmitter
 \begin_inset Text
 
 \begin_layout Plain Layout
-1402h: VCU (
+14h 02h: VCU (
 \begin_inset Quotes eld
 \end_inset
 
@@ -7053,35 +6824,6 @@ receiver
 \end_inset
 
 ) power level
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-1403h: radio channel
 \end_layout
 
 \end_inset

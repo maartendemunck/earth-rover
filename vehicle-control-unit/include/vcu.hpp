@@ -4,6 +4,8 @@
 
 #include <cstdint>
 #include <i2c_t3.h>
+#include <GPSport.h>
+#include <NMEAGPS.h>
 #include "adafruit_bno055.hpp"
 #include "configured-servo.hpp"
 #include "lighting.hpp"
@@ -20,6 +22,8 @@ namespace earth_rover
     ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
     AdafruitBNO055<i2c_t3> bno055_imu;
+    NMEAGPS mtk3339_gps;
+    gps_fix mtk3339_gps_fix;
 
     elapsedMillis since_last_control_message;
     bool timeout_handler_called;
@@ -39,6 +43,7 @@ namespace earth_rover
 
       AdafruitBNO055<i2c_t3>::bno055_euler_angles_t getOrientation();
       AdafruitBNO055<i2c_t3>::bno055_calibration_status_t getImuCalibrationStatus();
+      gps_fix getGpsData() const { return mtk3339_gps_fix; };
 
     private:
 

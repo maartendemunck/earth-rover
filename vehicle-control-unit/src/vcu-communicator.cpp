@@ -60,7 +60,7 @@ namespace earth_rover
         case RequestMessageType::Control:
         {
           static_assert(nrf24l01_payload_size >= 7,
-                        "the control message requires a payload size of at least 7 bytes");
+                        "the 'control' message requires a payload size of at least 7 bytes");
           int16_t steering = buffer[1] | (buffer[2] << 8 );
           int16_t throttle = buffer[3] | (buffer[4] << 8 );
           int8_t gearbox = buffer[5];
@@ -80,6 +80,14 @@ namespace earth_rover
           if(state_requested & 0x02)  // Orientation.
           {
             sendOrientationMessage();
+          }
+          if(state_requested & 0x04)  // Location.
+          {
+            sendLocationMessage();
+          }
+          if(state_requested & 0x08)  // Altitude.
+          {
+            sendAltitudeMessage();
           }
         } break;
         default:
@@ -102,8 +110,7 @@ namespace earth_rover
 
   bool VcuCommunicator::sendOrientationMessage()
   {
-    static_assert(nrf24l01_payload_size >= 8,
-                  "the 'orientation' message requires a payload of size of at least 8 bytes");
+    static_assert(nrf24l01_payload_size >= 8, "the 'orientation' message requires a payload size of at least 8 bytes");
     uint8_t buffer[nrf24l01_payload_size];
     // Compose orientation message.
     buffer[0] = static_cast<uint8_t>(ResponseMessageType::Orientation);
@@ -124,6 +131,60 @@ namespace earth_rover
                 ((calibration_status.system & 0x03) << 6);
     // Transmit orientation message.
     return sendMessage(buffer);
+  }
+
+
+  bool VcuCommunicator::sendLocationMessage()
+  {
+    auto gps_data = vcu.getGpsData();
+    if(gps_data.valid.location)
+    {
+      static_assert(nrf24l01_payload_size >= 9, "the 'location' message requires a payload size of at least 9 bytes");
+      uint8_t buffer[nrf24l01_payload_size];
+      // Compose location message.
+      buffer[0] = static_cast<uint8_t>(ResponseMessageType::Location);
+      const int32_t latitude = gps_data.latitudeL();
+      buffer[1] = latitude & 0x000000ff;
+      buffer[2] = (latitude & 0x0000ff00) >> 8;
+      buffer[3] = (latitude & 0x00ff0000) >> 16;
+      buffer[4] = (latitude & 0xff000000) >> 24;
+      const int32_t longitude = gps_data.longitudeL();
+      buffer[5] = longitude & 0x000000ff;
+      buffer[6] = (longitude & 0x0000ff00) >> 8;
+      buffer[7] = (longitude & 0x00ff0000) >> 16;
+      buffer[8] = (longitude & 0xff000000) >> 24;
+      // Transmit location message.
+      return sendMessage(buffer);
+    }
+    else
+    {
+      return false;  // Ignore the location request if we don't have a valid location.
+    }
+    
+  }
+
+
+  bool VcuCommunicator::sendAltitudeMessage()
+  {
+    auto gps_data = vcu.getGpsData();
+    if(gps_data.valid.altitude)
+    {
+      static_assert(nrf24l01_payload_size >= 5, "the 'altitude' message requires a payload size of at least 5 bytes");
+      uint8_t buffer[nrf24l01_payload_size];
+      // Compose altitude message.
+      buffer[0] = static_cast<uint8_t>(ResponseMessageType::Altitude);
+      const int32_t altitude = gps_data.altitude_cm();
+      buffer[1] = altitude & 0x000000ff;
+      buffer[2] = (altitude & 0x0000ff00) >> 8;
+      buffer[3] = (altitude & 0x00ff0000) >> 16;
+      buffer[4] = (altitude & 0xff000000) >> 24;
+      // Transmit altitude message.
+      return sendMessage(buffer);
+    }
+    else
+    {
+      return false;  // Ignore the altitude request if we don't have a valid altitude.
+    }
   }
 
 

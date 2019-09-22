@@ -336,6 +336,27 @@ namespace earth_rover
           (90 + 2 * int16_t(limit_value(orientation.roll, -60., 60.))) % 360);
       serial_device.flush();
     }
+    // Update location.
+    if(current_page == HmiPage::Location && (force_update || car_state.getLocationChanged()))
+    {
+      auto location = car_state.getLocation();
+      serial_device.printf("t_lat.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
+                           location.latitude.degrees, location.latitude.minutes,
+                           location.latitude.seconds_whole, location.latitude.seconds_frac / 100,
+                           location.latitude.hemisphere == Hemisphere_t::NORTH_H? 'N': 'S');
+      serial_device.printf("t_lon.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
+                           location.longitude.degrees, location.longitude.minutes,
+                           location.longitude.seconds_whole, location.longitude.seconds_frac / 100,
+                           location.longitude.hemisphere == Hemisphere_t::EAST_H? 'E': 'W');
+      serial_device.flush();
+    }
+    // Update altitude.
+    if(current_page == HmiPage::Location && (force_update || car_state.getAltitudeChanged()))
+    {
+      auto altitude = car_state.getAltitude();
+      serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude / 100, altitude % 100);
+      serial_device.flush();
+    }
     // Update steering servo settings.
     if(force_update || car_configuration.getSteeringConfig().isConfigurationChanged())
     {

@@ -3,6 +3,7 @@
 
 
 #include <cstdint>
+#include <DMS.h>
 #include "limit-value.hpp"
 
 
@@ -13,13 +14,15 @@ namespace earth_rover
   {
     public:
 
-      struct Drive {
+      struct Drive
+      {
         int16_t steering;
         int16_t throttle;
         int8_t gear;
       };
 
-      struct Lighting {
+      struct Lighting
+      {
         bool turn_signal_right;
         bool turn_signal_left;
         bool dipped_beam;
@@ -27,22 +30,24 @@ namespace earth_rover
         bool hazard_flashers;
       };
 
-      struct Speedometer {
+      struct Speedometer
+      {
         float speed;
         float odometer;
         float tripmeter;
       };
 
-      struct Orientation {
+      struct Orientation
+      {
         float yaw;
         float pitch;
         float roll;
       };
 
-      struct Location {
-        float latitude;
-        float longitude;
-        float altitude;
+      struct Location
+      {
+        DMS_t latitude;
+        DMS_t longitude;
       };
 
     private:
@@ -60,6 +65,8 @@ namespace earth_rover
       bool orientation_changed;
       Location location;
       bool location_changed;
+      int32_t altitude;
+      bool altitude_changed;
 
     public:
 
@@ -80,6 +87,12 @@ namespace earth_rover
       void setOrientation(const Orientation & new_orientation);
       const Orientation & getOrientation(bool reset = true);
       bool getOrientationChanged() { return orientation_changed; };
+      void setLocation(const Location & new_location);
+      const Location & getLocation(bool reset = true);
+      bool getLocationChanged() { return location_changed; };
+      void setAltitude(int32_t new_altitude);
+      int32_t getAltitude(bool reset = true);
+      bool getAltitudeChanged() { return altitude_changed; };
 
   };
 

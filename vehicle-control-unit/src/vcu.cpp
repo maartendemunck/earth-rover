@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "vcu.hpp"
 
 
@@ -32,6 +33,11 @@ namespace earth_rover
     // Initialize the Bosch BNO055 IMU. TODO: get I²C configuration as a parameter?
     Wire.begin(I2C_MASTER, 0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, 400000, I2C_OP_MODE_ISR);
     bno055_imu.setup();
+    // Initialize the GPS. TODO: get serial configuration as a parameter?
+    Serial1.setRX(0);
+    Serial1.setTX(1);
+    Serial1.begin(9600, SERIAL_8N1);
+ 
     // This is a safe state, no need to call the timeout handler.
     timeout_handler_called = true;
   }
@@ -44,6 +50,10 @@ namespace earth_rover
       handleTimeout();
     }
     automotive_lighting.spinOnce();
+    while(mtk3339_gps.available(Serial1))
+    {
+      mtk3339_gps_fix = mtk3339_gps.read();
+    }
   }
 
 

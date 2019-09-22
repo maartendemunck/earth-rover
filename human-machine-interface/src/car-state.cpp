@@ -150,4 +150,38 @@ namespace earth_rover
     return orientation;
   }
 
+
+  void CarState::setLocation(const Location & new_location)
+  {
+    location = new_location;
+    location_changed = true;
+  }
+
+
+  const CarState::Location & CarState::getLocation(bool reset)
+  {
+    if(reset)
+    {
+      location_changed = false;
+    }
+    return location;
+  }
+  
+  
+  void CarState::setAltitude(int32_t new_altitude)
+  {
+    altitude = new_altitude;
+    altitude_changed = true;
+  }
+  
+  
+  int32_t CarState::getAltitude(bool reset)
+  {
+    if(reset)
+    {
+      altitude_changed = false;
+    }
+    return altitude;
+  }
+
 }

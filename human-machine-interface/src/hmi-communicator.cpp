@@ -47,17 +47,21 @@ namespace earth_rover
     {
       bool control_message_sent = sendControlMessage();
       since_update -= update_interval;
-      if(control_message_sent && update_sequence_id % 20 == 0)  // Request GPS position every second.
-      {
-        sendRequestStateMessage(0x04);
-      }
-      if(control_message_sent && update_sequence_id % 5 == 1)  // Request velocity, odometer and tripmeter four times per second.
+      if(control_message_sent && update_sequence_id % 6 == 0)
       {
         sendRequestStateMessage(0x01);
       }
-      if(control_message_sent && update_sequence_id % 5 == 2)  // Requence orientation four times per second.
+      if(control_message_sent && update_sequence_id % 6 == 2)
       {
         sendRequestStateMessage(0x02);
+      }
+      if(control_message_sent && update_sequence_id % 12 == 4)
+      {
+        sendRequestStateMessage(0x04);
+      }
+      if(control_message_sent && update_sequence_id % 12 == 10)
+      {
+        sendRequestStateMessage(0x08);
       }
       ++ update_sequence_id;
       channel_changed = false;
@@ -71,11 +75,25 @@ namespace earth_rover
         case ResponseMessageType::Orientation:
         {
           CarState::Orientation orientation;
-          orientation.yaw = float(uint16_t(buffer[1] | (buffer[2] << 8))) / 100.;
-          orientation.pitch = float(int16_t(buffer[3] | (buffer[4] << 8))) / 100.;
-          orientation.roll = float(int16_t(buffer[5] | (buffer[6] << 8))) / 100.;
+          orientation.yaw = float(uint16_t(buffer[1]) | (uint16_t(buffer[2]) << 8)) / 100.;
+          orientation.pitch = float(int16_t(buffer[3]) | (int16_t(buffer[4]) << 8)) / 100.;
+          orientation.roll = float(int16_t(buffer[5]) | (int16_t(buffer[6]) << 8)) / 100.;
           car_state.setOrientation(orientation);
         } break;
+        case ResponseMessageType::Location:
+        {
+          CarState::Location location;
+          location.latitude.From(int32_t(buffer[1]) | (int32_t(buffer[2]) << 8)
+                                 | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24));
+          location.longitude.From(int32_t(buffer[5]) | (int32_t(buffer[6]) << 8)
+                                  | (int32_t(buffer[7]) << 16) | (int32_t(buffer[8]) << 24));
+          car_state.setLocation(location);
+        } break;
+        case ResponseMessageType::Altitude:
+        {
+          car_state.setAltitude(int32_t(buffer[1]) | (int32_t(buffer[2]) << 8)
+                                | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24));
+        }
       }
     }
   }

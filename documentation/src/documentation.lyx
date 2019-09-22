@@ -82,8 +82,8 @@
 \quotes_style english
 \dynamic_quotes 0
 \papercolumns 1
-\papersides 1
-\paperpagestyle default
+\papersides 2
+\paperpagestyle plain
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -175,9 +175,22 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+center
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename images/electronics-block-diagram.pdf
-	width 100text%
+	width 95text%
 
 \end_inset
 
@@ -2620,10 +2633,6 @@ name "tab:pin-assignment-controller-car"
 
 \end_layout
 
-\begin_layout Section
-Autopilot
-\end_layout
-
 \begin_layout Chapter
 Software
 \end_layout
@@ -2793,9 +2802,9 @@ small
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="40" columns="3">
+<lyxtabular version="3" rows="41" columns="3">
 <features tabularvalignment="middle">
-<column alignment="left" valignment="middle" width="26mm">
+<column alignment="left" valignment="middle" width="29mm">
 <column alignment="right" valignment="top" width="0pt">
 <column alignment="left" valignment="middle" width="82mm">
 <row endhead="true" endfirsthead="true">
@@ -3333,6 +3342,35 @@ Bit 2: location
 </cell>
 </row>
 <row>
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Bit 3: altitude
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
 <cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -3370,7 +3408,7 @@ Request configuration
 \begin_inset Newline newline
 \end_inset
 
-0011000b = 30h
+00110000b = 30h
 \end_layout
 
 \end_inset
@@ -3548,7 +3586,7 @@ Configure steering servo
 \begin_inset Newline newline
 \end_inset
 
-0010000b = 20h
+00100000b = 20h
 \end_layout
 
 \end_inset
@@ -3776,7 +3814,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4046,7 +4084,7 @@ small
 \begin_inset Tabular
 <lyxtabular version="3" rows="10" columns="3">
 <features tabularvalignment="middle">
-<column alignment="left" valignment="middle" width="26mm">
+<column alignment="left" valignment="middle" width="29mm">
 <column alignment="right" valignment="top" width="0pt">
 <column alignment="left" valignment="middle" width="82mm">
 <row endhead="true" endfirsthead="true">
@@ -4415,7 +4453,7 @@ small
 \begin_inset Tabular
 <lyxtabular version="3" rows="40" columns="3">
 <features tabularvalignment="middle">
-<column alignment="left" valignment="middle" width="26mm">
+<column alignment="left" valignment="middle" width="30mm">
 <column alignment="right" valignment="top" width="0pt">
 <column alignment="left" valignment="middle" width="82mm">
 <row endhead="true" endfirsthead="true">
@@ -4474,7 +4512,11 @@ Speed and distance
 \begin_inset Text
 
 \begin_layout Plain Layout
-Speed (0.001 km/h) (uint16)
+Speed (0.001
+\begin_inset space ~
+\end_inset
+
+km/h) (uint16)
 \end_layout
 
 \end_inset
@@ -4494,7 +4536,7 @@ Speed (0.001 km/h) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-16 bits
+24 bits
 \end_layout
 
 \end_inset
@@ -4503,7 +4545,11 @@ Speed (0.001 km/h) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Odometer (0.01 km) (uint16)
+Odometer (1
+\begin_inset space ~
+\end_inset
+
+m) (uint24)
 \end_layout
 
 \end_inset
@@ -4523,7 +4569,7 @@ Odometer (0.01 km) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-16 bits
+24 bits
 \end_layout
 
 \end_inset
@@ -4532,36 +4578,11 @@ Odometer (0.01 km) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Tripmeter (0.001km) (uint16)
-\end_layout
-
+Tripmeter (1
+\begin_inset space ~
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="left" valignment="top" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-16 bits
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Padding
+m) (uint24)
 \end_layout
 
 \end_inset
@@ -4594,7 +4615,11 @@ Orientation
 \begin_inset Text
 
 \begin_layout Plain Layout
-Yaw (compass, 0.01°) (uint16)
+Yaw (compass, 0.01
+\begin_inset space ~
+\end_inset
+
+degree) (uint16)
 \end_layout
 
 \end_inset
@@ -4623,7 +4648,11 @@ Yaw (compass, 0.01°) (uint16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Pitch (0.01°) (int16)
+Pitch (0.01
+\begin_inset space ~
+\end_inset
+
+degree) (int16)
 \end_layout
 
 \end_inset
@@ -4652,7 +4681,11 @@ Pitch (0.01°) (int16)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Roll (0.01°) (int16)
+Roll (0.01
+\begin_inset space ~
+\end_inset
+
+degree) (int16)
 \end_layout
 
 \end_inset
@@ -4688,7 +4721,7 @@ Calibration status (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4717,7 +4750,7 @@ Bits 0-1: Magnetometer calibration status
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4746,7 +4779,7 @@ Bits 2-3: Accelerometer calibration status
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4775,7 +4808,7 @@ Bits 4-5: Gyroscope calibration status
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4804,7 +4837,7 @@ Bits 6-7: System calibration status
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4841,7 +4874,7 @@ Location
 \begin_inset Newline newline
 \end_inset
 
-10010002b = 92h
+10010010b = 92h
 \end_layout
 
 \end_inset
@@ -4850,7 +4883,7 @@ Location
 \begin_inset Text
 
 \begin_layout Plain Layout
-24 bits
+32 bits
 \end_layout
 
 \end_inset
@@ -4859,14 +4892,22 @@ Location
 \begin_inset Text
 
 \begin_layout Plain Layout
-Latitude (0.05") (int24)
+Latitude (
+\begin_inset Formula $10^{-6}$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+degree) (int32)
 \end_layout
 
 \end_inset
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4879,7 +4920,7 @@ Latitude (0.05") (int24)
 \begin_inset Text
 
 \begin_layout Plain Layout
-24 bits
+32 bits
 \end_layout
 
 \end_inset
@@ -4888,36 +4929,15 @@ Latitude (0.05") (int24)
 \begin_inset Text
 
 \begin_layout Plain Layout
-Longitude (0.1") (int24)
-\end_layout
-
+Longitude (
+\begin_inset Formula $10^{-6}$
 \end_inset
-</cell>
-</row>
-<row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
 
-\end_layout
-
+\begin_inset space ~
 \end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-16 bits
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Altitude (0.1m) (int16)
+degree) (int32)
 \end_layout
 
 \end_inset
@@ -4925,6 +4945,72 @@ Altitude (0.1m) (int16)
 </row>
 <row>
 <cell multirow="3" alignment="left" valignment="middle" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Altitude
+\begin_inset Newline newline
+\end_inset
+
+10010011b = 93h
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32 bits
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Altitude (0.01
+\begin_inset space ~
+\end_inset
+
+m) (int32)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="left" valignment="top" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+32 bits
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Padding
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4957,7 +5043,7 @@ Pulse width left (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4986,7 +5072,7 @@ Pulse width center (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5015,7 +5101,7 @@ Pulse width right (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5044,7 +5130,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5073,7 +5159,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5102,7 +5188,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5131,7 +5217,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5160,7 +5246,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5189,7 +5275,7 @@ Input (uint8):
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5251,7 +5337,7 @@ Pulse width backwards (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5280,7 +5366,7 @@ Pulse width stop (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5309,7 +5395,7 @@ Pulse width forward (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5346,7 +5432,7 @@ steering servo configuration
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5408,7 +5494,7 @@ Pulse width low speed (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5437,7 +5523,7 @@ Pulse width neutral (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5466,7 +5552,7 @@ Pulse width high speed (uint16)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5503,7 +5589,7 @@ steering servo configuration
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5540,7 +5626,7 @@ Radio config
 \begin_inset Newline newline
 \end_inset
 
-10110100 = B4h
+10110100b = B4h
 \end_layout
 
 \end_inset
@@ -5565,7 +5651,7 @@ HMI (TX) power (uint8)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5594,7 +5680,7 @@ VCU (RX) power (uint8)
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout

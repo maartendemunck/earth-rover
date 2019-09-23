@@ -13,15 +13,20 @@ namespace earth_rover
 
   void CarState::spinOnce()
   {
+    if(orientation.valid == true && orientation.since_last_update >= 1000u)
+    {
+      orientation.valid = false;
+      orientation.updated = true;
+    }
     if(location.valid == true && location.since_last_update >= 5000u)
     {
       location.valid = false;
-      location.changed = true;
+      location.updated = true;
     }
     if(altitude.valid == true && altitude.since_last_update >= 5000u)
     {
       altitude.valid = false;
-      altitude.changed = true;
+      altitude.updated = true;
     }
   }
 
@@ -149,20 +154,25 @@ namespace earth_rover
   }
 
 
-  void CarState::setOrientation(const Orientation & new_orientation)
+  void CarState::setOrientation(const Orientation & new_orientation, bool valid)
   {
-    orientation = new_orientation;
-    orientation_changed = true;
+    orientation.data = new_orientation;
+    orientation.valid = valid;
+    orientation.updated = true;
+    if(valid)
+    {
+      orientation.since_last_update = 0;
+    }
   }
 
 
-  const CarState::Orientation & CarState::getOrientation(bool reset)
+  std::pair<bool, CarState::Orientation> CarState::getOrientation(bool reset)
   {
     if(reset)
     {
-      orientation_changed = false;
+      orientation.updated = false;
     }
-    return orientation;
+    return std::make_pair(orientation.valid, orientation.data);
   }
 
 
@@ -170,7 +180,7 @@ namespace earth_rover
   {
     location.data = new_location;
     location.valid = valid;
-    location.changed = true;
+    location.updated = true;
     if(valid)
     {
       location.since_last_update = 0;
@@ -182,7 +192,7 @@ namespace earth_rover
   {
     if(reset)
     {
-      location.changed = false;
+      location.updated = false;
     }
     return std::make_pair(location.valid, location.data);
   }
@@ -192,7 +202,7 @@ namespace earth_rover
   {
     altitude.data = new_altitude;
     altitude.valid = valid;
-    altitude.changed = true;
+    altitude.updated = true;
     if(valid)
     {
       altitude.since_last_update = 0;
@@ -204,7 +214,7 @@ namespace earth_rover
   {
     if(reset)
     {
-      altitude.changed = false;
+      altitude.updated = false;
     }
     return std::make_pair(altitude.valid, altitude.data);
   }

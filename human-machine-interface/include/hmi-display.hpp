@@ -326,18 +326,25 @@ namespace earth_rover
   void HmiDisplay<SerialDevice>::updateSettingsOnDisplay (bool force_update)
   {
     // Update orientation.
-    if(current_page == HmiPage::Orientation && (force_update || car_state.getOrientationChanged()))
+    if(current_page == HmiPage::Orientation && (force_update || car_state.isOrientationUpdated()))
     {
       auto orientation = car_state.getOrientation();
-      serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.yaw)) % 360);
-      serial_device.printf("z_pitch.val=%d\xff\xff\xff",
-          (90 + 2 * int16_t(limit_value(orientation.pitch, -60., 60.))) % 360);
-      serial_device.printf("z_roll.val=%d\xff\xff\xff",
-          (90 + 2 * int16_t(limit_value(orientation.roll, -60., 60.))) % 360);
-      serial_device.flush();
+      if(orientation.first == true)
+      {
+        serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.second.yaw)) % 360);
+        serial_device.printf("z_pitch.val=%d\xff\xff\xff",
+            (90 + 2 * int16_t(limit_value(orientation.second.pitch, -60., 60.))) % 360);
+        serial_device.printf("z_roll.val=%d\xff\xff\xff",
+            (90 + 2 * int16_t(limit_value(orientation.second.roll, -60., 60.))) % 360);
+        serial_device.flush();
+      }
+      else
+      {
+        ;  // TODO: Remove pointer? Don't forget to remove serial_device.flush() below if block.
+      }
     }
     // Update location.
-    if(current_page == HmiPage::Location && (force_update || car_state.isLocationChanged()))
+    if(current_page == HmiPage::Location && (force_update || car_state.isLocationUpdated()))
     {
       auto location = car_state.getLocation();
       if(location.first == true)
@@ -359,7 +366,7 @@ namespace earth_rover
       serial_device.flush();
     }
     // Update altitude.
-    if(current_page == HmiPage::Location && (force_update || car_state.isAltitudeChanged()))
+    if(current_page == HmiPage::Location && (force_update || car_state.isAltitudeUpdated()))
     {
       auto altitude = car_state.getAltitude();
       if(altitude.first == true)

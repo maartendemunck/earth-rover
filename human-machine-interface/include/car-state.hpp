@@ -59,27 +59,19 @@ namespace earth_rover
       bool turn_signal_left_cancelled {false};  //!< Used to shut off the turn signal using the steering command.
       bool turn_signal_right_cancelled {false};  //!< used to shut off the turn signal using the steering command.
 
-      Speedometer speedometer;
-      bool speedometer_changed;
-
-      Orientation orientation;
-      bool orientation_changed;
-
-      struct
+      template <typename T>
+      struct SensorData
       {
-        Location data;
+        T data;
         bool valid;
-        bool changed;
+        bool updated;
         elapsedMillis since_last_update;
-      } location;
+      };
 
-      struct
-      {
-        int32_t data;
-        bool valid;
-        bool changed;
-        elapsedMillis since_last_update;
-      } altitude;
+      SensorData<Speedometer> speedometer;
+      SensorData<Orientation> orientation;
+      SensorData<Location> location;
+      SensorData<int32_t> altitude;
 
     public:
 
@@ -100,14 +92,15 @@ namespace earth_rover
       void setHighBeam(bool state);
       void setHazardFlashers(bool state);
       const Lighting & getLighting() { return lighting; };
-      void setOrientation(const Orientation & new_orientation);
-      const Orientation & getOrientation(bool reset = true);
-      bool getOrientationChanged() { return orientation_changed; };
+
+      void setOrientation(const Orientation & new_orientation, bool valid = true);
+      bool isOrientationUpdated() { return orientation.updated; };
+      std::pair<bool, Orientation> getOrientation(bool reset = true);
       void setLocation(const Location & new_location, bool valid = true);
-      bool isLocationChanged() { return location.changed; };
+      bool isLocationUpdated() { return location.updated; };
       std::pair<bool, Location> getLocation(bool reset = true);
       void setAltitude(int32_t new_altitude, bool valid = true);
-      bool isAltitudeChanged() { return altitude.changed; };
+      bool isAltitudeUpdated() { return altitude.updated; };
       std::pair<bool, int32_t> getAltitude(bool reset = true);
 
   };

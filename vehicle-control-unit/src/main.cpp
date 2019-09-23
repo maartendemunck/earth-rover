@@ -19,8 +19,8 @@ constexpr uint8_t turn_signal_right_pin = 5u;
 constexpr uint8_t turn_signal_left_pin = 6u;
 
 constexpr i2c_t3 & imu_i2c = Wire;
-constexpr uint8_t imu_i2c_scl_pin = 18u;
-constexpr uint8_t imu_i2c_sda_pin = 19u;
+constexpr uint8_t imu_i2c_scl_pin = 19u;
+constexpr uint8_t imu_i2c_sda_pin = 18u;
 
 constexpr HardwareSerial & gps_serial = Serial1;
 constexpr uint8_t gps_serial_rx_pin = 0u;
@@ -43,12 +43,6 @@ void setup()
   // Initialisation started, switch on built in LED.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, 1);
-  // Configure SPI.
-  SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
-  // Setup the VCU.
-  vcu.setup();
-  // Configure nRF24L01+ communication module.
-  communicator.setup();
   // Setup debug console.
   #ifdef SERIAL_DEBUG
     Serial.begin(9600);
@@ -57,6 +51,12 @@ void setup()
       ;
     }
   #endif
+  // Configure SPI.
+  SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
+  // Setup the VCU.
+  vcu.setup();
+  // Configure nRF24L01+ communication module.
+  communicator.setup();
   // Initialisation finished, switch off built in LED.
   digitalWrite(LED_BUILTIN, 0);
 }

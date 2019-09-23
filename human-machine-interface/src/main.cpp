@@ -28,6 +28,9 @@ earth_rover::HmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, 
 
 void setup()
 {
+  // Initialisation started, switch on built in LED.
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, 1);
   // Setup debug console.
   #ifdef SERIAL_DEBUG
     Serial.begin(9600);
@@ -36,9 +39,6 @@ void setup()
       ;
     }
   #endif
-  // Initialisation started, switch on built in LED.
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, 1);
   // Configure SPI.
   SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
   // Configure nRF24L01+ communication module.

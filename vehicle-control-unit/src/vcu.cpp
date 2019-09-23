@@ -46,7 +46,6 @@ namespace earth_rover
     mtk3339_gps_serial_device.setRX(mtk3339_gps_serial_rx_pin);
     mtk3339_gps_serial_device.setTX(mtk3339_gps_serial_tx_pin);
     mtk3339_gps_serial_device.begin(9600, SERIAL_8N1);
- 
     // This is a safe state, no need to call the timeout handler.
     timeout_handler_called = true;
   }

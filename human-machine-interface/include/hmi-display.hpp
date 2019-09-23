@@ -371,7 +371,7 @@ namespace earth_rover
       auto altitude = car_state.getAltitude();
       if(altitude.first == true)
       {
-        serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude.second / 100, altitude.second % 100);
+        serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude.second / 100, abs(altitude.second) % 100);
       }
       else
       {

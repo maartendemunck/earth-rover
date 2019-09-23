@@ -75,9 +75,9 @@ namespace earth_rover
         case ResponseMessageType::Orientation:
         {
           CarState::Orientation orientation;
-          orientation.yaw = float(uint16_t(buffer[1]) | (uint16_t(buffer[2]) << 8)) / 100.;
-          orientation.pitch = float(int16_t(buffer[3]) | (int16_t(buffer[4]) << 8)) / 100.;
-          orientation.roll = float(int16_t(buffer[5]) | (int16_t(buffer[6]) << 8)) / 100.;
+          orientation.yaw = float(uint16_t(buffer[1] | (buffer[2] << 8))) / 100.;
+          orientation.pitch = float(int16_t(buffer[3] | (buffer[4] << 8))) / 100.;
+          orientation.roll = float(int16_t(buffer[5] | (buffer[6] << 8))) / 100.;
           car_state.setOrientation(orientation);
         } break;
         case ResponseMessageType::Location:
@@ -91,8 +91,8 @@ namespace earth_rover
         } break;
         case ResponseMessageType::Altitude:
         {
-          car_state.setAltitude(int32_t(buffer[1]) | (int32_t(buffer[2]) << 8)
-                                | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24), true);
+          car_state.setAltitude(int32_t(buffer[1] | (buffer[2] << 8)
+                                | (buffer[3] << 16) | (buffer[4] << 24)), true);
         }
       }
     }

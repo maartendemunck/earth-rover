@@ -6,12 +6,20 @@ namespace earth_rover
 {
 
   Vcu::Vcu (uint8_t steering_servo_pin, uint8_t throttle_servo_pin, uint8_t gearbox_servo_pin,
-      uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin):
+      uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin,
+      i2c_t3 & imu_i2c, uint8_t imu_i2c_scl_pin, uint8_t imu_i2c_sda_pin,
+      HardwareSerial & gps_serial, uint8_t gps_serial_rx_pin, uint8_t gps_serial_tx_pin):
     steering_servo {steering_servo_pin, 2000u, 1000u, 1500u, true},
     throttle_servo {throttle_servo_pin, 1000u, 2000u, 1500u, true},
     gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1480u, true},
     automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin},
-    bno055_imu {&Wire, AdafruitBNO055<i2c_t3>::BNO055_ADDRESS_A}
+    bno055_imu_i2c_device {imu_i2c},
+    bno055_imu_i2c_scl_pin {imu_i2c_scl_pin},
+    bno055_imu_i2c_sda_pin {imu_i2c_sda_pin},
+    bno055_imu_device {imu_i2c, AdafruitBNO055<i2c_t3>::BNO055_ADDRESS_A},
+    mtk3339_gps_serial_device {gps_serial},
+    mtk3339_gps_serial_rx_pin {gps_serial_rx_pin},
+    mtk3339_gps_serial_tx_pin {gps_serial_tx_pin}
   {
     ;
   }
@@ -31,12 +39,13 @@ namespace earth_rover
     automotive_lighting.setStopLamps(true);
     automotive_lighting.setHazardFlashers(true);
     // Initialize the Bosch BNO055 IMU. TODO: get I²C configuration as a parameter?
-    Wire.begin(I2C_MASTER, 0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, 400000, I2C_OP_MODE_ISR);
-    bno055_imu.setup();
+    bno055_imu_i2c_device.begin(I2C_MASTER, 0x00, bno055_imu_i2c_scl_pin, bno055_imu_i2c_sda_pin, I2C_PULLUP_EXT,
+                                400000, I2C_OP_MODE_ISR);
+    bno055_imu_device.setup();
     // Initialize the GPS. TODO: get serial configuration as a parameter?
-    Serial1.setRX(0);
-    Serial1.setTX(1);
-    Serial1.begin(9600, SERIAL_8N1);
+    mtk3339_gps_serial_device.setRX(mtk3339_gps_serial_rx_pin);
+    mtk3339_gps_serial_device.setTX(mtk3339_gps_serial_tx_pin);
+    mtk3339_gps_serial_device.begin(9600, SERIAL_8N1);
  
     // This is a safe state, no need to call the timeout handler.
     timeout_handler_called = true;
@@ -50,9 +59,9 @@ namespace earth_rover
       handleTimeout();
     }
     automotive_lighting.spinOnce();
-    while(mtk3339_gps.available(Serial1))
+    while(mtk3339_gps_device.available(mtk3339_gps_serial_device))
     {
-      mtk3339_gps_fix = mtk3339_gps.read();
+      mtk3339_gps_fix = mtk3339_gps_device.read();
     }
   }
 
@@ -107,7 +116,7 @@ namespace earth_rover
   AdafruitBNO055<i2c_t3>::bno055_euler_angles_t Vcu::getOrientation()
   {
     // Get Euler angles.
-    auto angles = bno055_imu.getEulerAngles();
+    auto angles = bno055_imu_device.getEulerAngles();
     // Adjust Euler angles for the orientation of the Adafruit BNO055 IMU in the car.
     angles.yaw = - angles.yaw - 90.;
     while(angles.yaw < 0)
@@ -122,7 +131,7 @@ namespace earth_rover
 
   AdafruitBNO055<i2c_t3>::bno055_calibration_status_t Vcu::getImuCalibrationStatus()
   {
-    return bno055_imu.getCalibrationStatus();
+    return bno055_imu_device.getCalibrationStatus();
   }
 
 
@@ -135,6 +144,5 @@ namespace earth_rover
     // Timeout handler called.
     timeout_handler_called = true;
   }
-
 
 }

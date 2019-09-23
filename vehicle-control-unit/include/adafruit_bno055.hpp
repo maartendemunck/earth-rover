@@ -194,13 +194,13 @@ namespace earth_rover
         POWER_MODE_LOWPOWER = 0X01,
         POWER_MODE_SUSPEND  = 0X02
       };
-      I2CDevice * i2c_device_;
+      I2CDevice & i2c_device_;
       uint8_t i2c_address_;
       bno055_operation_mode_t bno055_operation_mode_;
 
     public:
 
-      AdafruitBNO055(I2CDevice * i2c_device, uint8_t i2c_address = BNO055_ADDRESS_A):
+      AdafruitBNO055(I2CDevice & i2c_device, uint8_t i2c_address = BNO055_ADDRESS_A):
         i2c_device_{i2c_device},
         i2c_address_{i2c_address},
         bno055_operation_mode_{bno055_operation_mode_t::OPERATION_MODE_CONFIG}
@@ -410,39 +410,39 @@ namespace earth_rover
 
       void writeByte(bno055_register_t sensor_register, uint8_t value)
       {
-        i2c_device_->beginTransmission(i2c_address_);
-        i2c_device_->write(uint8_t(sensor_register));
-        i2c_device_->write(value);
-        i2c_device_->endTransmission(I2C_STOP, 0);
+        i2c_device_.beginTransmission(i2c_address_);
+        i2c_device_.write(uint8_t(sensor_register));
+        i2c_device_.write(value);
+        i2c_device_.endTransmission(I2C_STOP, 0);
       }
 
       void writeNBytes(bno055_register_t sensor_register, uint8_t * buffer, uint8_t size)
       {
-        i2c_device_->beginTransmission(i2c_address_);
+        i2c_device_.beginTransmission(i2c_address_);
         for(uint8_t i = 0; i < size; ++ i) {
-          i2c_device_->write(uint8_t(sensor_register) + i);
-          i2c_device_->write(buffer[i]);
+          i2c_device_.write(uint8_t(sensor_register) + i);
+          i2c_device_.write(buffer[i]);
         }
-        i2c_device_->endTransmission(I2C_STOP, 0);
+        i2c_device_.endTransmission(I2C_STOP, 0);
       }
 
       uint8_t readByte(bno055_register_t sensor_register)
       {
         uint8_t value = 0u;
-        i2c_device_->beginTransmission(i2c_address_);
-        i2c_device_->write(uint8_t(sensor_register));
-        i2c_device_->endTransmission(I2C_STOP, 0);
-        i2c_device_->requestFrom(i2c_address_, uint8_t(1u));
-        value = i2c_device_->receive();
+        i2c_device_.beginTransmission(i2c_address_);
+        i2c_device_.write(uint8_t(sensor_register));
+        i2c_device_.endTransmission(I2C_STOP, 0);
+        i2c_device_.requestFrom(i2c_address_, uint8_t(1u));
+        value = i2c_device_.receive();
         return value;
       }
 
       void readNBytes(bno055_register_t sensor_register, uint8_t * buffer, uint8_t size)
       {
-        i2c_device_->beginTransmission(i2c_address_);
-        i2c_device_->write(uint8_t(sensor_register));
-        i2c_device_->endTransmission(I2C_STOP, 0);
-        i2c_device_->requestFrom(i2c_address_, size);
+        i2c_device_.beginTransmission(i2c_address_);
+        i2c_device_.write(uint8_t(sensor_register));
+        i2c_device_.endTransmission(I2C_STOP, 0);
+        i2c_device_.requestFrom(i2c_address_, size);
         for (uint8_t i = 0; i < size; ++ i) {
           buffer[i] = Wire.read();
         }

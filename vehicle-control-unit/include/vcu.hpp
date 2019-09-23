@@ -21,8 +21,14 @@ namespace earth_rover
     ConfiguredServo throttle_servo;
     ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
-    AdafruitBNO055<i2c_t3> bno055_imu;
-    NMEAGPS mtk3339_gps;
+    i2c_t3 & bno055_imu_i2c_device;
+    const uint8_t bno055_imu_i2c_scl_pin;
+    const uint8_t bno055_imu_i2c_sda_pin;
+    AdafruitBNO055<i2c_t3> bno055_imu_device;
+    HardwareSerial & mtk3339_gps_serial_device;
+    const uint8_t mtk3339_gps_serial_rx_pin;
+    const uint8_t mtk3339_gps_serial_tx_pin;
+    NMEAGPS mtk3339_gps_device;
     gps_fix mtk3339_gps_fix;
 
     elapsedMillis since_last_control_message;
@@ -34,7 +40,9 @@ namespace earth_rover
     public:
 
       Vcu(uint8_t steering_servo_pin, uint8_t throttle_servo_pin, uint8_t gearbox_servo_pin,
-          uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin);
+        uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin,
+        i2c_t3 & imu_i2c, uint8_t imu_i2c_scl_pin, uint8_t imu_i2c_sda_pin,
+        HardwareSerial & gps_serial, uint8_t gps_serial_rx_pin, uint8_t gps_serial_tx_pin);
       ~Vcu() = default;
       void setup();
       void spinOnce();

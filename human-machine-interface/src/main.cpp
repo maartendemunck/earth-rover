@@ -73,6 +73,9 @@ void loop()
   car_state.setThrottleInput(inputs[throttle_channel - 1]);
   car_state.setGearboxInput(inputs[gearbox_channel - 1]);
 
+  // Update car state.
+  car_state.spinOnce();
+
   // Send drive command.
   communicator.spinOnce();
 

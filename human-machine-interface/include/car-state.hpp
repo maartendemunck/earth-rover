@@ -61,16 +61,32 @@ namespace earth_rover
 
       Speedometer speedometer;
       bool speedometer_changed;
+
       Orientation orientation;
       bool orientation_changed;
-      Location location;
-      bool location_changed;
-      int32_t altitude;
-      bool altitude_changed;
+
+      struct
+      {
+        Location data;
+        bool valid;
+        bool changed;
+        elapsedMillis since_last_update;
+      } location;
+
+      struct
+      {
+        int32_t data;
+        bool valid;
+        bool changed;
+        elapsedMillis since_last_update;
+      } altitude;
 
     public:
 
       CarState();
+      ~CarState() = default;
+
+      void spinOnce();
 
       void setSteeringInput(int16_t steering);
       void setThrottleInput(int16_t throttle);
@@ -87,12 +103,12 @@ namespace earth_rover
       void setOrientation(const Orientation & new_orientation);
       const Orientation & getOrientation(bool reset = true);
       bool getOrientationChanged() { return orientation_changed; };
-      void setLocation(const Location & new_location);
-      const Location & getLocation(bool reset = true);
-      bool getLocationChanged() { return location_changed; };
-      void setAltitude(int32_t new_altitude);
-      int32_t getAltitude(bool reset = true);
-      bool getAltitudeChanged() { return altitude_changed; };
+      void setLocation(const Location & new_location, bool valid = true);
+      bool isLocationChanged() { return location.changed; };
+      std::pair<bool, Location> getLocation(bool reset = true);
+      void setAltitude(int32_t new_altitude, bool valid = true);
+      bool isAltitudeChanged() { return altitude.changed; };
+      std::pair<bool, int32_t> getAltitude(bool reset = true);
 
   };
 

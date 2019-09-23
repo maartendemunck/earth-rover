@@ -337,24 +337,40 @@ namespace earth_rover
       serial_device.flush();
     }
     // Update location.
-    if(current_page == HmiPage::Location && (force_update || car_state.getLocationChanged()))
+    if(current_page == HmiPage::Location && (force_update || car_state.isLocationChanged()))
     {
       auto location = car_state.getLocation();
-      serial_device.printf("t_lat.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
-                           location.latitude.degrees, location.latitude.minutes,
-                           location.latitude.seconds_whole, location.latitude.seconds_frac / 100,
-                           location.latitude.hemisphere == Hemisphere_t::NORTH_H? 'N': 'S');
-      serial_device.printf("t_lon.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
-                           location.longitude.degrees, location.longitude.minutes,
-                           location.longitude.seconds_whole, location.longitude.seconds_frac / 100,
-                           location.longitude.hemisphere == Hemisphere_t::EAST_H? 'E': 'W');
+      if(location.first == true)
+      {
+        serial_device.printf("t_lat.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
+                            location.second.latitude.degrees, location.second.latitude.minutes,
+                            location.second.latitude.seconds_whole, location.second.latitude.seconds_frac / 100,
+                            location.second.latitude.hemisphere == Hemisphere_t::NORTH_H? 'N': 'S');
+        serial_device.printf("t_lon.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
+                            location.second.longitude.degrees, location.second.longitude.minutes,
+                            location.second.longitude.seconds_whole, location.second.longitude.seconds_frac / 100,
+                            location.second.longitude.hemisphere == Hemisphere_t::EAST_H? 'E': 'W');
+      }
+      else
+      {
+        serial_device.printf("t_lat.txt=\"NO GPS FIX\"\xff\xff\xff");
+        serial_device.printf("t_lon.txt=\"NO GPS FIX\"\xff\xff\xff");
+      }
       serial_device.flush();
     }
     // Update altitude.
-    if(current_page == HmiPage::Location && (force_update || car_state.getAltitudeChanged()))
+    if(current_page == HmiPage::Location && (force_update || car_state.isAltitudeChanged()))
     {
       auto altitude = car_state.getAltitude();
-      serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude / 100, altitude % 100);
+      if(altitude.first == true)
+      {
+        serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude.second / 100, altitude.second % 100);
+      }
+      else
+      {
+        serial_device.printf("t_alt.txt=\"NO GPS FIX\"\xff\xff\xff");
+      }
+      
       serial_device.flush();
     }
     // Update steering servo settings.

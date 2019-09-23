@@ -11,6 +11,21 @@ namespace earth_rover
   }
 
 
+  void CarState::spinOnce()
+  {
+    if(location.valid == true && location.since_last_update >= 5000u)
+    {
+      location.valid = false;
+      location.changed = true;
+    }
+    if(altitude.valid == true && altitude.since_last_update >= 5000u)
+    {
+      altitude.valid = false;
+      altitude.changed = true;
+    }
+  }
+
+
   void CarState::setSteeringInput(int16_t steering)
   {
     drive.steering = limit_value(steering, int16_t(-1000), int16_t(1000));
@@ -151,37 +166,47 @@ namespace earth_rover
   }
 
 
-  void CarState::setLocation(const Location & new_location)
+  void CarState::setLocation(const Location & new_location, bool valid)
   {
-    location = new_location;
-    location_changed = true;
+    location.data = new_location;
+    location.valid = valid;
+    location.changed = true;
+    if(valid)
+    {
+      location.since_last_update = 0;
+    }
   }
 
 
-  const CarState::Location & CarState::getLocation(bool reset)
+  std::pair<bool, CarState::Location> CarState::getLocation(bool reset)
   {
     if(reset)
     {
-      location_changed = false;
+      location.changed = false;
     }
-    return location;
+    return std::make_pair(location.valid, location.data);
   }
   
   
-  void CarState::setAltitude(int32_t new_altitude)
+  void CarState::setAltitude(int32_t new_altitude, bool valid)
   {
-    altitude = new_altitude;
-    altitude_changed = true;
+    altitude.data = new_altitude;
+    altitude.valid = valid;
+    altitude.changed = true;
+    if(valid)
+    {
+      altitude.since_last_update = 0;
+    }
   }
   
   
-  int32_t CarState::getAltitude(bool reset)
+  std::pair<bool, int32_t> CarState::getAltitude(bool reset)
   {
     if(reset)
     {
-      altitude_changed = false;
+      altitude.changed = false;
     }
-    return altitude;
+    return std::make_pair(altitude.valid, altitude.data);
   }
 
 }

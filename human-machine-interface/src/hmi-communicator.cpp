@@ -87,12 +87,12 @@ namespace earth_rover
                                  | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24));
           location.longitude.From(int32_t(buffer[5]) | (int32_t(buffer[6]) << 8)
                                   | (int32_t(buffer[7]) << 16) | (int32_t(buffer[8]) << 24));
-          car_state.setLocation(location);
+          car_state.setLocation(location, true);
         } break;
         case ResponseMessageType::Altitude:
         {
           car_state.setAltitude(int32_t(buffer[1]) | (int32_t(buffer[2]) << 8)
-                                | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24));
+                                | (int32_t(buffer[3]) << 16) | (int32_t(buffer[4]) << 24), true);
         }
       }
     }

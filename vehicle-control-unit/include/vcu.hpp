@@ -9,6 +9,7 @@
 #include "adafruit_bno055.hpp"
 #include "configured-servo.hpp"
 #include "lighting.hpp"
+#include "position-encoder.hpp"
 
 
 namespace earth_rover
@@ -21,6 +22,7 @@ namespace earth_rover
     ConfiguredServo throttle_servo;
     ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
+    PositionEncoder<7u, 8u> position_encoder;  // TODO: parameterize pin numbers!
     i2c_t3 & bno055_imu_i2c_device;
     const uint8_t bno055_imu_i2c_scl_pin;
     const uint8_t bno055_imu_i2c_sda_pin;
@@ -49,9 +51,12 @@ namespace earth_rover
 
       void handleControlMessage(int16_t steering, int16_t throttle, int8_t gearbox, int8_t lighting);
 
+      int16_t getSpeed() const { return position_encoder.getSpeed(); }
+      uint64_t getOdometer() const { return position_encoder.getOdometer(); }
+      uint64_t getTripmeter() const { return position_encoder.getTripmeter(); }
       AdafruitBNO055<i2c_t3>::bno055_euler_angles_t getOrientation();
       AdafruitBNO055<i2c_t3>::bno055_calibration_status_t getImuCalibrationStatus();
-      gps_fix getGpsData() const { return mtk3339_gps_fix; };
+      gps_fix getGpsData() const { return mtk3339_gps_fix; }
 
     private:
 

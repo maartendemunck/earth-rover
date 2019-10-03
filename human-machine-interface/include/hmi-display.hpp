@@ -54,10 +54,6 @@ namespace earth_rover
       void setup();
       void spinOnce();
 
-      void publishVelocity(float velocity);
-      void publishOdometer(float odometer);
-      void publishTripmeter(float tripmeter);
-
       void receiveData();
 
     private:
@@ -128,30 +124,6 @@ namespace earth_rover
       setTurnSignalLeft(false);
     }
     updateSettingsOnDisplay();
-  }
-
-
-  template <typename SerialDevice>
-  void HmiDisplay<SerialDevice>::publishVelocity(float velocity)
-  {
-    uint16_t angle = (320u + uint16_t(26 * limit_value(velocity, 0., 10.))) % 360;
-    serial_device.printf("speedometer.z_speedometer.val=%u\xff\xff\xff", angle);
-  }
-
-
-  template <typename SerialDevice>
-  void HmiDisplay<SerialDevice>::publishOdometer(float odometer)
-  {
-    int32_t odometer_raw = int32_t(odometer * 100) % 1000000;
-    serial_device.printf("speedometer.x_odo.val=%d\xff\xff\xff", odometer_raw);
-  }
-
-
-  template <typename SerialDevice>
-  void HmiDisplay<SerialDevice>::publishTripmeter(float tripmeter)
-  {
-    int32_t tripmeter_raw = int32_t(tripmeter * 1000) % 1000000;
-    serial_device.printf("speedometer.x_trip.val=%d\xff\xff\xff", tripmeter_raw);
   }
 
 
@@ -325,6 +297,25 @@ namespace earth_rover
   template <typename SerialDevice>
   void HmiDisplay<SerialDevice>::updateSettingsOnDisplay (bool force_update)
   {
+    // Update speedometer.
+    if(current_page == HmiPage::Speedometer && (force_update || car_state.isSpeedometerUpdated()))
+    {
+      auto speedometer = car_state.getSpeedometer();
+      if(speedometer.first == true)
+      {
+        uint16_t angle = (320u + uint16_t(26 * limit_value(speedometer.second.speed, 0., 10.))) % 360u;
+        serial_device.printf("z_speed.val=%d\xff\xff\xff", angle);
+        uint32_t odometer_raw = int32_t(speedometer.second.odometer * 100) % 1000000;
+        serial_device.printf("x_odo.val=%d\xff\xff\xff", odometer_raw);
+        int32_t tripmeter_raw = int32_t(speedometer.second.tripmeter * 1000) % 1000000;
+        serial_device.printf("x_trip.val=%d\xff\xff\xff", tripmeter_raw);
+      }
+      else
+      {
+        serial_device.print("z_speed.val=320\xff\xff\xff");
+      }
+      serial_device.flush();
+    }
     // Update orientation.
     if(current_page == HmiPage::Orientation && (force_update || car_state.isOrientationUpdated()))
     {

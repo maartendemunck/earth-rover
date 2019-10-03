@@ -72,6 +72,14 @@ namespace earth_rover
       nrf24l01_device.read(buffer, nrf24l01_payload_size);
       switch(static_cast<ResponseMessageType>(buffer[0]))
       {
+        case ResponseMessageType::Speedometer:
+        {
+          CarState::Speedometer speedometer;
+          speedometer.speed = float(uint16_t(buffer[1] | (buffer[2] << 8))) / 1000.;
+          speedometer.odometer = float(uint32_t(buffer[3] | (buffer[4] << 8) | (buffer[5] << 16))) / 1000.;
+          speedometer.tripmeter = float(uint32_t(buffer[6] | (buffer[7] << 8) | (buffer[8] << 16))) / 1000.;
+          car_state.setSpeedometer(speedometer);
+        } break;
         case ResponseMessageType::Orientation:
         {
           CarState::Orientation orientation;

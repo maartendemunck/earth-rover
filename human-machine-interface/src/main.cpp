@@ -45,7 +45,6 @@ void setup()
   communicator.setup();
   // Setup Nextion display.
   display.setup();
-  display.publishVelocity(10.);
   // Initialisation finished, switch off built in LED.
   digitalWrite(LED_BUILTIN, 0);
 }

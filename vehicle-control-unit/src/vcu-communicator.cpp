@@ -77,6 +77,10 @@ namespace earth_rover
           static_assert(nrf24l01_payload_size >= 2,
                         "the 'request state' message requires a payload size of at least 2 bytes");
           uint8_t state_requested = buffer[1];
+          if(state_requested & 0x01)  // Speed and odometer.
+          {
+            sendSpeedometerMessage();
+          }
           if(state_requested & 0x02)  // Orientation.
           {
             sendOrientationMessage();
@@ -105,6 +109,28 @@ namespace earth_rover
     {
       fhss_synced = false;
     }
+  }
+
+
+  bool VcuCommunicator::sendSpeedometerMessage()
+  {
+    static_assert(nrf24l01_payload_size >= 9, "the 'speedometer' message requires a payload size of at least 9 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    // Compose speedometer message.
+    buffer[0] = static_cast<uint8_t>(ResponseMessageType::Speedometer);
+    auto speed = int16_t(vcu.getSpeed());
+    buffer[1] = speed & 0x00ff;
+    buffer[2] = (speed & 0xff00) >> 8;
+    auto odometer = uint64_t(vcu.getOdometer()) & 0x00ffffff;
+    buffer[3] = odometer & 0x0000ff;
+    buffer[4] = (odometer & 0x00ff00) >> 8;
+    buffer[5] = (odometer & 0xff0000) >> 16;
+    auto tripmeter = uint64_t(vcu.getTripmeter()) & 0x00ffffff;
+    buffer[6] = tripmeter & 0x0000ff;
+    buffer[7] = (tripmeter & 0x00ff00) >> 8;
+    buffer[8] = (tripmeter & 0xff0000) >> 16;
+    // Transmit speedometer message.
+    return sendMessage(buffer);
   }
 
 

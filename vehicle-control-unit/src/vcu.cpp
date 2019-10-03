@@ -13,6 +13,7 @@ namespace earth_rover
     throttle_servo {throttle_servo_pin, 1000u, 2000u, 1500u, true},
     gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1480u, true},
     automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin},
+    position_encoder {23000u, 0u, 0u},
     bno055_imu_i2c_device {imu_i2c},
     bno055_imu_i2c_scl_pin {imu_i2c_scl_pin},
     bno055_imu_i2c_sda_pin {imu_i2c_sda_pin},
@@ -38,6 +39,8 @@ namespace earth_rover
     // Start with stop lamps and hazard flashers on, until we receive something from the HMI.
     automotive_lighting.setStopLamps(true);
     automotive_lighting.setHazardFlashers(true);
+    // Initialize position encoder.
+    position_encoder.setup();
     // Initialize the Bosch BNO055 IMU. TODO: get I²C configuration as a parameter?
     bno055_imu_i2c_device.begin(I2C_MASTER, 0x00, bno055_imu_i2c_scl_pin, bno055_imu_i2c_sda_pin, I2C_PULLUP_EXT,
                                 400000, I2C_OP_MODE_ISR);

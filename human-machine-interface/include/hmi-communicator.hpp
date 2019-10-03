@@ -17,7 +17,10 @@ namespace earth_rover
     private:
 
       enum class RequestMessageType: uint8_t { Control = 0x00, RequestState = 0x10 };
-      enum class ResponseMessageType: uint8_t { Orientation = 0x91, Location = 0x92, Altitude = 0x93 };
+      enum class ResponseMessageType: uint8_t
+      {
+        Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93
+      };
 
       RF24 nrf24l01_device;
       static constexpr uint8_t nrf24l01_payload_size {9u};

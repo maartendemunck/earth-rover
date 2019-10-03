@@ -154,6 +154,28 @@ namespace earth_rover
   }
 
 
+  void CarState::setSpeedometer(const Speedometer & new_speedometer, bool valid)
+  {
+    speedometer.data = new_speedometer;
+    speedometer.valid = valid;
+    speedometer.updated = true;
+    if(valid)
+    {
+      speedometer.since_last_update = 0;
+    }
+  }
+
+
+  std::pair<bool, CarState::Speedometer> CarState::getSpeedometer(bool reset)
+  {
+    if(reset)
+    {
+      speedometer.updated = false;
+    }
+    return std::make_pair(speedometer.valid, speedometer.data);
+  }
+
+
   void CarState::setOrientation(const Orientation & new_orientation, bool valid)
   {
     orientation.data = new_orientation;

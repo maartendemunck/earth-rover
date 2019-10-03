@@ -93,14 +93,17 @@ namespace earth_rover
       void setHazardFlashers(bool state);
       const Lighting & getLighting() { return lighting; };
 
+      void setSpeedometer(const Speedometer & new_speedometer, bool valid = true);
+      bool isSpeedometerUpdated() { return speedometer.updated; }
+      std::pair<bool, Speedometer> getSpeedometer(bool reset = true);
       void setOrientation(const Orientation & new_orientation, bool valid = true);
-      bool isOrientationUpdated() { return orientation.updated; };
+      bool isOrientationUpdated() { return orientation.updated; }
       std::pair<bool, Orientation> getOrientation(bool reset = true);
       void setLocation(const Location & new_location, bool valid = true);
-      bool isLocationUpdated() { return location.updated; };
+      bool isLocationUpdated() { return location.updated; }
       std::pair<bool, Location> getLocation(bool reset = true);
       void setAltitude(int32_t new_altitude, bool valid = true);
-      bool isAltitudeUpdated() { return altitude.updated; };
+      bool isAltitudeUpdated() { return altitude.updated; }
       std::pair<bool, int32_t> getAltitude(bool reset = true);
 
   };

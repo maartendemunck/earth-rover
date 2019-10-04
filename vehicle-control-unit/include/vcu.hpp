@@ -8,17 +8,15 @@
 #include "configured-servo.hpp"
 #include "lighting.hpp"
 #include "position-encoder.hpp"
-#include "neogps-wrapper.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_vcu
 {
 
-  template<typename Gps>
+  template<typename Steering, typename Gps>
   class Vcu
   {
 
-    ConfiguredServo steering_servo;
     ConfiguredServo throttle_servo;
     ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
@@ -27,7 +25,8 @@ namespace earth_rover
     const uint8_t bno055_imu_i2c_scl_pin;
     const uint8_t bno055_imu_i2c_sda_pin;
     AdafruitBNO055<i2c_t3> bno055_imu_device;
-    Gps & gps;
+    Steering & steering;  //!< Steering device.
+    Gps & gps;            //!< GPS device.
 
     elapsedMillis since_last_control_message;
     bool timeout_handler_called;
@@ -37,12 +36,11 @@ namespace earth_rover
 
     public:
 
-      Vcu(uint8_t steering_servo_pin, uint8_t throttle_servo_pin, uint8_t gearbox_servo_pin,
+      Vcu(uint8_t throttle_servo_pin, uint8_t gearbox_servo_pin,
         uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin,
         i2c_t3 & imu_i2c, uint8_t imu_i2c_scl_pin, uint8_t imu_i2c_sda_pin,
-        Gps & gps)
+        Steering & steering, Gps & gps)
       :
-        steering_servo {steering_servo_pin, 2000u, 1000u, 1500u, true},
         throttle_servo {throttle_servo_pin, 1000u, 2000u, 1500u, true},
         gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1480u, true},
         automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin},
@@ -51,6 +49,7 @@ namespace earth_rover
         bno055_imu_i2c_scl_pin {imu_i2c_scl_pin},
         bno055_imu_i2c_sda_pin {imu_i2c_sda_pin},
         bno055_imu_device {imu_i2c, AdafruitBNO055<i2c_t3>::BNO055_ADDRESS_A},
+        steering {steering},
         gps {gps}
       {
         ;
@@ -62,8 +61,7 @@ namespace earth_rover
       {
         // Configure the servos. The steering servo requires an explicit setPosition (on top of the one in the setup
         // function), so send an explicit center position to all servos.
-        steering_servo.setup();
-        steering_servo.setPosition(0);
+        steering.setup();
         throttle_servo.setup();
         throttle_servo.setPosition(0);
         gearbox_servo.setup();
@@ -89,14 +87,15 @@ namespace earth_rover
         {
           handleTimeout();
         }
+        steering.spinOnce();
         automotive_lighting.spinOnce();
         gps.spinOnce();
       }
 
-      void handleControlMessage(int16_t steering, int16_t throttle, int8_t gearbox, int8_t lighting)
+      void handleControlMessage(int16_t steering_angle, int16_t throttle, int8_t gearbox, int8_t lighting)
       {
         // Set steering servo.
-        steering_servo.setPosition(steering);
+        steering.setNormalizedSteeringAngle(steering_angle);
         // Set throttle servo.
         throttle_servo.setPosition(throttle);
         // Set gearbox servo. Prevent shifting to low or high gear while not driving.

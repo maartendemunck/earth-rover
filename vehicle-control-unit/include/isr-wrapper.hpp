@@ -5,7 +5,7 @@
 #include <functional>
 
 
-namespace earth_rover
+namespace earth_rover_vcu
 {
 
   template<uint8_t irq>

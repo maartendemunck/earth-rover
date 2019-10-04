@@ -2,7 +2,7 @@
 #define __ADAFRUIT_BNO055__
 
 
-namespace earth_rover
+namespace earth_rover_vcu
 {
 
   template <typename I2CDevice>

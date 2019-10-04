@@ -7,7 +7,7 @@
 #include "isr-wrapper.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_vcu
 {
   template<uint8_t hall_sensor_a_pin, uint8_t hall_sensor_b_pin>
   class PositionEncoder

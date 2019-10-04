@@ -9,7 +9,7 @@
 #include "vcu.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_vcu
 {
 
   template <typename Vcu>

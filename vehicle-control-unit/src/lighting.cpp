@@ -2,7 +2,7 @@
  #include <Arduino.h>
 
 
- namespace earth_rover
+ namespace earth_rover_vcu
  {
 
   Lighting::Lighting(uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number,

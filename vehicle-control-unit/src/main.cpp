@@ -2,6 +2,8 @@
 #include <i2c_t3.h>
 #include "configured-servo.hpp"
 #include "lighting.hpp"
+#include "neogps-wrapper.hpp"
+#include "vcu.hpp"
 #include "vcu-communicator.hpp"
 
 
@@ -22,20 +24,16 @@ constexpr i2c_t3 & imu_i2c = Wire;
 constexpr uint8_t imu_i2c_scl_pin = 19u;
 constexpr uint8_t imu_i2c_sda_pin = 18u;
 
-constexpr HardwareSerial & gps_serial = Serial1;
-constexpr uint8_t gps_serial_rx_pin = 0u;
-constexpr uint8_t gps_serial_tx_pin = 1u;
-
 constexpr uint8_t rf24_ce_pin = 10u;
 constexpr uint8_t spi_sck_pin = 14u;
 constexpr uint8_t rf24_csn_pin = 15u;
 
-// Main components.
-earth_rover::Vcu vcu {steering_servo_pin, throttle_servo_pin, gearbox_servo_pin,
+// Components.
+earth_rover::NeoGpsWrapper<decltype(Serial1), 0, 1> gps {Serial1};
+earth_rover::Vcu<decltype(gps)> vcu {steering_servo_pin, throttle_servo_pin, gearbox_servo_pin,
                       head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin,
-                      imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin,
-                      gps_serial, gps_serial_rx_pin, gps_serial_tx_pin};
-earth_rover::VcuCommunicator communicator {rf24_ce_pin, rf24_csn_pin, vcu};
+                      imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin, gps};
+earth_rover::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 
 
 void setup()

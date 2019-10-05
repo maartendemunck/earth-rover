@@ -1,0 +1,157 @@
+//! Powertrain device driver for the Earth Rover's VCU (implementation).
+/*!
+ *  Device driver for the Earth Rover's powertrain, controlling the electronic speed controller (ESC) and the gearbox
+ *  servo.
+ * 
+ *  \ingroup VCU
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
+
+
+#include "powertrain.hpp"
+
+
+namespace earth_rover_vcu
+{
+
+  Powertrain::Powertrain(uint8_t esc_pin_number, uint8_t gearbox_servo_pin_number)
+  :
+    esc_pin_number {esc_pin_number},
+    gearbox_servo_pin_number {gearbox_servo_pin_number},
+    esc {esc_pin_number, 1000u, 2000u, 1500u, true},
+    gearbox_servo {gearbox_servo_pin_number, 1000u, 2000u, 1500u, false},
+    gearbox_pulse_widths {1480u, 1150u, 1800u},
+    current_throttle_setting {0},
+    current_gear {0}
+  {
+    ;
+  }
+
+
+  void Powertrain::setup()
+  {
+    current_throttle_setting = 0;
+    esc.setup();
+    esc.setPosition(current_throttle_setting);
+    current_gear = 0;
+    gearbox_servo.setup();
+    gearbox_servo.setPulseWidth(gearbox_pulse_widths[current_gear]);
+  }
+
+
+  void Powertrain::spinOnce()
+  {
+    if(current_gear != requested_gear)
+    {
+      if(requested_gear == 0 || (is_driving && since_driving > 200u))
+      {
+        gearbox_servo.setPulseWidth(gearbox_pulse_widths[requested_gear]);
+        current_gear = requested_gear;
+      }
+    }
+  }
+
+
+  void Powertrain::setNormalizedThrottleSetting(int16_t throttle_setting)
+  {
+    esc.setPosition(throttle_setting);
+    current_throttle_setting = throttle_setting;
+    if(!is_driving && abs(current_throttle_setting) >= 150)
+    {
+      is_driving = true;
+      since_driving = 0;
+    }
+    else if(is_driving && abs(current_throttle_setting) <= 100)
+    {
+      is_driving = false;
+    }
+  }
+
+
+  void Powertrain::configureESC(uint16_t pulse_width_reverse, uint16_t pulse_width_stop, uint16_t pulse_width_forward)
+  {
+    ConfiguredServo::Configuration configuration;
+    configuration.pin_number = esc_pin_number;
+    configuration.minimum_pulse_width = pulse_width_reverse;
+    configuration.maximum_pulse_width = pulse_width_forward;
+    configuration.center_pulse_width = pulse_width_stop;
+    configuration.initial_pulse_width = pulse_width_stop;
+    configuration.enforce_pulse_width_limits = true;
+    esc.setConfiguration(configuration);
+    esc.setPosition(current_throttle_setting);
+  }
+
+
+  void Powertrain::configureGearboxServo(
+    uint16_t pulse_width_neutral, uint16_t pulse_width_low, uint16_t pulse_width_high)
+  {
+    gearbox_pulse_widths[0] = pulse_width_neutral;
+    gearbox_pulse_widths[1] = pulse_width_low;
+    gearbox_pulse_widths[2] = pulse_width_high;
+    gearbox_servo.setPulseWidth(gearbox_pulse_widths[current_gear]);
+  }
+
+
+  uint16_t Powertrain::getConfigurationSize()
+  {
+    return 13u;
+  }
+
+
+  bool Powertrain::saveConfiguration(uint8_t * data, uint16_t size)
+  {
+    if(size >= 13u)
+    {
+      auto configuration = esc.getConfiguration();
+      data[0] = configuration.minimum_pulse_width & 0x00ff;
+      data[1] = (configuration.minimum_pulse_width & 0xff00) >> 8;
+      data[2] = configuration.center_pulse_width & 0x00ff;
+      data[3] = (configuration.center_pulse_width & 0xff00) >> 8;
+      data[4] = configuration.maximum_pulse_width & 0x00ff;
+      data[5] = (configuration.maximum_pulse_width & 0xff00) >> 8;
+      data[6] = gearbox_pulse_widths[0] & 0x00ff;
+      data[7] = (gearbox_pulse_widths[0] & 0xff00) >> 8;
+      data[8] = gearbox_pulse_widths[1] & 0x00ff;
+      data[9] = (gearbox_pulse_widths[1] & 0xff00) >> 8;
+      data[10] = gearbox_pulse_widths[2] & 0x00ff;
+      data[11] = (gearbox_pulse_widths[2] & 0xff00) >> 8;
+      data[12] = data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5] ^ data[6] ^ data[7] ^ data[8] ^ data[9]
+                 ^ data[10] ^ data[11];
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+
+  }
+
+
+  bool Powertrain::loadConfiguration(uint8_t * data, uint16_t size)
+  {
+    if(size >= 13u && data[12] == (data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5]
+                                   ^ data[6] ^ data[7] ^ data[8] ^ data[9] ^ data[10] ^ data[11]))
+    {
+      decltype(esc)::Configuration configuration;
+      configuration.pin_number = esc_pin_number;
+      configuration.minimum_pulse_width = uint16_t(data[0] | (data[1] << 8));
+      configuration.center_pulse_width = uint16_t(data[2] | (data[3] << 8));
+      configuration.maximum_pulse_width = uint16_t(data[4] | (data[5] << 8));
+      configuration.initial_pulse_width = configuration.center_pulse_width;
+      configuration.enforce_pulse_width_limits = true;
+      esc.setConfiguration(configuration);
+      esc.setPosition(current_throttle_setting);
+      gearbox_pulse_widths[0] = uint16_t(data[6] | (data[7] << 8));
+      gearbox_pulse_widths[1] = uint16_t(data[8] | (data[9] << 8));
+      gearbox_pulse_widths[2] = uint16_t(data[10] | (data[11] << 8));
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+
+  }
+
+}

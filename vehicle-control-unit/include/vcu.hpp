@@ -13,36 +13,29 @@
 namespace earth_rover_vcu
 {
 
-  template<typename Steering, typename Gps>
+  template<typename Steering_t, typename Powertrain_t, typename Gps_t>
   class Vcu
   {
 
-    ConfiguredServo throttle_servo;
-    ConfiguredServo gearbox_servo;
     Lighting automotive_lighting;
     PositionEncoder<7u, 8u> position_encoder;  // TODO: parameterize pin numbers!
     i2c_t3 & bno055_imu_i2c_device;
     const uint8_t bno055_imu_i2c_scl_pin;
     const uint8_t bno055_imu_i2c_sda_pin;
     AdafruitBNO055<i2c_t3> bno055_imu_device;
-    Steering & steering;  //!< Steering device.
-    Gps & gps;            //!< GPS device.
+    Steering_t & steering;      //!< Steering device driver.
+    Powertrain_t & powertrain;  //!< Powertrain device driver.
+    Gps_t & gps;                //!< GPS device driver.
 
     elapsedMillis since_last_control_message;
     bool timeout_handler_called;
 
-    bool is_driving;
-    elapsedMillis since_driving;
-
     public:
 
-      Vcu(uint8_t throttle_servo_pin, uint8_t gearbox_servo_pin,
-        uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin,
+      Vcu(uint8_t head_lamp_pin, uint8_t tail_lamp_pin, uint8_t turn_signal_right_pin, uint8_t turn_signal_left_pin,
         i2c_t3 & imu_i2c, uint8_t imu_i2c_scl_pin, uint8_t imu_i2c_sda_pin,
-        Steering & steering, Gps & gps)
+        Steering_t & steering, Powertrain_t & powertrain, Gps_t & gps)
       :
-        throttle_servo {throttle_servo_pin, 1000u, 2000u, 1500u, true},
-        gearbox_servo {gearbox_servo_pin, 1150u, 1850u, 1480u, true},
         automotive_lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin},
         position_encoder {23000u, 0u, 0u},
         bno055_imu_i2c_device {imu_i2c},
@@ -50,6 +43,7 @@ namespace earth_rover_vcu
         bno055_imu_i2c_sda_pin {imu_i2c_sda_pin},
         bno055_imu_device {imu_i2c, AdafruitBNO055<i2c_t3>::BNO055_ADDRESS_A},
         steering {steering},
+        powertrain {powertrain},
         gps {gps}
       {
         ;
@@ -57,15 +51,12 @@ namespace earth_rover_vcu
 
       ~Vcu() = default;
 
+      //! Initialize the VCU and all subsystems.
       void setup()
       {
-        // Configure the servos. The steering servo requires an explicit setPosition (on top of the one in the setup
-        // function), so send an explicit center position to all servos.
+        // Initialize all subsystems.
         steering.setup();
-        throttle_servo.setup();
-        throttle_servo.setPosition(0);
-        gearbox_servo.setup();
-        gearbox_servo.setPosition(0);
+        powertrain.setup();
         // Start with stop lamps and hazard flashers on, until we receive something from the HMI.
         automotive_lighting.setStopLamps(true);
         automotive_lighting.setHazardFlashers(true);
@@ -88,44 +79,17 @@ namespace earth_rover_vcu
           handleTimeout();
         }
         steering.spinOnce();
+        powertrain.spinOnce();
         automotive_lighting.spinOnce();
         gps.spinOnce();
       }
 
       void handleControlMessage(int16_t steering_angle, int16_t throttle, int8_t gearbox, int8_t lighting)
       {
-        // Set steering servo.
+        // Send settings to subsystems.
         steering.setNormalizedSteeringAngle(steering_angle);
-        // Set throttle servo.
-        throttle_servo.setPosition(throttle);
-        // Set gearbox servo. Prevent shifting to low or high gear while not driving.
-        if(!is_driving && abs(throttle) >= 150)
-        {
-          since_driving = 0;
-          is_driving = true;
-        }
-        else if(abs(throttle) < 100)
-        {
-          is_driving = false;
-        }
-        switch(gearbox)
-        {
-          case 1:  // Low
-            if(is_driving && since_driving > 200u)
-            {
-              gearbox_servo.setPosition(-1000);
-            }
-            break;
-          case 2:  // High
-            if(is_driving && since_driving > 200u)
-            {
-              gearbox_servo.setPosition(1000);
-            }
-            break;
-          default:  // Neutral
-            gearbox_servo.setPosition(0);
-            break;
-        }
+        powertrain.setNormalizedThrottleSetting(throttle);
+        powertrain.setGear(gearbox);
         // Set automotive lighting.
         automotive_lighting.setTurnSignalRight(lighting & 0x01);
         automotive_lighting.setTurnSignalLeft(lighting & 0x02);
@@ -183,7 +147,7 @@ namespace earth_rover_vcu
       void handleTimeout()
       {
         // Stop car and turn stop lamps and hazard flashers on.
-        throttle_servo.setPosition(0);
+        powertrain.setNormalizedThrottleSetting(0);
         automotive_lighting.setStopLamps(true);
         automotive_lighting.setHazardFlashers(true);
         // Timeout handler called.

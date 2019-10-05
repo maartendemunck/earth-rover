@@ -15,7 +15,7 @@ namespace earth_rover_vcu
   SteeringServo::SteeringServo(uint8_t pin_number)
   :
     pin_number {pin_number},
-    steering_servo {pin_number},
+    steering_servo {pin_number, 2000u, 1000u, 1500u, true},
     current_steering_angle {0}
   {
     ;
@@ -25,7 +25,7 @@ namespace earth_rover_vcu
   void SteeringServo::configureSteeringServo(
     uint16_t pulse_width_left, uint16_t pulse_width_center, uint16_t pulse_width_right)
   {
-    ConfiguredServo::Configuration configuration;
+    decltype(steering_servo)::Configuration configuration;
     configuration.pin_number = pin_number;
     configuration.minimum_pulse_width = pulse_width_left;
     configuration.maximum_pulse_width = pulse_width_right;
@@ -33,6 +33,7 @@ namespace earth_rover_vcu
     configuration.initial_pulse_width = pulse_width_center;
     configuration.enforce_pulse_width_limits = true;
     steering_servo.setConfiguration(configuration);
+    steering_servo.setPosition(current_steering_angle);
   }
 
 

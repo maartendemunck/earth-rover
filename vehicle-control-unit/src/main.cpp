@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <i2c_t3.h>
-#include "configured-servo.hpp"
 #include "lighting.hpp"
 #include "neogps-wrapper.hpp"
+#include "powertrain.hpp"
 #include "steering-servo.hpp"
 #include "vcu.hpp"
 #include "vcu-communicator.hpp"
@@ -12,7 +12,8 @@
 
 
 // Pin assignments.
-constexpr uint8_t throttle_servo_pin = 21u;
+constexpr uint8_t steering_servo_pin = 20u;
+constexpr uint8_t esc_pin = 21u;
 constexpr uint8_t gearbox_servo_pin = 22u;
 
 constexpr uint8_t head_lamp_pin = 3u;
@@ -29,11 +30,12 @@ constexpr uint8_t spi_sck_pin = 14u;
 constexpr uint8_t rf24_csn_pin = 15u;
 
 // Components.
-earth_rover_vcu::SteeringServo steering_servo {20};
+earth_rover_vcu::SteeringServo steering_servo {steering_servo_pin};
+earth_rover_vcu::Powertrain powertrain {esc_pin, gearbox_servo_pin};
 earth_rover_vcu::NeoGpsWrapper<HardwareSerial> gps {Serial1, 0, 1};
-earth_rover_vcu::Vcu<decltype(steering_servo), decltype(gps)> vcu {throttle_servo_pin, gearbox_servo_pin,
-                      head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin,
-                      imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin, steering_servo, gps};
+earth_rover_vcu::Vcu<decltype(steering_servo), decltype(powertrain), decltype(gps)> vcu
+  { head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin, imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin,
+    steering_servo, powertrain, gps};
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 
 

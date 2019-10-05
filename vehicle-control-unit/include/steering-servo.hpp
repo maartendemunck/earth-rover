@@ -6,8 +6,8 @@
  */
 
 
-#ifndef __EARTH_ROVER_VCU__STEERING__
-#define __EARTH_ROVER_VCU__STEERING__
+#ifndef __EARTH_ROVER_VCU__STEERING_SERVO__
+#define __EARTH_ROVER_VCU__STEERING_SERVO__
 
 
 #include <cstdint>
@@ -27,7 +27,7 @@ namespace earth_rover_vcu
   {
     private:
 
-      uint8_t pin_number;              //!< Pin number used to control the steering servo.
+      uint8_t pin_number;              //!< I/O pin used to control the steering servo.
       ConfiguredServo steering_servo;  //!< Steering servo controller.
       int16_t current_steering_angle;  //!< Current (normalized) steering angle (-1000...0...+1000).
 
@@ -45,8 +45,9 @@ namespace earth_rover_vcu
       //! Initialize the steering servo.
       inline void setup()
       {
+        current_steering_angle = 0;
         steering_servo.setup();
-        steering_servo.setPosition(0);
+        steering_servo.setPosition(current_steering_angle);
       }
 
       //! Spinning loop.
@@ -62,7 +63,7 @@ namespace earth_rover_vcu
       /*!
        *  \param steering_angle Normalized (-1000 = full left, 0 = center, +1000 = full right) steering angle.
        */
-      inline void setNormalizedSteeringAngle(uint16_t steering_angle)
+      inline void setNormalizedSteeringAngle(int16_t steering_angle)
       {
         steering_servo.setPosition(steering_angle);
         current_steering_angle = steering_angle;

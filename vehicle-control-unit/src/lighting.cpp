@@ -1,9 +1,16 @@
- #include "lighting.hpp"
- #include <Arduino.h>
+//! Automotive lighting device driver for the Earth Rover's VCU (implementation).
+/*!
+ *  \ingroup VCU
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
 
 
- namespace earth_rover_vcu
- {
+#include "lighting.hpp"
+
+
+namespace earth_rover_vcu
+{
 
   Lighting::Lighting(uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number,
                      uint8_t turn_signal_right_pin_number, uint8_t turn_signal_left_pin_number):

@@ -52,6 +52,7 @@ namespace earth_rover_vcu
 
       //! Spinning loop.
       /*!
+       *  \internal
        *  The steering servo's spinning loop does nothing.
        */
       inline void spinOnce()

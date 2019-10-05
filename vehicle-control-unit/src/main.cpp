@@ -2,6 +2,7 @@
 #include <i2c_t3.h>
 #include "lighting.hpp"
 #include "neogps-wrapper.hpp"
+#include "position-encoder.hpp"
 #include "powertrain.hpp"
 #include "steering-servo.hpp"
 #include "vcu.hpp"
@@ -12,14 +13,13 @@
 
 
 // Pin assignments.
-constexpr uint8_t steering_servo_pin = 20u;
-constexpr uint8_t esc_pin = 21u;
-constexpr uint8_t gearbox_servo_pin = 22u;
-
-constexpr uint8_t head_lamp_pin = 3u;
-constexpr uint8_t tail_lamp_pin = 4u;
-constexpr uint8_t turn_signal_right_pin = 5u;
-constexpr uint8_t turn_signal_left_pin = 6u;
+constexpr uint8_t steering_servo_pin = 20u;    //!< I/O pin used to control the steering servo.
+constexpr uint8_t esc_pin = 21u;               //!< I/O pin used to control the electronic speed controller (ESC).
+constexpr uint8_t gearbox_servo_pin = 22u;     //!< I/O pin used to control the gearbox servo.
+constexpr uint8_t head_lamp_pin = 3u;          //!< I/O pin used to control the head lamps.
+constexpr uint8_t tail_lamp_pin = 4u;          //!< I/O pin used to control the tail lamps.
+constexpr uint8_t turn_signal_right_pin = 5u;  //!< I/O pin used to control the right turn signal.
+constexpr uint8_t turn_signal_left_pin = 6u;   //!< I/O pin used to control the left turn signal.
 
 constexpr i2c_t3 & imu_i2c = Wire;
 constexpr uint8_t imu_i2c_scl_pin = 19u;
@@ -32,10 +32,14 @@ constexpr uint8_t rf24_csn_pin = 15u;
 // Components.
 earth_rover_vcu::SteeringServo steering_servo {steering_servo_pin};
 earth_rover_vcu::Powertrain powertrain {esc_pin, gearbox_servo_pin};
+earth_rover_vcu::Lighting lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin};
+earth_rover_vcu::PositionEncoder<7u, 8u> position_encoder {23000u, 0u, 0u};
 earth_rover_vcu::NeoGpsWrapper<HardwareSerial> gps {Serial1, 0, 1};
-earth_rover_vcu::Vcu<decltype(steering_servo), decltype(powertrain), decltype(gps)> vcu
-  { head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin, imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin,
-    steering_servo, powertrain, gps};
+
+earth_rover_vcu::Vcu<decltype(steering_servo), decltype(powertrain), decltype(lighting),
+                     decltype(position_encoder), decltype(gps)>
+  vcu { steering_servo, powertrain, lighting, position_encoder, gps, imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin };
+
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 
 
@@ -44,7 +48,7 @@ void setup()
   // Initialisation started, switch on built in LED.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, 1);
-  // Setup debug console.
+  // Setup debug console (if enabled).
   #ifdef SERIAL_DEBUG
     Serial.begin(9600);
     while(!Serial)

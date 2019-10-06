@@ -172,7 +172,6 @@ namespace earth_rover_vcu
         // Compose orientation message.
         buffer[0] = static_cast<uint8_t>(ResponseMessageType::Orientation);
         auto orientation = vcu.getOrientation();
-        auto calibration_status = vcu.getImuCalibrationStatus();
         uint16_t yaw = uint16_t(orientation.yaw * 180. / M_PI * 100.);
         buffer[1] = yaw & 0x00ff;
         buffer[2] = (yaw & 0xff00) >> 8;
@@ -182,10 +181,7 @@ namespace earth_rover_vcu
         int16_t roll =  int16_t(orientation.roll * 180. / M_PI * 100.);
         buffer[5] = roll & 0x00ff;
         buffer[6] = (roll & 0xff00) >> 8;
-        buffer[7] = (calibration_status.magnetometer & 0x03) |
-                    ((calibration_status.accelerometer & 0x03) << 2) |
-                    ((calibration_status.gyroscope & 0x03) << 4) |
-                    ((calibration_status.system & 0x03) << 6);
+        buffer[7] = vcu.isImuFullyCalibrated()? 0xff: 0x00;
         // Transmit orientation message.
         return sendMessage(buffer);
       }

@@ -71,6 +71,16 @@ namespace earth_rover_vcu
         }
       }
 
+      //! Spinning loop.
+      /*!
+       *  \internal
+       *  The position encoder's spinning loop does nothing.
+       */
+      void spinOnce()
+      {
+        ;
+      }
+
       //! Get the current speed of the Earth Rover.
       /*!
        *  \return The current speed of the earth rover in m/h (1e-3 km/h).

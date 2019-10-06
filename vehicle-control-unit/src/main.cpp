@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include <i2c_t3.h>
-#include "lighting.hpp"
-#include "neogps-wrapper.hpp"
-#include "position-encoder.hpp"
-#include "powertrain.hpp"
+
 #include "steering-servo.hpp"
+#include "powertrain.hpp"
+#include "lighting.hpp"
+#include "position-encoder.hpp"
+#include "adafruit-bno055-wrapper.hpp"
+#include "neogps-wrapper.hpp"
 #include "vcu.hpp"
 #include "vcu-communicator.hpp"
 
@@ -33,12 +35,13 @@ constexpr uint8_t rf24_csn_pin = 15u;
 earth_rover_vcu::SteeringServo steering_servo {steering_servo_pin};
 earth_rover_vcu::Powertrain powertrain {esc_pin, gearbox_servo_pin};
 earth_rover_vcu::Lighting lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin};
+earth_rover_vcu::AdafruitBNO055Wrapper<i2c_t3> imu {imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin};
 earth_rover_vcu::PositionEncoder<7u, 8u> position_encoder {23000u, 0u, 0u};
 earth_rover_vcu::NeoGpsWrapper<HardwareSerial> gps {Serial1, 0, 1};
 
 earth_rover_vcu::Vcu<decltype(steering_servo), decltype(powertrain), decltype(lighting),
-                     decltype(position_encoder), decltype(gps)>
-  vcu { steering_servo, powertrain, lighting, position_encoder, gps, imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin };
+                     decltype(position_encoder), decltype(imu), decltype(gps)>
+  vcu {steering_servo, powertrain, lighting, position_encoder, imu, gps};
 
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 

@@ -26,6 +26,8 @@ namespace earth_rover_vcu
    *  \tparam PositionEncoder_t Actual type of the position encoder device driver.
    *  \tparam Imu_t Actual type of the IMU device driver.
    *  \tparam Gps_t Actual type of the GPS device driver.
+   * 
+   *  \ingroup VCU
    */
   template<typename Steering_t, typename Powertrain_t, typename Lighting_t,
            typename PositionEncoder_t, typename Imu_t, typename Gps_t>

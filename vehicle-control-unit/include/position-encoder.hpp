@@ -24,6 +24,8 @@ namespace earth_rover_vcu
    * 
    *  \tparam hall_sensor_a_pin I/O pin used for the first Hall effect sensor.
    *  \tparam hall_sensor_b_pin I/O pin used for the second Hall effect sensor.
+   * 
+   *  \ingroup VCU
    */
   template<uint8_t hall_sensor_a_pin, uint8_t hall_sensor_b_pin>
   class PositionEncoder

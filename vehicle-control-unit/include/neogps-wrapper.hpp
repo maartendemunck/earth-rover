@@ -27,7 +27,6 @@ namespace earth_rover_vcu
    *  \tparam SerialDevice Type of the serial device connected to the GPS device.
    * 
    *  \ingroup VCU
-   * 
    */
   template <typename SerialDevice>
   class NeoGpsWrapper

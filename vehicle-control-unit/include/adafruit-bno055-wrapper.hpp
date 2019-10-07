@@ -18,6 +18,9 @@ namespace earth_rover_vcu
 {
 
   //! Struct to store an orientation in Euler angles.
+  /*!
+   *  \ingroup VCU
+   */
   struct EulerAngles_t
   {
     float yaw;    //!< Yaw (rotation around the vertical axis).
@@ -29,6 +32,8 @@ namespace earth_rover_vcu
   //! Wrapper for an AdafruitBNO055 instance, providing a device-independent IMU interface.
   /*!
    *  \tparam I2CDevice_t I²C device type.
+   * 
+   *  \ingroup VCU
    */
   template <typename I2CDevice_t>
   class AdafruitBNO055Wrapper

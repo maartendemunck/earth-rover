@@ -21,6 +21,8 @@ namespace earth_rover_vcu
    *  Of course, the general ISR programming guidelines still apply: they should be as short and fast as possible.
    * 
    *  \tparam irq Interrupt number.
+   * 
+   *  \ingroup VCU
    */
   template<uint8_t irq>
   class ISRWrapper

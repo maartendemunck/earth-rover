@@ -30,13 +30,13 @@ namespace earth_rover_vcu
   {
     private:
 
-      ISRWrapper<hall_sensor_a_pin> isr_wrapper;
-      const uint16_t pulses_per_km;
-      volatile uint32_t odometer;
-      volatile uint32_t tripmeter;
-      elapsedMicros since_last_pulse;
-      static constexpr uint8_t available_intervals = 8;
-      volatile uint32_t between_pulses[available_intervals];
+      ISRWrapper<digitalPinToInterrupt(hall_sensor_a_pin)> isr_wrapper;  //!< ISR for the first Hall effect sensor.
+      const uint16_t pulses_per_km;                           //!< Number of pulses per km.
+      volatile uint32_t odometer;                             //!< Current value of the odometer (in pulses).
+      volatile uint32_t tripmeter;                            //!< Current value of the trip meter (in pulses).
+      elapsedMicros since_last_pulse;                         //!< Elapsed time since the last pulse.
+      static constexpr uint8_t available_intervals = 8;       //!< Number of between-pulse-intervals stored.
+      volatile uint32_t between_pulses[available_intervals];  //!< Stored between-pulse-intervals.
 
     public:
 

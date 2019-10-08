@@ -1,4 +1,4 @@
-//! Generic servo driver (interface).
+//! Generic servo device driver (interface).
 /*!
  *  \ingroup VCU
  *  \file
@@ -16,7 +16,7 @@
 namespace earth_rover_vcu
 {
 
-  //! Generic servo driver.
+  //! Generic servo device driver.
   /*!
    *  \ingroup VCU
    */

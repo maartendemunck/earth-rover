@@ -1,3 +1,10 @@
+//! Adafruit Bosch BNO055 IMU device driver (interface and template implementation).
+/*!
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
+
+
 #ifndef __EARTH_ROVER_VCU__ADAFRUIT_BNO055__
 #define __EARTH_ROVER_VCU__ADAFRUIT_BNO055__
 
@@ -5,63 +12,72 @@
 namespace earth_rover_vcu
 {
 
+  //! Adafruit Bosch BNO055 IMU device driver.
+  /*!
+   */
   template <typename I2CDevice>
   class AdafruitBNO055
   {
 
     public:
 
-      static constexpr uint8_t BNO055_ID {0xA0};
-      static constexpr uint8_t BNO055_ADDRESS_A {0x28};
-      static constexpr uint8_t BNO055_ADDRESS_B {0x29};
+      static constexpr uint8_t BNO055_ID {0xA0};         //!< BNO055 I²C ID.
+      static constexpr uint8_t BNO055_ADDRESS_A {0x28};  //!< BNO055 I²C address A.
+      static constexpr uint8_t BNO055_ADDRESS_B {0x29};  //!< BNO055 I²C address B.
 
+      //! BNO055 calibration status
       struct bno055_calibration_status_t
       {
-        uint8_t system;
-        uint8_t accelerometer;
-        uint8_t gyroscope;
-        uint8_t magnetometer;
+        uint8_t system;         //!< Overall system calibration status (0...3).
+        uint8_t accelerometer;  //!< Accelerometer calibration status (0...3).
+        uint8_t gyroscope;      //!< Gyroscope calibration status (0...3).
+        uint8_t magnetometer;   //!< Magnetometer calibration status (0...3).
       };
 
+      //! BNO055 calibration values.
       struct bno055_calibration_values_t
       {
-        int16_t accel_offset_x;
-        int16_t accel_offset_y;
-        int16_t accel_offset_z;
-        int16_t mag_offset_x;
-        int16_t mag_offset_y;
-        int16_t mag_offset_z;
-        int16_t gyro_offset_x;
-        int16_t gyro_offset_y;
-        int16_t gyro_offset_z;
-        int16_t accel_radius;
-        int16_t mag_radius;
+        int16_t accel_offset_x;  //!< Accelerometer offset X.
+        int16_t accel_offset_y;  //!< Accelerometer offset Y.
+        int16_t accel_offset_z;  //!< Accelerometer offset Z.
+        int16_t mag_offset_x;    //!< Magnetometer offset X.
+        int16_t mag_offset_y;    //!< Magnetometer offset Y.
+        int16_t mag_offset_z;    //!< Magnetometer offset Z.
+        int16_t gyro_offset_x;   //!< Gyroscope offset X.
+        int16_t gyro_offset_y;   //!< Gyroscope offset Y.
+        int16_t gyro_offset_z;   //!< Gyroscope offset Z.
+        int16_t accel_radius;    //!< Accelerometer radius.
+        int16_t mag_radius;      //!< Gyroscope radius.
       };
 
+      //! Vector type.
       struct bno055_vector_t
       {
-        float x;
-        float y;
-        float z;
+        float x;  //!< x
+        float y;  //!< y
+        float z;  //!< z
       };
 
+      //! Quaternion type.
       struct bno055_quaternion_t
       {
-        float w;
-        float x;
-        float y;
-        float z;
+        float w;  //!< w
+        float x;  //!< x
+        float y;  //!< y
+        float z;  //!< z
       };
 
+      //! Euler angles type.
       struct bno055_euler_angles_t
       {
-        float yaw;
-        float pitch;
-        float roll;
+        float yaw;    //!< Yaw (rotation around vertical axis).
+        float pitch;  //!< Pitch (rotation around transverse axis).
+        float roll;   //!< Roll (rotation around longitudinal axis).
       };
 
     private:
 
+      //! BNO055 registers.
       enum class bno055_register_t: uint8_t
       {
         BNO055_CHIP_ID_ADDR                 = 0x00,
@@ -172,6 +188,8 @@ namespace earth_rover_vcu
         MAG_RADIUS_LSB_ADDR                 = 0x69,
         MAG_RADIUS_MSB_ADDR                 = 0x6A
       };
+
+      //! BNO055 operation modes.
       enum class bno055_operation_mode_t: uint8_t
       {
         OPERATION_MODE_CONFIG       = 0x00,
@@ -188,18 +206,26 @@ namespace earth_rover_vcu
         OPERATION_MODE_NDOF_FMC_OFF = 0x0B,
         OPERATION_MODE_NDOF         = 0x0C
       };
+
+      //! BNO055 power modes.
       enum class bno055_power_mode_t: uint8_t
       {
         POWER_MODE_NORMAL   = 0x00,
         POWER_MODE_LOWPOWER = 0x01,
         POWER_MODE_SUSPEND  = 0x02
       };
-      I2CDevice & i2c_device_;
-      uint8_t i2c_address_;
-      bno055_operation_mode_t bno055_operation_mode_;
+
+      I2CDevice & i2c_device_;                         //!< I²C device driver.
+      uint8_t i2c_address_;                            //!< BNO055 I²C address.
+      bno055_operation_mode_t bno055_operation_mode_;  //!< Current BNO055 operation mode.
 
     public:
 
+      //! Constructor.
+      /*!
+       *  \param i2c_device I²C device used to control the Adafruit Bosch BNO055 IMU.
+       *  \param i2c_address I²C address of the Adafruit Bosch BNO055 IMU.
+       */
       AdafruitBNO055(I2CDevice & i2c_device, uint8_t i2c_address = BNO055_ADDRESS_A):
         i2c_device_{i2c_device},
         i2c_address_{i2c_address},
@@ -208,8 +234,13 @@ namespace earth_rover_vcu
         ;
       }
 
+      //! Default destructor.
       ~AdafruitBNO055() = default;
 
+      //! Initialize the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \return True if the initialization was successful, false if the initialization failed.
+       */
       bool setup()
       {
         // Wait for device to appear.
@@ -261,6 +292,10 @@ namespace earth_rover_vcu
         return true;
       }
 
+      //! Get the orientation of the Adafruit Bosch BNO055 IMU as a quaternion.
+      /*!
+       *  \return The orientation of the Adafruit Bosch BNO055 IMU as a quaternion.
+       */
       bno055_quaternion_t getQuaternion()
       {
         // Read full quaternion in buffer at once.
@@ -277,6 +312,10 @@ namespace earth_rover_vcu
         return result;
       }
 
+      //! Get the orientation of the Adafruit Bosch BNO055 IMU as Euler angles.
+      /*!
+       *  \return The orientation of the Adafruit Bosch BNO055 IMU as Euler angles.
+       */
       bno055_euler_angles_t getEulerAngles()
       {
         // Get orientation as a quaternion.
@@ -298,6 +337,10 @@ namespace earth_rover_vcu
         return angles;
       }
 
+      //! Get the angular velocity of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \return The angular velocity of the Adafruit Bosch BNO055 IMU.
+       */
       bno055_vector_t getAngularVelocity()
       {
         // Read full quaternion in buffer at once.
@@ -313,6 +356,10 @@ namespace earth_rover_vcu
         return result;
       }
 
+      //! Get the linear acceleration of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \return The linear acceleration of the Adafruit Bosch BNO055 IMU.
+       */
       bno055_vector_t getLinearAcceleration()
       {
         // Read full quaternion in buffer at once.
@@ -328,6 +375,10 @@ namespace earth_rover_vcu
         return result;
       }
 
+      //! Check whether the Adafruit Bosch BNO055 IMU is fully calibrated.
+      /*!
+       *  \return True if the IMU is fully calibrated, false if not.
+       */
       bool isFullyCalibrated()
       {
         auto calibration_status = getCalibrationStatus();
@@ -335,6 +386,10 @@ namespace earth_rover_vcu
               &&  (calibration_status.gyroscope >= 3) && (calibration_status.magnetometer >= 3);
       }
 
+      //! Get the calibration status of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \return The calibration status of the Adafruit Bosch BNO055 IMU.
+       */
       bno055_calibration_status_t getCalibrationStatus()
       {
         bno055_calibration_status_t result;
@@ -346,6 +401,10 @@ namespace earth_rover_vcu
         return result;
       }
 
+      //! Get the calibration values of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \param calibration_values Buffer to store the calibration values of the Adafruit Bosch BNO055 IMU.
+       */
       void getCalibrationValues(bno055_calibration_values_t & calibration_values)
       {
         // Switch to configuration mode.
@@ -371,6 +430,10 @@ namespace earth_rover_vcu
         setOperationMode(previous_operation_mode);
       }
 
+      //! Set the calibration values of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \param calibration_values The calibration values of the Adafruit Bosch BNO055 IMU.
+       */
       void setCalibrationValues(const bno055_calibration_values_t & calibration_values)
       {
         // Switch to configuration mode.
@@ -408,6 +471,11 @@ namespace earth_rover_vcu
 
     private:
 
+      //! Write a byte to a BNO055 I²C register.
+      /*!
+       *  \param sensor_register Register to write to.
+       *  \param value Value to write.
+       */
       void writeByte(bno055_register_t sensor_register, uint8_t value)
       {
         i2c_device_.beginTransmission(i2c_address_);
@@ -416,6 +484,12 @@ namespace earth_rover_vcu
         i2c_device_.endTransmission(I2C_STOP, 0);
       }
 
+      //! Write a number of bytes to successive BNO055 I²C registers.
+      /*!
+       *  \param sensor_register First register to write to.
+       *  \param buffer Values to write.
+       *  \param size Number of values (bytes) to write.
+       */
       void writeNBytes(bno055_register_t sensor_register, uint8_t * buffer, uint8_t size)
       {
         i2c_device_.beginTransmission(i2c_address_);
@@ -426,6 +500,11 @@ namespace earth_rover_vcu
         i2c_device_.endTransmission(I2C_STOP, 0);
       }
 
+      //! Read a byte from a BNO055 I²C register.
+      /*!
+       *  \param sensor_register Register to read from.
+       *  \return Value read.
+       */
       uint8_t readByte(bno055_register_t sensor_register)
       {
         uint8_t value = 0u;
@@ -437,6 +516,12 @@ namespace earth_rover_vcu
         return value;
       }
 
+      //! Read a number of bytes from successive BNO055 I²C registers.
+      /*!
+       *  \param sensor_register First register to read from.
+       *  \param buffer Buffer to store values.
+       *  \param size Number of values (bytes) to read.
+       */
       void readNBytes(bno055_register_t sensor_register, uint8_t * buffer, uint8_t size)
       {
         i2c_device_.beginTransmission(i2c_address_);
@@ -448,6 +533,11 @@ namespace earth_rover_vcu
         }
       }
 
+      //! Set the operation mode of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \param operation_mode New operation mode.
+       *  \return Previous operation mode.
+       */
       bno055_operation_mode_t setOperationMode(bno055_operation_mode_t operation_mode)
       {
         auto previous_operation_mode = bno055_operation_mode_;
@@ -457,6 +547,10 @@ namespace earth_rover_vcu
         return previous_operation_mode;
       }
 
+      //! Set the power mode of the Adafruit Bosch BNO055 IMU.
+      /*!
+       *  \param power_mode New power mode.
+       */
       void setPowerMode(bno055_power_mode_t power_mode)
       {
         writeByte(bno055_register_t::BNO055_PWR_MODE_ADDR, uint8_t(power_mode));

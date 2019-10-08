@@ -23,7 +23,7 @@
 
 
 /*
- * Pin assignments.
+ *  Pin assignments.
  */
 
 constexpr uint8_t steering_servo_pin = 20u;    //!< I/O pin used to control the steering servo.
@@ -44,7 +44,7 @@ constexpr uint8_t rf24_csn_pin = 15u;          //!< I/O pin used for the nRF24L0
 
 
 /*
- * Vehicle systems.
+ *  Vehicle systems.
  */
 
 //! Steering servo device driver.
@@ -67,7 +67,7 @@ earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_
 
 
 /*
- *  Sketch control.
+ *   Sketch.
  */
 
 //! Initialize the VCU.

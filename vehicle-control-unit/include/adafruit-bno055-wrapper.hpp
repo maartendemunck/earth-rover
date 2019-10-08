@@ -17,7 +17,7 @@
 namespace earth_rover_vcu
 {
 
-  //! Struct to store an orientation in Euler angles.
+  //! Euler angles type.
   /*!
    *  \ingroup VCU
    */

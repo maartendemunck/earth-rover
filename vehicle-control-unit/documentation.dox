@@ -1,4 +1,11 @@
 /*!
- *  @defgroup VCU
- *  @brief The Earth Rover's Vehicle Control Unit (VCU)
+ *  \defgroup VCU
+ *  \brief The Earth Rover's Vehicle Control Unit (VCU).
+ */
+
+/*!
+ *  \namespace earth_rover_vcu
+ *  \brief Vehicle Control Unit (VCU) namespace.
+ *  
+ *  The earth_rover_vcu namespace groups all code for the Earth Rover's Vehicle Control Unit (VCU).
  */

@@ -210,6 +210,35 @@ namespace earth_rover_vcu
 
   };
 
+
+  //! Factory function to create a Vcu object.
+  /*!
+   *  \tparam Steering_t Steering servo device driver type.
+   *  \tparam Powertrain_t Powertrain device driver type.
+   *  \tparam Lighting_t Automotive lighting device driver type.
+   *  \tparam PositionEncoder_t Position encoder device driver type.
+   *  \tparam Imu_t IMU device driver type.
+   *  \tparam Gps_t GPS device driver.
+   *  \param steering Steering servo device driver.
+   *  \param powertrain Powertrain device driver.
+   *  \param lighting Automotive lighting device driver.
+   *  \param position_encoder Position encoder device driver.
+   *  \param imu IMU device driver.
+   *  \param gps GPS device driver.
+   *  \return VCU with the given device drivers.
+   * 
+   *  \ingroup VCU
+   */
+  template<typename Steering_t, typename Powertrain_t, typename Lighting_t,
+           typename PositionEncoder_t, typename Imu_t, typename Gps_t>
+  auto makeVcu(
+    Steering_t & steering, Powertrain_t & powertrain, Lighting_t & lighting,
+    PositionEncoder_t & position_encoder, Imu_t & imu, Gps_t & gps)
+  {
+    return Vcu<Steering_t, Powertrain_t, Lighting_t, PositionEncoder_t, Imu_t, Gps_t>(
+      steering, powertrain, lighting, position_encoder, imu, gps);
+  }
+
 }
 
 #endif

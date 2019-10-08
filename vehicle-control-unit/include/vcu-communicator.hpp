@@ -1,5 +1,13 @@
-#ifndef __VCU_COMMUNICATOR__
-#define __VCU_COMMUNICATOR__
+//! VCU (vehicle control unit) communicator for the Earth Rover (interface and template implementation).
+/*!
+ *  \ingroup VCU
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
+
+
+#ifndef __EARTH_ROVER__VCU_COMMUNICATOR__
+#define __EARTH_ROVER__VCU_COMMUNICATOR__
 
 
 #include <functional>
@@ -12,35 +20,64 @@
 namespace earth_rover_vcu
 {
 
+  //! VCU (vehicle control unit) communicator for the Earth Rover.
+  /*!
+   *  The VCU communicator handles the communication with the HMI, executing commands and responding to requests.
+   * 
+   *  \tparam Vcu VCU type.
+   * 
+   *  \ingroup VCU
+   */
   template <typename Vcu>
   class VcuCommunicator
   {
     private:
 
-      enum class RequestMessageType: uint8_t { Control = 0x00, RequestState = 0x10 };
+      //! Request message IDs.
+      enum class RequestMessageType: uint8_t
+      {
+        Control = 0x00, RequestState = 0x10
+      };
+      //! Response message IDs.
       enum class ResponseMessageType: uint8_t
       {
         Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93
       };
 
+      //! nRF24L01+ device.
       RF24 nrf24l01_device;
+      //! Payload size of the nRF24L01+ messages.
       static constexpr uint8_t nrf24l01_payload_size {9u};
-      // This sequence seems to work reliably with the Velleman nRF24L01+ modules.
+      //! nRF24L01+ channel sequence to use for the FHSS algorithm.
+      /*!
+       *  This sequence seems to work reliably with the Velleman nRF24L01+ modules.
+       */
       const uint8_t nrf24l01_fhss_channels[40]
         {  0,  4,  8, 12, 16, 20, 24, 28, 32, 36,  1,  5,  9, 13, 17, 21, 25, 29, 33, 37,
            2,  6, 10, 14, 18, 22, 26, 30, 34, 38,  3,  7, 11, 15, 19, 23, 27, 31, 35, 39 };
+      //! Current channel (as an index to the nrf24l01_fhss_channels array).
       uint8_t nrf24l01_fhss_channel_index;
+      //! State update interval.
       static constexpr uint8_t update_interval {50u};
+      //! Elapsed time since the last channel change.
       elapsedMillis since_channel_change;
-      bool channel_changed;
+      //! Timeout for the FHSS algorithm (default: the time needed to cycle through all channels).
       uint32_t fhss_timeout {(sizeof(nrf24l01_fhss_channels) / sizeof(nrf24l01_fhss_channels[0])) * update_interval};
+      //! True if the FHSS algorithm is synced, false if not.
       bool fhss_synced;
+      //! Elapsed time since the last received message.
       elapsedMillis since_last_message;
-
+      //! VCU.
       Vcu & vcu;
 
     public:
 
+      //! Constructor.
+      /*!
+       *  \param ce_pin I/O pin used for the nRF24L01+'s CE signal.
+       *  \param csn_pin I/O pin used for the nRF24L01+'s CSN signal.
+       *  \param vcu VCU.
+       */
       VcuCommunicator(uint8_t ce_pin, uint8_t csn_pin, Vcu & vcu)
       :
         nrf24l01_device {ce_pin, csn_pin},
@@ -50,6 +87,10 @@ namespace earth_rover_vcu
         ;
       }
 
+      //! Destructor.
+      ~VcuCommunicator() = default;
+
+      //! Initialize the VCU communicator.
       void setup()
       {
         // Setup nRF24L01+.
@@ -65,6 +106,7 @@ namespace earth_rover_vcu
         nrf24l01_device.startListening();
       }
 
+      //! Spinning loop.
       void spinOnce()
       {
         if(fhss_synced == true && since_channel_change >= update_interval)
@@ -144,9 +186,14 @@ namespace earth_rover_vcu
 
     private:
 
+      //! Send a speedometer (speed, odometer and tripmeter) response.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
       bool sendSpeedometerMessage()
       {
-        static_assert(nrf24l01_payload_size >= 9, "the 'speedometer' message requires a payload size of at least 9 bytes");
+        static_assert(nrf24l01_payload_size >= 9,
+                      "the 'speedometer' message requires a payload size of at least 9 bytes");
         uint8_t buffer[nrf24l01_payload_size];
         // Compose speedometer message.
         buffer[0] = static_cast<uint8_t>(ResponseMessageType::Speedometer);
@@ -165,6 +212,10 @@ namespace earth_rover_vcu
         return sendMessage(buffer);
       }
 
+      //! Send an orientation (yaw, pitch, roll) response.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
       bool sendOrientationMessage()
       {
         static_assert(nrf24l01_payload_size >= 8, "the 'orientation' message requires a payload size of at least 8 bytes");
@@ -186,12 +237,17 @@ namespace earth_rover_vcu
         return sendMessage(buffer);
       }
 
+      //! Send an location (latitude and longitude) response.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
       bool sendLocationMessage()
       {
         auto gps_data = vcu.getGpsData();
         if(gps_data.valid.location)
         {
-          static_assert(nrf24l01_payload_size >= 9, "the 'location' message requires a payload size of at least 9 bytes");
+          static_assert(nrf24l01_payload_size >= 9,
+                        "the 'location' message requires a payload size of at least 9 bytes");
           uint8_t buffer[nrf24l01_payload_size];
           // Compose location message.
           buffer[0] = static_cast<uint8_t>(ResponseMessageType::Location);
@@ -215,12 +271,17 @@ namespace earth_rover_vcu
         
       }
 
+      //! Send an altitude response.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
       bool sendAltitudeMessage()
       {
         auto gps_data = vcu.getGpsData();
         if(gps_data.valid.altitude)
         {
-          static_assert(nrf24l01_payload_size >= 5, "the 'altitude' message requires a payload size of at least 5 bytes");
+          static_assert(nrf24l01_payload_size >= 5,
+                        "the 'altitude' message requires a payload size of at least 5 bytes");
           uint8_t buffer[nrf24l01_payload_size];
           // Compose altitude message.
           buffer[0] = static_cast<uint8_t>(ResponseMessageType::Altitude);
@@ -238,6 +299,11 @@ namespace earth_rover_vcu
         }
       }
 
+      //! Send a message via the nRF24L01+ transceiver.
+      /*!
+       *  \param buffer Message (of nrf24l01_payload_size bytes).
+       *  \return True if the message was successfully sent, false if not.
+       */
       inline bool sendMessage(uint8_t buffer[nrf24l01_payload_size])
       {
         nrf24l01_device.stopListening();
@@ -246,6 +312,7 @@ namespace earth_rover_vcu
         return result;
       }
 
+      //! Hop to the next channel in the list.
       inline void changeChannel()
       {
         nrf24l01_fhss_channel_index = (nrf24l01_fhss_channel_index + 1)

@@ -1,8 +1,16 @@
+//! Car state (digital twin) for the Earth Rover (implementation).
+/*!
+ *  \ingroup HMI
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
+
+
 #include <Arduino.h>
 #include "car-state.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   CarState::CarState()

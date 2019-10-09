@@ -1,8 +1,8 @@
-#ifndef __CONFIGURATION__
-#define __CONFIGURATION__
+#ifndef __EARTH_ROVER_HMI__CONFIGURATION__
+#define __EARTH_ROVER_HMI__CONFIGURATION__
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   class Configuration
@@ -24,6 +24,8 @@ namespace earth_rover
       {
         ;
       }
+
+      ~Configuration() = default;
 
       inline bool isConfigurationChanged()
       {

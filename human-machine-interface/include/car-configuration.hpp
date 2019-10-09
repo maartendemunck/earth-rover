@@ -1,21 +1,21 @@
-#ifndef __CAR_CONFIGURATION__
-#define __CAR_CONFIGURATION__
+#ifndef __EARTH_ROVER_HMI__CAR_CONFIGURATION__
+#define __EARTH_ROVER_HMI__CAR_CONFIGURATION__
 
 
 #include "servo-configuration.hpp"
 #include "radio-configuration.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   class CarConfiguration
   {
     private:
-      ServoConfiguration steering_configuration;
-      ServoConfiguration throttle_configuration;
-      ServoConfiguration gearbox_configuration;
-      RadioConfiguration radio_configuration;
+      ServoConfiguration steering_configuration;  //!< Steering servo configuration.
+      ServoConfiguration throttle_configuration;  //!< ESC configuration.
+      ServoConfiguration gearbox_configuration;   //!< Gearbx servo configuration.
+      RadioConfiguration radio_configuration;     //!< Radio configuration.
 
     public:
       CarConfiguration();
@@ -27,6 +27,10 @@ namespace earth_rover
                        ServoConfiguration && throttle_configuration,
                        ServoConfiguration && gearbox_configuration,
                        RadioConfiguration && radio_configuration);
+
+      void setup() { ; }
+
+      void spinOnce() { ; }
 
       ServoConfiguration & getSteeringConfig() { return steering_configuration; };
       ServoConfiguration & getThrottleConfig() { return throttle_configuration; };

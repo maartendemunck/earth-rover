@@ -1,11 +1,11 @@
 /*!
- *  \defgroup HMI
- *  \brief The Earth Rover's Human Machine Interface (HMI).
+ *  \defgroup HMI Human machine interface (HMI)
+ *  \brief The Earth Rover's Human machine interface (HMI).
  */
 
 /*!
  *  \namespace earth_rover_hmi
- *  \brief Human Machine Interface (HMI) namespace.
+ *  \brief Human machine interface (HMI) namespace.
  *  
- *  The earth_rover_hmi namespace groups all code for the Earth Rover's Human Machine Interface (HMI).
+ *  The earth_rover_hmi namespace groups all code for the Earth Rover's human machine interface (HMI).
  */

@@ -1,12 +1,12 @@
-#ifndef __SERVO_CONFIGURATION__
-#define __SERVO_CONFIGURATION__
+#ifndef __EARTH_ROVER_HMI__SERVO_CONFIGURATION__
+#define __EARTH_ROVER_HMI__SERVO_CONFIGURATION__
 
 
 #include <cstdint>
 #include "configuration.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   class ServoConfiguration: public Configuration

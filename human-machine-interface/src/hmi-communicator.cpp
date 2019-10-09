@@ -1,8 +1,16 @@
+//! HMI (human machine interface) communicator for the Earth Rover (implementation).
+/*!
+ *  \ingroup HMI
+ *  \file
+ *  \author Maarten De Munck <maarten@vijfendertig.be>
+ */
+
+
 #include "hmi-communicator.hpp"
 #include "from-to-integral.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   constexpr uint8_t HmiCommunicator::nrf24l01_fhss_channels[];  // Initialised in header file.
@@ -111,8 +119,8 @@ namespace earth_rover
   {
     static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
     uint8_t buffer[nrf24l01_payload_size];
-    auto drive = car_state.getDriveInputs();
-    auto lighting = car_state.getLighting();
+    auto drive = car_state.getRequestedDriveState();
+    auto lighting = car_state.getRequestedLightingState();
     buffer[0] = to_integral(RequestMessageType::Control);
     buffer[1] = (drive.steering) & 0xff;
     buffer[2] = (drive.steering >> 8) & 0xff;
@@ -157,10 +165,6 @@ namespace earth_rover
     if(result)
     {
       digitalWrite(LED_BUILTIN, 0);
-    }
-    else
-    {
-      // Serial.printf("F: %3d (%2d)\n", nrf24l01_fhss_channels[nrf24l01_fhss_channel_index], nrf24l01_fhss_channel_index);
     }
     
     return result;

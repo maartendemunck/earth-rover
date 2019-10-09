@@ -1,7 +1,7 @@
 #include "servo-configuration.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   ServoConfiguration::ServoConfiguration(uint8_t input_channel):

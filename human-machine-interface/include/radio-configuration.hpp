@@ -1,12 +1,12 @@
-#ifndef __RADIO_CONFIGURATION__
-#define __RADIO_CONFIGURATION__
+#ifndef __EARTH_ROVER_HMI__RADIO_CONFIGURATION__
+#define __EARTH_ROVER_HMI__RADIO_CONFIGURATION__
 
 
 #include <cstdint>
 #include "configuration.hpp"
 
 
-namespace earth_rover
+namespace earth_rover_hmi
 {
 
   class RadioConfiguration: public Configuration

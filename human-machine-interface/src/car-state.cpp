@@ -14,28 +14,13 @@ namespace earth_rover_hmi
 {
 
   CarState::CarState()
+  :
+    speedometer {1000u},
+    orientation {1000u},
+    location {5000u},
+    altitude {5000u}
   {
     ;
-  }
-
-
-  void CarState::spinOnce()
-  {
-    if(orientation.valid == true && orientation.since_last_update >= 1000u)
-    {
-      orientation.valid = false;
-      orientation.updated = true;
-    }
-    if(location.valid == true && location.since_last_update >= 5000u)
-    {
-      location.valid = false;
-      location.updated = true;
-    }
-    if(altitude.valid == true && altitude.since_last_update >= 5000u)
-    {
-      altitude.valid = false;
-      altitude.updated = true;
-    }
   }
 
 
@@ -159,94 +144,6 @@ namespace earth_rover_hmi
   void CarState::setHazardFlashers(bool state)
   {
       lighting.hazard_flashers = state;
-  }
-
-
-  void CarState::setSpeedometer(const Speedometer & new_speedometer, bool valid)
-  {
-    speedometer.data = new_speedometer;
-    speedometer.valid = valid;
-    speedometer.updated = true;
-    if(valid)
-    {
-      speedometer.since_last_update = 0;
-    }
-  }
-
-
-  std::pair<bool, CarState::Speedometer> CarState::getSpeedometer(bool reset)
-  {
-    if(reset)
-    {
-      speedometer.updated = false;
-    }
-    return std::make_pair(speedometer.valid, speedometer.data);
-  }
-
-
-  void CarState::setOrientation(const Orientation & new_orientation, bool valid)
-  {
-    orientation.data = new_orientation;
-    orientation.valid = valid;
-    orientation.updated = true;
-    if(valid)
-    {
-      orientation.since_last_update = 0;
-    }
-  }
-
-
-  std::pair<bool, CarState::Orientation> CarState::getOrientation(bool reset)
-  {
-    if(reset)
-    {
-      orientation.updated = false;
-    }
-    return std::make_pair(orientation.valid, orientation.data);
-  }
-
-
-  void CarState::setLocation(const Location & new_location, bool valid)
-  {
-    location.data = new_location;
-    location.valid = valid;
-    location.updated = true;
-    if(valid)
-    {
-      location.since_last_update = 0;
-    }
-  }
-
-
-  std::pair<bool, CarState::Location> CarState::getLocation(bool reset)
-  {
-    if(reset)
-    {
-      location.updated = false;
-    }
-    return std::make_pair(location.valid, location.data);
-  }
-  
-  
-  void CarState::setAltitude(int32_t new_altitude, bool valid)
-  {
-    altitude.data = new_altitude;
-    altitude.valid = valid;
-    altitude.updated = true;
-    if(valid)
-    {
-      altitude.since_last_update = 0;
-    }
-  }
-  
-  
-  std::pair<bool, int32_t> CarState::getAltitude(bool reset)
-  {
-    if(reset)
-    {
-      altitude.updated = false;
-    }
-    return std::make_pair(altitude.valid, altitude.data);
   }
 
 }

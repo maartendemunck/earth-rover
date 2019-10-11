@@ -10,8 +10,8 @@
 #include "car-configuration.hpp"
 #include "car-state.hpp"
 #include "hmi-communicator.hpp"
-#include "hmi-display.hpp"
 #include "limit-value.hpp"
+#include "nextion-hmi-display.hpp"
 
 
 // #define SERIAL_DEBUG
@@ -42,7 +42,7 @@ earth_rover_hmi::CarState car_state;
 //! HMI communicator.
 earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_configuration, car_state};
 //! HMI display.
-earth_rover_hmi::HmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, car_state};
+earth_rover_hmi::NextionHmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, car_state};
 
 
 /*

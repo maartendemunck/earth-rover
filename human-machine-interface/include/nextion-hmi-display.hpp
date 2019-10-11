@@ -6,8 +6,8 @@
  */
 
 
-#ifndef __EARTH_ROVER_HMI__HMI_DISPLAY__
-#define __EARTH_ROVER_HMI__HMI_DISPLAY__
+#ifndef __EARTH_ROVER_HMI__NEXTION_HMI_DISPLAY__
+#define __EARTH_ROVER_HMI__NEXTION_HMI_DISPLAY__
 
 
 #include "car-configuration.hpp"
@@ -21,12 +21,12 @@ namespace earth_rover_hmi
 
   //! Nextion HMI touch display device driver for the Earth Rover.
   /*!
-   *  \tparam SerialDevice Type of the serial device connected to the Nextion HMI touch display.
+   *  \tparam SerialDevice_t Type of the serial device connected to the Nextion HMI touch display.
    * 
    *  \ingroup HMI
    */
-  template <typename SerialDevice>
-  class HmiDisplay
+  template <typename SerialDevice_t>
+  class NextionHmiDisplay
   {
     private:
 
@@ -52,7 +52,7 @@ namespace earth_rover_hmi
         HazardFlashers = 0x05u
       };
 
-      SerialDevice & serial_device;                 //!< Serial device used to communicate with the Nextion display.
+      SerialDevice_t & serial_device;                 //!< Serial device used to communicate with the Nextion display.
       static constexpr uint16_t rx_buffer_size{8};  //!< Size of the receive buffer (can contain the largest message).
       uint8_t rx_buffer[rx_buffer_size];            //!< Receive buffer.
       uint16_t rx_buffer_pointer;                   //!< Relative location of the next byte in the receive buffer.
@@ -70,7 +70,7 @@ namespace earth_rover_hmi
        *  \param car_configuration Car configuration.
        *  \param car_state Car state (digital twin).
        */
-      HmiDisplay(SerialDevice & serial_device, CarConfiguration & car_configuration, CarState & car_state)
+      NextionHmiDisplay(SerialDevice_t & serial_device, CarConfiguration & car_configuration, CarState & car_state)
       :
         serial_device {serial_device},
         rx_buffer_pointer {0u},
@@ -84,7 +84,7 @@ namespace earth_rover_hmi
       /*!
        *  The destructor restores the default baud rate.
        */
-      ~HmiDisplay()
+      ~NextionHmiDisplay()
       {
         // Restore default baudrate.
         serial_device.printf("baud 9600\xff\xff\xff");
@@ -318,13 +318,13 @@ namespace earth_rover_hmi
         if(current_page == HmiPage::Speedometer && (force_update || car_state.isSpeedometerUpdated()))
         {
           auto speedometer = car_state.getSpeedometer();
-          if(speedometer.first == true)
+          if(speedometer.valid == true)
           {
-            uint16_t angle = (320u + uint16_t(26 * limit_value(speedometer.second.speed, 0., 10.))) % 360u;
+            uint16_t angle = (320u + uint16_t(26 * limit_value(speedometer.data.speed, 0., 10.))) % 360u;
             serial_device.printf("z_speed.val=%d\xff\xff\xff", angle);
-            uint32_t odometer_raw = int32_t(speedometer.second.odometer * 100) % 1000000;
+            uint32_t odometer_raw = int32_t(speedometer.data.odometer * 100) % 1000000;
             serial_device.printf("x_odo.val=%d\xff\xff\xff", odometer_raw);
-            int32_t tripmeter_raw = int32_t(speedometer.second.tripmeter * 1000) % 1000000;
+            int32_t tripmeter_raw = int32_t(speedometer.data.tripmeter * 1000) % 1000000;
             serial_device.printf("x_trip.val=%d\xff\xff\xff", tripmeter_raw);
           }
           else
@@ -337,13 +337,13 @@ namespace earth_rover_hmi
         if(current_page == HmiPage::Orientation && (force_update || car_state.isOrientationUpdated()))
         {
           auto orientation = car_state.getOrientation();
-          if(orientation.first == true)
+          if(orientation.valid == true)
           {
-            serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.second.yaw)) % 360);
+            serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.data.yaw)) % 360);
             serial_device.printf("z_pitch.val=%d\xff\xff\xff",
-                (90 + 2 * int16_t(limit_value(orientation.second.pitch, -60., 60.))) % 360);
+                (90 + 2 * int16_t(limit_value(orientation.data.pitch, -60., 60.))) % 360);
             serial_device.printf("z_roll.val=%d\xff\xff\xff",
-                (90 + 2 * int16_t(limit_value(orientation.second.roll, -60., 60.))) % 360);
+                (90 + 2 * int16_t(limit_value(orientation.data.roll, -60., 60.))) % 360);
             serial_device.flush();
           }
           else
@@ -355,16 +355,16 @@ namespace earth_rover_hmi
         if(current_page == HmiPage::Location && (force_update || car_state.isLocationUpdated()))
         {
           auto location = car_state.getLocation();
-          if(location.first == true)
+          if(location.valid == true)
           {
             serial_device.printf("t_lat.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
-                                location.second.latitude.degrees, location.second.latitude.minutes,
-                                location.second.latitude.seconds_whole, location.second.latitude.seconds_frac / 100,
-                                location.second.latitude.hemisphere == Hemisphere_t::NORTH_H? 'N': 'S');
+                                location.data.latitude.degrees, location.data.latitude.minutes,
+                                location.data.latitude.seconds_whole, location.data.latitude.seconds_frac / 100,
+                                location.data.latitude.hemisphere == Hemisphere_t::NORTH_H? 'N': 'S');
             serial_device.printf("t_lon.txt=\"%d\xb0%02d'%02d.%02d\\\" %c\"\xff\xff\xff",
-                                location.second.longitude.degrees, location.second.longitude.minutes,
-                                location.second.longitude.seconds_whole, location.second.longitude.seconds_frac / 100,
-                                location.second.longitude.hemisphere == Hemisphere_t::EAST_H? 'E': 'W');
+                                location.data.longitude.degrees, location.data.longitude.minutes,
+                                location.data.longitude.seconds_whole, location.data.longitude.seconds_frac / 100,
+                                location.data.longitude.hemisphere == Hemisphere_t::EAST_H? 'E': 'W');
           }
           else
           {
@@ -377,9 +377,9 @@ namespace earth_rover_hmi
         if(current_page == HmiPage::Location && (force_update || car_state.isAltitudeUpdated()))
         {
           auto altitude = car_state.getAltitude();
-          if(altitude.first == true)
+          if(altitude.valid == true)
           {
-            serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude.second / 100, abs(altitude.second) % 100);
+            serial_device.printf("t_alt.txt=\"%d.%02dm\"\xff\xff\xff", altitude.data / 100, abs(altitude.data) % 100);
           }
           else
           {

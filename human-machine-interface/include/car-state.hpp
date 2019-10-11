@@ -12,7 +12,26 @@
 
 #include <cstdint>
 #include <DMS.h>
+#include "sensor-state.hpp"
 #include "limit-value.hpp"
+
+
+namespace
+{
+  //! Compare two DMS_t objects.
+  /*!
+   *  \param lhs Left hand side operand.
+   *  \param rhs Right hand size operand.
+   *  \return True if both objects are different, false if they are equal.
+   * 
+   *  \ingroup HMI
+   */
+  bool operator!= (const DMS_t & lhs, const DMS_t & rhs)
+  {
+    return (lhs.degrees != rhs.degrees || lhs.minutes != rhs.minutes || lhs.hemisphere != rhs.hemisphere
+            || lhs.seconds_whole != rhs.seconds_whole || lhs.seconds_frac != rhs.seconds_frac);
+  }
+}
 
 
 namespace earth_rover_hmi
@@ -61,6 +80,15 @@ namespace earth_rover_hmi
         float speed;      //!< Speed (in km/h).
         float odometer;   //!< Odometer (in km).
         float tripmeter;  //!< Trip meter (in km).
+        //! Overloaded comparison operator.
+        /*!
+         *  \param rhs Right hand side operand.
+         *  \return true if both operands are different, false if they are equal.
+         */
+        bool operator!= (const Speedometer & rhs)
+        {
+          return (speed != rhs.speed || odometer != rhs.odometer || tripmeter != rhs.tripmeter);
+        }
       };
 
       //! IMU measurement.
@@ -72,6 +100,15 @@ namespace earth_rover_hmi
         float yaw;    //!< Yaw (rotation around the vertical axis) (in degrees).
         float pitch;  //!< Pitch (rotation around the transverse axis) (in degrees).
         float roll;   //!< Roll (rotation around the longitudinal axis) (in degrees).
+        //! Overloaded comparison operator.
+        /*!
+         *  \param rhs Right hand side operand.
+         *  \return true if both operands are different, false if they are equal.
+         */
+        bool operator!= (const Orientation & rhs)
+        {
+          return (yaw != rhs.yaw || pitch != rhs.pitch || roll != rhs.roll);
+        }
       };
 
       //! GPS location measurement.
@@ -82,6 +119,15 @@ namespace earth_rover_hmi
       {
         DMS_t latitude;   //!< Latitude.
         DMS_t longitude;  //!< Longitude.
+        //! Overloaded comparison operator.
+        /*!
+         *  \param rhs Right hand side operand.
+         *  \return true if both operands are different, false if they are equal.
+         */
+        bool operator!= (const Location & rhs)
+        {
+          return (latitude != rhs.latitude || longitude != rhs.longitude);
+        }
       };
 
     private:
@@ -99,29 +145,14 @@ namespace earth_rover_hmi
       //! Flag used to shut off the right turn signal using the steering command.
       bool turn_signal_right_cancelled {false};
 
-      //! Sensordata wrapper.
-      /*!
-       *  Wrapper to add metadata to a measurement.
-       * 
-       *  \ingroup HMI
-       */
-      template <typename T>
-      struct SensorData
-      {
-        T data;                           //!< Sensor data.
-        bool valid;                       //!< Sensor data is valid.
-        bool updated;                     //!< Sensor data is updated since this flag was last reset.
-        elapsedMillis since_last_update;  //!< Time since the last update.
-      };
-
       //! Speed, odometer and trip meter measurement.
-      SensorData<Speedometer> speedometer;
+      SensorState<Speedometer> speedometer;
       //! Orientation measurement.
-      SensorData<Orientation> orientation;
+      SensorState<Orientation> orientation;
       //! GPS location (latitude and longitude) measurement.
-      SensorData<Location> location;
+      SensorState<Location> location;
       //! GPS altitude measurement.
-      SensorData<int32_t> altitude;
+      SensorState<int32_t> altitude;
 
     public:
 
@@ -132,13 +163,16 @@ namespace earth_rover_hmi
       ~CarState() = default;
 
       //! Initialize the car state.
-      inline void setup()
+      void setup()
       {
         ;
       }
 
       //! Spinning loop.
-      void spinOnce();
+      void spinOnce()
+      { 
+        ;
+      }
 
       //! Set the steering input.
       /*!
@@ -162,7 +196,7 @@ namespace earth_rover_hmi
       /*!
        *  \return Requested steering and powertrain state to communicate to the VCU.
        */
-      inline const Drive & getRequestedDriveState()
+      const Drive & getRequestedDriveState()
       {
         return drive;
       }
@@ -215,17 +249,20 @@ namespace earth_rover_hmi
       /*!
        *  \return Requested automotive lighting state to communicate to the VCU.
        */
-      inline const Lighting & getRequestedLightingState()
+      const Lighting & getRequestedLightingState()
       {
         return lighting;
       }
 
       //! Set speedometer, odometer and trip meter measurements.
       /*!
-       *  \param new_speedometer Measurements.
+       *  \param value Measurements.
        *  \param valid True if the last measurements are valid, false of not.
        */
-      void setSpeedometer(const Speedometer & new_speedometer, bool valid = true);
+      void setSpeedometer(const Speedometer & value, bool valid = true)
+      {
+        speedometer.set(value, valid);
+      }
 
       //! Check whether the speedometer, odometer and tripmeter are updated.
       /*!
@@ -234,24 +271,30 @@ namespace earth_rover_hmi
        *
        *  \return True if the speedometer, odometer or trip meter were updated, false if not.
        */
-      inline bool isSpeedometerUpdated()
+      bool isSpeedometerUpdated()
       {
-        return speedometer.updated;
+        return speedometer.isUpdated();
       }
 
       //! Get the current speedometer, odometer and trip meter measurements.
       /*!
-       *  \param reset True to reset the updated flag, false to keep it.
+       *  \param reset_updated True to reset the updated flag, false to keep it.
        *  \return A pair with a flag indicating whether the current measurements are valid and the measurements itself.
        */
-      std::pair<bool, Speedometer> getSpeedometer(bool reset = true);
+      auto getSpeedometer(bool reset_updated = true)
+      {
+        return speedometer.get(reset_updated);
+      }
 
       //! Set orientation measurements.
       /*!
-       *  \param new_orientation Measurements.
+       *  \param value Measurements.
        *  \param valid True if the last measurements are valid, false of not.
        */
-      void setOrientation(const Orientation & new_orientation, bool valid = true);
+      void setOrientation(const Orientation & value, bool valid = true)
+      {
+        orientation.set(value, valid);
+      }
 
       //! Check whether the orientation is updated.
       /*!
@@ -259,24 +302,30 @@ namespace earth_rover_hmi
        *
        *  \return True if the orientation was updated, false if not.
        */
-      inline bool isOrientationUpdated()
+      bool isOrientationUpdated()
       {
-        return orientation.updated;
+        return orientation.isUpdated();
       }
 
       //! Get the current orientation measurements.
       /*!
-       *  \param reset True to reset the updated flag, false to keep it.
+       *  \param reset_updated True to reset the updated flag, false to keep it.
        *  \return A pair with a flag indicating whether the current measurements are valid and the measurements itself.
        */
-      std::pair<bool, Orientation> getOrientation(bool reset = true);
+      auto getOrientation(bool reset_updated = true)
+      {
+        return orientation.get(reset_updated);
+      }
 
       //! Set GPS location (latitude, longitude) measurements.
       /*!
-       *  \param new_location Measurements.
+       *  \param value Measurements.
        *  \param valid True if the last measurements are valid, false of not.
        */
-      void setLocation(const Location & new_location, bool valid = true);
+      void setLocation(const Location & value, bool valid = true)
+      {
+        location.set(value, valid);
+      }
 
       //! Check whether the GPS location (latitude, longitude) is updated.
       /*!
@@ -284,24 +333,30 @@ namespace earth_rover_hmi
        *
        *  \return True if the GPS location was updated, false if not.
        */
-      inline bool isLocationUpdated()
+      bool isLocationUpdated()
       {
-        return location.updated;
+        return location.isUpdated();
       }
 
       //! Get the current GPS location (latitude, longitude) measurements.
       /*!
-       *  \param reset True to reset the updated flag, false to keep it.
+       *  \param reset_updated True to reset the updated flag, false to keep it.
        *  \return A pair with a flag indicating whether the current measurements are valid and the measurements itself.
        */
-      std::pair<bool, Location> getLocation(bool reset = true);
+      auto getLocation(bool reset_updated = true)
+      {
+        return location.get(reset_updated);
+      }
 
       //! Set GPS altitude measurement.
       /*!
-       *  \param new_altitude Measurement.
+       *  \param value Measurement.
        *  \param valid True if the last measurement is valid, false of not.
        */
-      void setAltitude(int32_t new_altitude, bool valid = true);
+      void setAltitude(int32_t value, bool valid = true)
+      {
+        altitude.set(value, true);
+      }
 
       //! Check whether the GPS altitude is updated.
       /*!
@@ -309,17 +364,20 @@ namespace earth_rover_hmi
        *
        *  \return True if the GPS altitude was updated, false if not.
        */
-      inline bool isAltitudeUpdated()
+      bool isAltitudeUpdated()
       {
-        return altitude.updated;
+        return altitude.isUpdated();
       }
 
       //! Get the current GPS altitude measurement.
       /*!
-       *  \param reset True to reset the updated flag, false to keep it.
+       *  \param reset_updated True to reset the updated flag, false to keep it.
        *  \return A pair with a flag indicating whether the current measurement is valid and the measurement itself.
        */
-      std::pair<bool, int32_t> getAltitude(bool reset = true);
+      auto getAltitude(bool reset_updated = true)
+      {
+        return altitude.get(reset_updated);
+      }
 
   };
 

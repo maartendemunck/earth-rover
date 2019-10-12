@@ -16,12 +16,10 @@ namespace earth_rover_hmi
   constexpr uint8_t HmiCommunicator::nrf24l01_fhss_channels[];  // Initialised in header file.
 
 
-  HmiCommunicator::HmiCommunicator(
-    uint8_t ce_pin, uint8_t csn_pin, CarConfiguration & car_configuration, CarState & car_state):
+  HmiCommunicator::HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarState & car_state):
     nrf24l01_device {ce_pin, csn_pin},
     nrf24l01_fhss_channel_index {0u},
     update_sequence_id {0u},
-    car_configuration {car_configuration},
     car_state {car_state}
   {
     ;
@@ -119,14 +117,16 @@ namespace earth_rover_hmi
   {
     static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
     uint8_t buffer[nrf24l01_payload_size];
-    auto drive = car_state.getRequestedDriveState();
+    auto steering = car_state.getCurrentSteeringPosition();
+    auto throttle = car_state.getCurrentThrottlePosition();
+    auto gear = car_state.getCurrentGear();
     auto lighting = car_state.getRequestedLightingState();
     buffer[0] = to_integral(RequestMessageType::Control);
-    buffer[1] = (drive.steering) & 0xff;
-    buffer[2] = (drive.steering >> 8) & 0xff;
-    buffer[3] = (drive.throttle) & 0xff;
-    buffer[4] = (drive.throttle >> 8) & 0xff;
-    buffer[5] = drive.gear;
+    buffer[1] = (steering) & 0xff;
+    buffer[2] = (steering >> 8) & 0xff;
+    buffer[3] = (throttle) & 0xff;
+    buffer[4] = (throttle >> 8) & 0xff;
+    buffer[5] = gear;
     buffer[6] = lighting.turn_signal_right
                 | (lighting.turn_signal_left << 1)
                 | (lighting.dipped_beam << 2)

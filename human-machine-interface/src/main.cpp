@@ -7,11 +7,11 @@
 
 
 #include <Arduino.h>
-#include "car-configuration.hpp"
 #include "car-state.hpp"
 #include "hmi-communicator.hpp"
 #include "limit-value.hpp"
 #include "nextion-hmi-display.hpp"
+#include "servo-state.hpp"
 
 
 // #define SERIAL_DEBUG
@@ -31,18 +31,21 @@ constexpr uint8_t rf24_csn_pin = 15;            //!< I/O pin used for the nRF24L
  *  Subsystems.
  */
 
-//! Car cofiguration.
-earth_rover_hmi::CarConfiguration car_configuration {
-  earth_rover_hmi::ServoConfiguration{1000u, 1500u, 2000u, true, 1u},
-  earth_rover_hmi::ServoConfiguration{1000u, 1500u, 2000u, true, 4u},
-  earth_rover_hmi::ServoConfiguration{1150u, 1500u, 1850u, true, 3u},
-  earth_rover_hmi::RadioConfiguration{1u, 1u}};
+//! Steering servo defaults.
+earth_rover_hmi::ServoConfigParams steering_servo_default_parameters {1u, 1000u, 1500u, 2000u, true};
+//! ESC defaults.
+earth_rover_hmi::ServoConfigParams esc_default_parameters {4u, 1000u, 1500u, 2000u, true};
+//! Gearbox servo defaults.
+uint16_t gearbox_servo_pulse_widths[4] {1500u, 1150u, 1800u};
+earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defauls_parameters {3u, gearbox_servo_pulse_widths};
 //! Car state (digital twin). 
-earth_rover_hmi::CarState car_state;
+earth_rover_hmi::CarState car_state
+  {std::move(steering_servo_default_parameters), std::move(esc_default_parameters),
+   std::move(gearbox_servo_defauls_parameters)};
 //! HMI communicator.
-earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_configuration, car_state};
+earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_state};
 //! HMI display.
-earth_rover_hmi::NextionHmiDisplay<decltype(Serial1)> display {Serial1, car_configuration, car_state};
+earth_rover_hmi::NextionHmiDisplay<decltype(Serial1)> display {Serial1, car_state};
 
 
 /*
@@ -64,7 +67,6 @@ void setup()
     }
   #endif
   // Configure the configuration and the digital twin.
-  car_configuration.setup();
   car_state.setup();
   // Configure SPI.
   SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
@@ -100,7 +102,6 @@ void loop()
   car_state.setGearboxInput(inputs[gearbox_channel - 1]);
 
   // Update car configuration and state.
-  car_configuration.spinOnce();
   car_state.spinOnce();
 
   // Send drive command.

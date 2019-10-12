@@ -10,7 +10,6 @@
 #define __EARTH_ROVER_HMI__NEXTION_HMI_DISPLAY__
 
 
-#include "car-configuration.hpp"
 #include "car-state.hpp"
 #include "from-to-integral.hpp"
 #include "limit-value.hpp"
@@ -57,7 +56,6 @@ namespace earth_rover_hmi
       uint8_t rx_buffer[rx_buffer_size];            //!< Receive buffer.
       uint16_t rx_buffer_pointer;                   //!< Relative location of the next byte in the receive buffer.
 
-      CarConfiguration & car_configuration;         //!< Current car configuration.
       CarState & car_state;                         //!< Current car state (digital twin).
 
       HmiPage current_page;                         //!< Active information or configuration page.
@@ -70,11 +68,10 @@ namespace earth_rover_hmi
        *  \param car_configuration Car configuration.
        *  \param car_state Car state (digital twin).
        */
-      NextionHmiDisplay(SerialDevice_t & serial_device, CarConfiguration & car_configuration, CarState & car_state)
+      NextionHmiDisplay(SerialDevice_t & serial_device, CarState & car_state)
       :
         serial_device {serial_device},
         rx_buffer_pointer {0u},
-        car_configuration {car_configuration},
         car_state {car_state}
       {
         ;
@@ -212,16 +209,16 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_configuration.getSteeringConfig().setInputChannel(value, Configuration::Changed::Display);
+                      car_state.setSteeringInputChannel(value);
                       break;
                     case 1:
-                      car_configuration.getSteeringConfig().setMinimum(value, Configuration::Changed::Display);
+                      car_state.setSteerLeftPulseWidth(value);
                       break;
                     case 2:
-                      car_configuration.getSteeringConfig().setCenter(value, Configuration::Changed::Display);
+                      car_state.setSteerCenterPulseWidth(value);
                       break;
                     case 3:
-                      car_configuration.getSteeringConfig().setMaximum(value, Configuration::Changed::Display);
+                      car_state.setSteerRightPulseWidth(value);
                       break;
                   }
                   break;
@@ -229,16 +226,16 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_configuration.getThrottleConfig().setInputChannel(value, Configuration::Changed::Display);
+                      car_state.setThrottleInputChannel(value);
                       break;
                     case 1:
-                      car_configuration.getThrottleConfig().setMinimum(value, Configuration::Changed::Display);
+                      car_state.setFullBackwardsPulseWidth(value);
                       break;
                     case 2:
-                      car_configuration.getThrottleConfig().setCenter(value, Configuration::Changed::Display);
+                      car_state.setStopPulseWidth(value);
                       break;
                     case 3:
-                      car_configuration.getThrottleConfig().setMaximum(value, Configuration::Changed::Display);
+                      car_state.setFullForwardPulseWidth(value);
                       break;
                   }
                   break;
@@ -246,19 +243,20 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_configuration.getGearboxConfig().setInputChannel(value, Configuration::Changed::Display);
+                      car_state.setGearboxInputChannel(value);
                       break;
                     case 1:
-                      car_configuration.getGearboxConfig().setCenter(value, Configuration::Changed::Display);
+                      car_state.setGearPulseWidth(0, value);
                       break;
                     case 2:
-                      car_configuration.getGearboxConfig().setMinimum(value, Configuration::Changed::Display);
+                      car_state.setGearPulseWidth(1, value);
                       break;
                     case 3:
-                      car_configuration.getGearboxConfig().setMaximum(value, Configuration::Changed::Display);
+                      car_state.setGearPulseWidth(2, value);
                       break;
                   }
                   break;
+              /*
                 case HmiPage::RadioSettings:
                   switch(setting)
                   {
@@ -270,6 +268,7 @@ namespace earth_rover_hmi
                       break;
                   }
                   break;
+                */
               }
             }
             // Reset receive buffer pointer.
@@ -388,6 +387,7 @@ namespace earth_rover_hmi
           
           serial_device.flush();
         }
+        /*
         // Update steering servo settings.
         if(force_update || car_configuration.getSteeringConfig().isConfigurationChanged())
         {
@@ -442,6 +442,7 @@ namespace earth_rover_hmi
             serial_device.print("page set_radio\xff\xff\xff");
           }
         }
+        */
       }
 
   };

@@ -13,7 +13,6 @@
 #include <cstdint>
 #include <RF24.h>
 #undef printf  // RF24.h defined 'printf' as 'Serial.printf', expanding 'Serial.printf' to 'Serial.Serial.printf'.
-#include "car-configuration.hpp"
 #include "car-state.hpp"
 
 
@@ -62,8 +61,6 @@ namespace earth_rover_hmi
       //! Flag to check whether the channel changed in this update interval.
       bool channel_changed;
 
-      //! Car configuration.
-      CarConfiguration & car_configuration;
       //! Car state (digital twin).
       CarState & car_state;
 
@@ -76,7 +73,7 @@ namespace earth_rover_hmi
        *  \param car_configuration Car configuration.
        *  \param car_state Car state (digital twin).
        */
-      HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarConfiguration & car_configuration, CarState & car_state);
+      HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarState & car_state);
 
       //! Default destructor.
       ~HmiCommunicator() = default;

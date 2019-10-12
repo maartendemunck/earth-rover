@@ -13,8 +13,13 @@
 namespace earth_rover_hmi
 {
 
-  CarState::CarState()
+  CarState::CarState(
+    ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
+    GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults)
   :
+    steering_servo {std::move(steering_servo_defaults)},
+    esc {std::move(esc_defaults)},
+    gearbox_servo {std::move(gearbox_servo_defaults)},
     speedometer {1000u},
     orientation {1000u},
     location {5000u},
@@ -26,7 +31,7 @@ namespace earth_rover_hmi
 
   void CarState::setSteeringInput(int16_t steering)
   {
-    drive.steering = limit_value(steering, int16_t(-1000), int16_t(1000));
+    steering_servo.setCurrentPosition(limit_value(steering, int16_t(-1000), int16_t(1000)));
     if(lighting.turn_signal_right && !lighting.turn_signal_left)
     {
       // If the steering input is moved more than 50% right, unlock the right turn signal.
@@ -68,9 +73,73 @@ namespace earth_rover_hmi
   }
 
 
+  void CarState::setSteeringInputChannel(uint8_t input_channel)
+  {
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
+    current_configuration.input_channel = input_channel;
+    steering_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setSteerLeftPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
+    current_configuration.pulse_width_minimum = pulse_width;
+    steering_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setSteerCenterPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
+    current_configuration.pulse_width_center = pulse_width;
+    steering_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setSteerRightPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
+    current_configuration.pulse_width_maximum = pulse_width;
+    steering_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
   void CarState::setThrottleInput(int16_t throttle)
   {
-    drive.throttle = limit_value(throttle, int16_t(-1000), int16_t(1000));
+    esc.setCurrentPosition(limit_value(throttle, int16_t(-1000), int16_t(1000)));
+  }
+
+
+  void CarState::setThrottleInputChannel(uint8_t input_channel)
+  {
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
+    current_configuration.input_channel = input_channel;
+    esc.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setFullBackwardsPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
+    current_configuration.pulse_width_minimum = pulse_width;
+    esc.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setStopPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
+    current_configuration.pulse_width_center = pulse_width;
+    esc.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setFullForwardPulseWidth(uint16_t pulse_width)
+  {
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
+    current_configuration.pulse_width_maximum = pulse_width;
+    esc.setCurrentConfiguration(current_configuration);
   }
 
 
@@ -82,22 +151,38 @@ namespace earth_rover_hmi
       gearbox_locked = 0;
     }
     // If the gearbox is unlocked and the input stick is moved to the end of the range, shift.
-    if(gearbox < -750 && !gearbox_locked && drive.gear > 0)
+    if(gearbox < -750 && !gearbox_locked)
     {
-      drive.gear --;
+      gearbox_servo.shiftDown();  // The shiftDown function will take care of the available gear range.
       gearbox_locked = -1;
     }
-    else if(gearbox > 750 && !gearbox_locked && drive.gear < 2)
+    else if(gearbox > 750 && !gearbox_locked)
     {
-      drive.gear ++;
+      gearbox_servo.shiftUp();  // The shiftUp function will take care of the available gear range.
       gearbox_locked = 1;
     }
   }
 
 
+  void CarState::setGearboxInputChannel(uint8_t input_channel)
+  {
+    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
+    current_configuration.input_channel = input_channel;
+    gearbox_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setGearPulseWidth(int8_t gear, uint16_t pulse_width)
+  {
+    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
+    current_configuration.setPulseWidth(gear, pulse_width);;
+    gearbox_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
   void CarState::setTurnSignalRight(bool state)
   {
-      lighting.turn_signal_right = state;
+    lighting.turn_signal_right = state;
   }
 
 

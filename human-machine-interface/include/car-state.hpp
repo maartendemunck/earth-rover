@@ -12,7 +12,9 @@
 
 #include <cstdint>
 #include <DMS.h>
+#include "gearbox-servo-state.hpp"
 #include "sensor-state.hpp"
+#include "servo-state.hpp"
 #include "limit-value.hpp"
 
 
@@ -46,17 +48,6 @@ namespace earth_rover_hmi
   class CarState
   {
     public:
-
-      //! Steering and powertrain state.
-      /*!
-       *  \ingroup HMI
-       */
-      struct Drive
-      {
-        int16_t steering;  //!< Normalized steering angle (-1000...0...1000).
-        int16_t throttle;  //!< Normalized throttle setting (-1000...0...1000).
-        int8_t gear;       //!< Gear.
-      };
 
       //! Automotive lighting state.
       /*!
@@ -132,10 +123,15 @@ namespace earth_rover_hmi
 
     private:
 
-      //! Current steering and powertrain state.
-      Drive drive;
+      //! Steering servo configuration and state.
+      ServoState steering_servo;
+      //! ESC configuration and state.
+      ServoState esc;
+      //! Gearbox servo configuration.
+      GearboxServoState<0, 1, 2> gearbox_servo;  //! TODO replace hardcoded gearbox configuration.
       //! Flag used to implement the hysteresis in the shift down and up commands.
       int8_t gearbox_locked = 0;
+
       //! Current state of the automotive lighting.
       Lighting lighting;
       //! Flag used to implement the hysteresis to automatically shut off the turn signals.
@@ -157,7 +153,9 @@ namespace earth_rover_hmi
     public:
 
       //! Constructor.
-      CarState();
+      CarState(
+        ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
+        GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults);
 
       //! Default destructor.
       ~CarState() = default;
@@ -180,11 +178,37 @@ namespace earth_rover_hmi
        */
       void setSteeringInput(int16_t steering);
 
+      void setSteeringInputChannel(uint8_t input_channel);
+
+      void setSteerLeftPulseWidth(uint16_t pulse_width);
+
+      void setSteerCenterPulseWidth(uint16_t pulse_width);
+
+      void setSteerRightPulseWidth(uint16_t pulse_width);
+
+      int16_t getCurrentSteeringPosition()
+      {
+        return steering_servo.getCurrentPosition();
+      }
+  
       //! Set the throttle input.
       /*!
        *  \param throttle Throttle input (-1000...0...+1000).
        */
       void setThrottleInput(int16_t throttle);
+
+      void setThrottleInputChannel(uint8_t input_channel);
+
+      void setFullBackwardsPulseWidth(uint16_t pulse_width);
+
+      void setStopPulseWidth(uint16_t pulse_width);
+
+      void setFullForwardPulseWidth(uint16_t pulse_width);
+
+      int16_t getCurrentThrottlePosition()
+      {
+        return esc.getCurrentPosition();
+      }
 
       //! Set the gearbox input.
       /*!
@@ -192,13 +216,13 @@ namespace earth_rover_hmi
        */
       void setGearboxInput(int16_t gearbox);
 
-      //! Get requested steering and powertrain state.
-      /*!
-       *  \return Requested steering and powertrain state to communicate to the VCU.
-       */
-      const Drive & getRequestedDriveState()
+      void setGearboxInputChannel(uint8_t input_channel);
+
+      void setGearPulseWidth(int8_t gear, uint16_t pulse_width);
+
+      int8_t getCurrentGear()
       {
-        return drive;
+        return gearbox_servo.getCurrentGear();
       }
 
       //! Set right turn signal input.

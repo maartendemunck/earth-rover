@@ -81,8 +81,8 @@ namespace earth_rover_hmi
   {
     private:
 
-      ConfigurationParameter<ServoConfigParams> configuration; //!< Configuration.
-      int16_t position;                                                   //!< State.
+      ConfigurationParameter<ServoConfigParams> configuration; //!< Servo configuration.
+      int16_t position;                                        //!< Current position.
 
     public:
 

@@ -32,16 +32,16 @@ constexpr uint8_t rf24_csn_pin = 15;            //!< I/O pin used for the nRF24L
  */
 
 //! Steering servo defaults.
-earth_rover_hmi::ServoConfigParams steering_servo_default_parameters {1u, 1000u, 1500u, 2000u, true};
+earth_rover_hmi::ServoConfigParams steering_servo_defaults {1u, 1000u, 1500u, 2000u, true};
 //! ESC defaults.
-earth_rover_hmi::ServoConfigParams esc_default_parameters {4u, 1000u, 1500u, 2000u, true};
-//! Gearbox servo defaults.
+earth_rover_hmi::ServoConfigParams esc_defaults {4u, 1000u, 1500u, 2000u, true};
+//! Gearbox servo pulse widths for the different gears (from low to high).
 uint16_t gearbox_servo_pulse_widths[4] {1500u, 1150u, 1800u};
-earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defauls_parameters {3u, gearbox_servo_pulse_widths};
+//! Gearbox servo defaults.
+earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults {3u, gearbox_servo_pulse_widths};
 //! Car state (digital twin). 
 earth_rover_hmi::CarState car_state
-  {std::move(steering_servo_default_parameters), std::move(esc_default_parameters),
-   std::move(gearbox_servo_defauls_parameters)};
+  {std::move(steering_servo_defaults), std::move(esc_defaults), std::move(gearbox_servo_defaults)};
 //! HMI communicator.
 earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_state};
 //! HMI display.

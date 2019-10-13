@@ -153,6 +153,11 @@ namespace earth_rover_hmi
     public:
 
       //! Constructor.
+      /*!
+       *  \param steering_servo_defaults Default settings for the steering servo.
+       *  \param esc_defaults Default settings for the ESC or throttle servo.
+       *  \param gearbox_servo_defaults Default settings for the gearbox servo.
+       */
       CarState(
         ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
         GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults);
@@ -178,14 +183,34 @@ namespace earth_rover_hmi
        */
       void setSteeringInput(int16_t steering);
 
+      //! Set the physical input channel used for steering.
+      /*!
+       *  \param input_channel Physical input channel used for steering.
+       */
       void setSteeringInputChannel(uint8_t input_channel);
 
+      //! Set the pulse width to steer fully to the left.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to steer fully to the left.
+       */
       void setSteerLeftPulseWidth(uint16_t pulse_width);
 
+      //! Set the pulse width to center the wheels.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to center the wheels.
+       */
       void setSteerCenterPulseWidth(uint16_t pulse_width);
 
+      //! Set the pulse width to steer fully to the right.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to steer fully to the right.
+       */
       void setSteerRightPulseWidth(uint16_t pulse_width);
 
+      //! Get the current (normalized) steering position.
+      /*!
+       *  \return The current normalized (-1000...0...1000) steering position.
+       */
       int16_t getCurrentSteeringPosition()
       {
         return steering_servo.getCurrentPosition();
@@ -197,14 +222,34 @@ namespace earth_rover_hmi
        */
       void setThrottleInput(int16_t throttle);
 
+      //! Set the physical input channel used for the throttle.
+      /*!
+       *  \param input_channel Physical input channel used for the throttle.
+       */
       void setThrottleInputChannel(uint8_t input_channel);
 
+      //! Set the pulse width to drive full speed backwards.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to drive full speed backwards.
+       */
       void setFullBackwardsPulseWidth(uint16_t pulse_width);
 
+      //! Set the pulse width to stop driving.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to stop driving.
+       */
       void setStopPulseWidth(uint16_t pulse_width);
 
+      //! Set the pulse width to drive full speed forward.
+      /*!
+       *  \param pulse_width Pulse width (in µs) to drive full speed forward.
+       */
       void setFullForwardPulseWidth(uint16_t pulse_width);
 
+      //! Get the current (normalized) throttle position.
+      /*!
+       *  \return The current normalized (-1000...0...+1000) throttle position.
+       */
       int16_t getCurrentThrottlePosition()
       {
         return esc.getCurrentPosition();
@@ -216,10 +261,25 @@ namespace earth_rover_hmi
        */
       void setGearboxInput(int16_t gearbox);
 
+      //! Set the physical input channel used to shift.
+      /*!
+       *  \param input_channel Physical input channel used to shift.
+       */
       void setGearboxInputChannel(uint8_t input_channel);
 
+      //! Set the pulse width for a specific gear.
+      /*!
+       *  If the specified gear doesn't exist, the command is silently ignored.
+       *
+       *  \param gear Gear.
+       *  \param pulse_width Pulse width (in µs) for the specified gear.
+       */
       void setGearPulseWidth(int8_t gear, uint16_t pulse_width);
 
+      //! Get the current gear.
+      /*!
+       *  \return The current gear.
+       */
       int8_t getCurrentGear()
       {
         return gearbox_servo.getCurrentGear();

@@ -65,8 +65,7 @@ namespace earth_rover_hmi
       //! Constructor.
       /*!
        *  \param serial_device Serial device used to communicate with the Nextion HMI touch display.
-       *  \param car_configuration Car configuration.
-       *  \param car_state Car state (digital twin).
+       *  \param car_state Car configuration and state (digital twin).
        */
       NextionHmiDisplay(SerialDevice_t & serial_device, CarState & car_state)
       :

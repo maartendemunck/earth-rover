@@ -70,8 +70,7 @@ namespace earth_rover_hmi
       /*!
        *  \param ce_pin I/O pin used for the nRF24L01+'s CE signal.
        *  \param csn_pin I/O pin used for the nRF24L01+'s CSN signal.
-       *  \param car_configuration Car configuration.
-       *  \param car_state Car state (digital twin).
+       *  \param car_state Car configuration and state (digital twin).
        */
       HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarState & car_state);
 

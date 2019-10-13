@@ -22,23 +22,30 @@ namespace earth_rover_hmi
   {
     public:
 
+      //! A measurement with a flag indicating whether the measurement is (still) valid.
+      /*!
+       *  \ingroup HMI
+       */
       struct Measurement
       {
-        SensorMeasurement_t data;
-        bool valid;
+        SensorMeasurement_t data;  //!< Measured value(s).
+        bool valid;                //!< Valid flag.
       };
 
     private:
 
-      const unsigned long maximum_age_ms;
-      SensorMeasurement_t measurement;
-      bool valid;
-      bool updated;
-      elapsedMillis since_update;
+      const unsigned long maximum_age_ms;  //!< Maximum age of the measurement before it is considered invalid anyway.
+      SensorMeasurement_t measurement;     //!< Measured value(s).
+      bool valid;                          //!< Flag indicating whether the measurement is valid or not.
+      bool updated;                        //!< Flag indicating whether the measurement is updated.
+      elapsedMillis since_update;          //!< Time since the last update.
 
     public:
 
       //! Constructor.
+      /*!
+       *  \param maximum_age_ms Maximum age of the measurement (in ms) before it is considered invalid.
+       */
       SensorState(unsigned long maximum_age_ms)
       :
         maximum_age_ms {maximum_age_ms},
@@ -71,7 +78,6 @@ namespace earth_rover_hmi
 
       //! Get the sensor state.
       /*!
-       *  \param maximum_age_milliseconds Maximum age (in ms) of the measurement befor it is considered invalid.
        *  \param reset_updated True to reset the updated flag, false to leave it at its current value.
        *  \return A struct containing the measurement and a flag to indicate whether it's valid or not.
        */

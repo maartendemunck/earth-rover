@@ -78,11 +78,8 @@ namespace earth_rover_vcu
        */
       void configureSteeringServo(uint16_t pulse_width_left, uint16_t pulse_width_center, uint16_t pulse_width_right);
 
-      //! Get the (minimal) size of the configuration block.
-      /*!
-       *  \return The minimal size of the configuration block.
-       */
-      uint16_t getConfigurationSize();
+      //! The (minimal) size of the configuration block.
+      static constexpr uint16_t configuration_size = 7u;
 
       //! Save the configuration to a buffer.
       /*!

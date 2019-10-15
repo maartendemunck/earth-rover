@@ -30,25 +30,41 @@ namespace earth_rover_vcu
        *  \ingroup VCU
        */
       struct Configuration {
-        uint8_t pin_number;               //!< I/O pin used to control the servo.
         uint16_t minimum_pulse_width;     //!< Minimum (normalized position = -1000) pulse width.
-        uint16_t maximum_pulse_width;     //!< Maximum (normalized position = +1000) pulse width.
         uint16_t center_pulse_width;      //!< Center (normalized position = 0) pulse width.
+        uint16_t maximum_pulse_width;     //!< Maximum (normalized position = +1000) pulse width.
         uint16_t initial_pulse_width;     //!< Initial pulse width.
         bool enforce_pulse_width_limits;  //!< Enforce the minimum and maximum pulse widths when calling setPulseWidth.
+        //! Constructor.
+        /*!
+         *  \param minimum_pulse_width Minimum (normalized position = -1000) pulse width.
+         *  \param center_pulse_width Center (normalized position = 0) pulse width.
+         *  \param maximum_pulse_width Maximum (normalized position = +1000) pulse width.
+         *  \param initial_pulse_width Initial pulse width.
+         *  \param enforce_pulse_width_limits Enforce the minimum and maximum pulse widths when calling setPulseWidth.
+         */
+        Configuration(
+          uint16_t minimum_pulse_width, uint16_t center_pulse_width, uint16_t maximum_pulse_width,
+          uint16_t initial_pulse_width, bool enforce_pulse_width_limits)
+        :
+          minimum_pulse_width {minimum_pulse_width},
+          center_pulse_width {center_pulse_width},
+          maximum_pulse_width {maximum_pulse_width},
+          initial_pulse_width {initial_pulse_width},
+          enforce_pulse_width_limits {enforce_pulse_width_limits}
+        {
+          ;
+        }
       };
 
     private:
 
-      static constexpr uint16_t default_minimum_pulse_width {1000U};    //!< Default minimum pulse widths.
-      static constexpr uint16_t default_maximum_pulse_width {2000U};    //!< Default maximum pulse width.
-      static constexpr uint16_t default_center_pulse_width {1500U};     //!< Default center pulse width.
-      static constexpr uint16_t default_initial_pulse_width {1500U};    //!< Default initial pulse width.
-      static constexpr bool default_enforce_pulse_width_limits {true};  //!< Enforce pulse widths by default.
+      Configuration default_configuration;  //!< Default configuration.
 
-      Servo servo;                   //!< Servo instance.
-      Configuration configuration;   //!< Current configuration.
-      uint16_t current_pulse_width;  //!< Current pulse width.
+      const uint8_t pin_number;             //!< I/O pin used to control the servo.
+      Servo servo;                          //!< Servo instance.
+      Configuration configuration;          //!< Current configuration.
+      uint16_t current_pulse_width;         //!< Current pulse width.
 
     public:
 

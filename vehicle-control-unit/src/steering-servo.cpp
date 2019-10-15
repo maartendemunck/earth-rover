@@ -25,21 +25,10 @@ namespace earth_rover_vcu
   void SteeringServo::configureSteeringServo(
     uint16_t pulse_width_left, uint16_t pulse_width_center, uint16_t pulse_width_right)
   {
-    decltype(steering_servo)::Configuration configuration;
-    configuration.pin_number = pin_number;
-    configuration.minimum_pulse_width = pulse_width_left;
-    configuration.maximum_pulse_width = pulse_width_right;
-    configuration.center_pulse_width = pulse_width_center;
-    configuration.initial_pulse_width = pulse_width_center;
-    configuration.enforce_pulse_width_limits = true;
+    decltype(steering_servo)::Configuration configuration
+      {pulse_width_left, pulse_width_center, pulse_width_right, pulse_width_center, true};
     steering_servo.setConfiguration(configuration);
     steering_servo.setPosition(current_steering_angle);
-  }
-
-
-  uint16_t SteeringServo::getConfigurationSize()
-  {
-    return 7u;
   }
 
 
@@ -68,13 +57,11 @@ namespace earth_rover_vcu
   {
     if(size >= 7 && data[6] == (data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5]))
     {
-      decltype(steering_servo)::Configuration configuration;
-      configuration.pin_number = pin_number;
-      configuration.minimum_pulse_width = uint16_t(data[0] | (data[1] << 8));
-      configuration.maximum_pulse_width = uint16_t(data[4] | (data[5] << 8));
-      configuration.center_pulse_width = uint16_t(data[2] | (data[3] << 8));
-      configuration.initial_pulse_width = configuration.center_pulse_width;
-      configuration.enforce_pulse_width_limits = true;
+      auto pulse_width_left = uint16_t(data[0] | (data[1] << 8));
+      auto pulse_width_center = uint16_t(data[2] | (data[3] << 8));
+      auto pulse_width_right = uint16_t(data[4] | (data[5] << 8));
+      decltype(steering_servo)::Configuration configuration
+        {pulse_width_left, pulse_width_center, pulse_width_right, pulse_width_center, true};
       steering_servo.setConfiguration(configuration);
       steering_servo.setPosition(current_steering_angle);
       return true;

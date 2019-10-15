@@ -15,11 +15,10 @@ namespace earth_rover_vcu
 
   ConfiguredServo::ConfiguredServo(uint8_t pin_number)
   :
+    default_configuration {1000u, 1500u, 2000u, 1500u, true},
+    pin_number {pin_number},
     servo {},
-    configuration {pin_number,
-                   default_minimum_pulse_width, default_maximum_pulse_width, default_center_pulse_width,
-                   default_initial_pulse_width,
-                   default_enforce_pulse_width_limits},
+    configuration {default_configuration},
     current_pulse_width {configuration.initial_pulse_width}
   {
     ;
@@ -27,14 +26,14 @@ namespace earth_rover_vcu
 
 
   ConfiguredServo::ConfiguredServo(
-    uint8_t pin_number, uint16_t minimum_pulse_width, uint16_t maximum_pulse_width, uint16_t center_pulse_width,
+    uint8_t pin_number, uint16_t minimum_pulse_width, uint16_t center_pulse_width, uint16_t maximum_pulse_width, 
     bool enforce_pulse_width_limits)
   :
+    default_configuration {minimum_pulse_width, center_pulse_width, maximum_pulse_width, 
+                           center_pulse_width, enforce_pulse_width_limits},
+    pin_number {pin_number},
     servo {},
-    configuration {pin_number,
-                   minimum_pulse_width, maximum_pulse_width, center_pulse_width,
-                   center_pulse_width,
-                   enforce_pulse_width_limits},
+    configuration {default_configuration},
     current_pulse_width {configuration.initial_pulse_width}
   {
     ;
@@ -49,7 +48,7 @@ namespace earth_rover_vcu
 
   void ConfiguredServo::setup()
   {
-    servo.attach(configuration.pin_number);
+    servo.attach(pin_number);
     setPulseWidth(current_pulse_width);
   }
 
@@ -57,7 +56,7 @@ namespace earth_rover_vcu
   void ConfiguredServo::setup(const Configuration & new_configuration)
   {
     configuration = new_configuration;
-    setup();
+    setPulseWidth(current_pulse_width);
   }
 
 
@@ -100,11 +99,7 @@ namespace earth_rover_vcu
 
   void ConfiguredServo::setDefaultConfiguration()
   {
-    configuration.minimum_pulse_width = default_minimum_pulse_width;
-    configuration.maximum_pulse_width = default_maximum_pulse_width;
-    configuration.center_pulse_width = default_center_pulse_width;
-    configuration.initial_pulse_width = default_initial_pulse_width;
-    configuration.enforce_pulse_width_limits = default_enforce_pulse_width_limits;
+    configuration = default_configuration;
     if(configuration.enforce_pulse_width_limits)
     {
       setPulseWidth(current_pulse_width);
@@ -114,9 +109,7 @@ namespace earth_rover_vcu
 
   void ConfiguredServo::setConfiguration(const ConfiguredServo::Configuration & new_configuration)
   {
-    auto current_pin_number = configuration.pin_number;
     configuration = new_configuration;
-    configuration.pin_number = current_pin_number;
     if(configuration.enforce_pulse_width_limits)
     {
       setPulseWidth(current_pulse_width);

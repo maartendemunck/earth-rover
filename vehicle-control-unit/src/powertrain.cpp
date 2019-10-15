@@ -71,13 +71,8 @@ namespace earth_rover_vcu
 
   void Powertrain::configureESC(uint16_t pulse_width_reverse, uint16_t pulse_width_stop, uint16_t pulse_width_forward)
   {
-    ConfiguredServo::Configuration configuration;
-    configuration.pin_number = esc_pin_number;
-    configuration.minimum_pulse_width = pulse_width_reverse;
-    configuration.maximum_pulse_width = pulse_width_forward;
-    configuration.center_pulse_width = pulse_width_stop;
-    configuration.initial_pulse_width = pulse_width_stop;
-    configuration.enforce_pulse_width_limits = true;
+    ConfiguredServo::Configuration configuration
+      {pulse_width_reverse, pulse_width_stop, pulse_width_forward, pulse_width_stop, true};
     esc.setConfiguration(configuration);
     esc.setPosition(current_throttle_setting);
   }
@@ -93,23 +88,17 @@ namespace earth_rover_vcu
   }
 
 
-  uint16_t Powertrain::getConfigurationSize()
-  {
-    return 13u;
-  }
-
-
   bool Powertrain::saveConfiguration(uint8_t * data, uint16_t size)
   {
     if(size >= 13u)
     {
-      auto configuration = esc.getConfiguration();
-      data[0] = configuration.minimum_pulse_width & 0x00ff;
-      data[1] = (configuration.minimum_pulse_width & 0xff00) >> 8;
-      data[2] = configuration.center_pulse_width & 0x00ff;
-      data[3] = (configuration.center_pulse_width & 0xff00) >> 8;
-      data[4] = configuration.maximum_pulse_width & 0x00ff;
-      data[5] = (configuration.maximum_pulse_width & 0xff00) >> 8;
+      auto esc_configuration = esc.getConfiguration();
+      data[0] = esc_configuration.minimum_pulse_width & 0x00ff;
+      data[1] = (esc_configuration.minimum_pulse_width & 0xff00) >> 8;
+      data[2] = esc_configuration.center_pulse_width & 0x00ff;
+      data[3] = (esc_configuration.center_pulse_width & 0xff00) >> 8;
+      data[4] = esc_configuration.maximum_pulse_width & 0x00ff;
+      data[5] = (esc_configuration.maximum_pulse_width & 0xff00) >> 8;
       data[6] = gearbox_pulse_widths[0] & 0x00ff;
       data[7] = (gearbox_pulse_widths[0] & 0xff00) >> 8;
       data[8] = gearbox_pulse_widths[1] & 0x00ff;
@@ -133,13 +122,11 @@ namespace earth_rover_vcu
     if(size >= 13u && data[12] == (data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5]
                                    ^ data[6] ^ data[7] ^ data[8] ^ data[9] ^ data[10] ^ data[11]))
     {
-      decltype(esc)::Configuration configuration;
-      configuration.pin_number = esc_pin_number;
-      configuration.minimum_pulse_width = uint16_t(data[0] | (data[1] << 8));
-      configuration.center_pulse_width = uint16_t(data[2] | (data[3] << 8));
-      configuration.maximum_pulse_width = uint16_t(data[4] | (data[5] << 8));
-      configuration.initial_pulse_width = configuration.center_pulse_width;
-      configuration.enforce_pulse_width_limits = true;
+      auto pulse_width_reverse = uint16_t(data[0] | (data[1] << 8));
+      auto pulse_width_stop = uint16_t(data[2] | (data[3] << 8));
+      auto pulse_width_forward = uint16_t(data[4] | (data[5] << 8));
+      decltype(esc)::Configuration configuration
+        {pulse_width_reverse, pulse_width_stop, pulse_width_forward, pulse_width_stop, true};
       esc.setConfiguration(configuration);
       esc.setPosition(current_throttle_setting);
       gearbox_pulse_widths[0] = uint16_t(data[6] | (data[7] << 8));

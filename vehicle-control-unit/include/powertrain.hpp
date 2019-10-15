@@ -102,11 +102,8 @@ namespace earth_rover_vcu
        */
       void configureGearboxServo(uint16_t pulse_width_neutral, uint16_t pulse_width_low, uint16_t pulse_width_high);
 
-      //! Get the (minimal) size of the configuration block.
-      /*!
-       *  \return The minimal size of the configuration block.
-       */
-      uint16_t getConfigurationSize();
+      //! The (minimal) size of the configuration block.
+      static constexpr uint16_t configuration_size = 13u;
 
       //! Save the configuration to a buffer.
       /*!

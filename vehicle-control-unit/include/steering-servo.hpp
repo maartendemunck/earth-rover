@@ -25,6 +25,16 @@ namespace earth_rover_vcu
    */
   class SteeringServo
   {
+    public:
+
+      //! Steering servo configuration.
+      struct Configuration
+      {
+        uint16_t pulse_width_left;    //!< Pulse width to steer to the left.
+        uint16_t pulse_width_center;  //!< Pulse width to drive straight.
+        uint16_t pulse_width_right;   //!< Pulse width to steer to the right.
+      };
+
     private:
 
       uint8_t pin_number;              //!< I/O pin used to control the steering servo.
@@ -77,6 +87,17 @@ namespace earth_rover_vcu
        *  \param pulse_width_right Pulse width to maximally steer to the right.
        */
       void configureSteeringServo(uint16_t pulse_width_left, uint16_t pulse_width_center, uint16_t pulse_width_right);
+
+      //! Get the current configuration.
+      /*!
+       *  \return The current configuration of the steering servo.
+       */
+      Configuration getConfiguration()
+      {
+        auto configuration = steering_servo.getConfiguration();
+        return Configuration
+          {configuration.minimum_pulse_width, configuration.center_pulse_width, configuration.maximum_pulse_width};
+      }
 
       //! The (minimal) size of the configuration block.
       static constexpr uint16_t configuration_size = 7u;

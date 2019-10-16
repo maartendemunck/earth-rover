@@ -42,6 +42,11 @@ namespace earth_rover_vcu
       Imu_t & imu;                               //!< IMU device driver.
       Gps_t & gps;                               //!< GPS device driver.
 
+      // TODO: this is not the responsibility of the VCU. Move to configuration object.
+      uint8_t steering_input_channel {0};        //!< Steering servo input channel.
+      uint8_t throttle_input_channel {2};        //!< ESC or throttle servo input channel.
+      uint8_t gearbox_input_channel {3};         //!< Gearbox servo input channel.
+
       elapsedMillis since_last_control_message;  //!< Time since we received a control message.
       bool timeout_handler_called;               //!< Control message timeout called.
 
@@ -144,7 +149,7 @@ namespace earth_rover_vcu
       /*!
        *  \return The current speed of the vehicle (in m/h).
        */
-      inline int16_t getSpeed() const
+      int16_t getSpeed() const
       {
         return position_encoder.getSpeed();
       }
@@ -153,7 +158,7 @@ namespace earth_rover_vcu
       /*!
        *  \return The current value of the odometer (in m).
        */
-      inline uint64_t getOdometer() const
+      uint64_t getOdometer() const
       {
         return position_encoder.getOdometer();
       }
@@ -162,7 +167,7 @@ namespace earth_rover_vcu
       /*!
        *  \return The current value of the trip meter (in m).
        */
-      inline uint64_t getTripmeter() const
+      uint64_t getTripmeter() const
       {
         return position_encoder.getTripmeter();
       }
@@ -190,9 +195,54 @@ namespace earth_rover_vcu
       /*!
        *  \return The current GPS fix (in NeoGPS gps-fix format).
        */
-      inline gps_fix getGpsData() const
+      gps_fix getGpsData() const
       {
         return gps.getCurrentGpsFix();
+      }
+
+      //! Get the current configuration of the steering servo.
+      /*!
+       *  \return The steering servo's current configuration.
+       */
+      SteeringServo::Configuration getSteeringServoConfiguration()
+      {
+        return steering.getConfiguration();
+      }
+
+      //! Get the steering input channel.
+      /*!
+       *  \return The steering input channel.
+       */
+      uint8_t getSteeringInputChannel()
+      {
+        return steering_input_channel;
+      }
+
+      //! Get the current configuration of the powertrain.
+      /*!
+       *  \return The powertrain's current configuration.
+       */
+      Powertrain::Configuration getPowertrainConfiguration()
+      {
+        return powertrain.getConfiguration();
+      }
+
+      //! Get the throttle input channel.
+      /*!
+       *  \return The steering input channel.
+       */
+      uint8_t getThrottleInputChannel()
+      {
+        return throttle_input_channel;
+      }
+
+      //! Get the steering input channel.
+      /*!
+       *  \return The steering input channel.
+       */
+      uint8_t getGearboxInputChannel()
+      {
+        return gearbox_input_channel;
       }
 
     private:

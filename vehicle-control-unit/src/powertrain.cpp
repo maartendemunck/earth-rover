@@ -88,6 +88,22 @@ namespace earth_rover_vcu
   }
 
 
+  Powertrain::Configuration Powertrain::getConfiguration()
+  {
+    Configuration configuration;
+    auto esc_configuration = esc.getConfiguration();
+    configuration.esc.pulse_width_reverse = esc_configuration.minimum_pulse_width;
+    configuration.esc.pulse_width_stop = esc_configuration.center_pulse_width;
+    configuration.esc.pulse_width_forward = esc_configuration.maximum_pulse_width;
+    for(uint8_t index = 0; index <= 2; ++ index)
+    {
+      configuration.gearbox.gear[index].number = index;
+      configuration.gearbox.gear[index].pulse_width = gearbox_pulse_widths[index];
+    }
+    return configuration;
+  }
+
+  
   bool Powertrain::saveConfiguration(uint8_t * data, uint16_t size)
   {
     if(size >= 13u)

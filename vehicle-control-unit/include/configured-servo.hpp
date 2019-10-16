@@ -122,9 +122,12 @@ namespace earth_rover_vcu
 
       //! Get the configuration parameters of the servo.
       /*!
-       *  \return The current configuration of the servo.
+       *  \return A const reference to the current configuration of the servo.
        */
-      Configuration getConfiguration() const;
+      const Configuration & getConfiguration() const
+      {
+        return configuration;
+      }
 
     private:
 

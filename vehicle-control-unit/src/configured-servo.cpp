@@ -117,12 +117,6 @@ namespace earth_rover_vcu
   }
 
 
-  ConfiguredServo::Configuration ConfiguredServo::getConfiguration() const
-  {
-    return configuration;
-  }
-
-
   uint16_t ConfiguredServo::correctPulseWidth(uint16_t requested_pulse_width) const
   {
     if(configuration.enforce_pulse_width_limits)

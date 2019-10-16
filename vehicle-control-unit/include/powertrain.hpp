@@ -29,6 +29,31 @@ namespace earth_rover_vcu
    */
   class Powertrain
   {
+    public:
+
+      //! Powertrain configuration.
+      struct Configuration
+      {
+        //! ESC or throttle servo configuration.
+        struct
+        {
+          uint16_t pulse_width_reverse;  //!< Pulse width for full speed backwards.
+          uint16_t pulse_width_stop;     //!< Pulse width to stop.
+          uint16_t pulse_width_forward;  //!< Pulse width for full speed forward.
+        } esc;
+        //! Gearbox servo configuration.
+        struct
+        {
+          const uint8_t gear_count {3};  //!< Number of gears.
+          //! Gear configuration.
+          struct
+          {
+            int8_t number;         //!< Gear number (sequential, <0: reverse, 0: neutral, >0 forward or bidirectional).
+            uint16_t pulse_width;  //!< Pulse width for gear.
+          } gear[3];
+        } gearbox;
+      };
+
     private:
 
       uint8_t esc_pin_number;            //!< I/O pin used to control the ESC.
@@ -101,6 +126,12 @@ namespace earth_rover_vcu
        *  \param pulse_width_high Pulse width for high (second) gear.
        */
       void configureGearboxServo(uint16_t pulse_width_neutral, uint16_t pulse_width_low, uint16_t pulse_width_high);
+
+      //! Get the current configuration.
+      /*!
+       *  \return The current configuration of the steering servo.
+       */
+      Configuration getConfiguration();
 
       //! The (minimal) size of the configuration block.
       static constexpr uint16_t configuration_size = 13u;

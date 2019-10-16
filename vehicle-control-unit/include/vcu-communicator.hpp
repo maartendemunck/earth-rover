@@ -36,12 +36,14 @@ namespace earth_rover_vcu
       //! Request message IDs.
       enum class RequestMessageType: uint8_t
       {
-        Control = 0x00, RequestState = 0x10
+        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30
       };
       //! Response message IDs.
       enum class ResponseMessageType: uint8_t
       {
-        Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93
+        Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93,
+        SteeringServoConfiguration = 0xb0, EscConfiguration = 0xb1, GearboxServoConfiguration = 0xb2,
+        RadioConfiguration = 0xb4
       };
 
       //! nRF24L01+ device.
@@ -165,6 +167,28 @@ namespace earth_rover_vcu
               if(state_requested & 0x08)  // Altitude.
               {
                 sendAltitudeMessage();
+              }
+            } break;
+            case RequestMessageType::RequestConfiguration:
+            {
+              static_assert(nrf24l01_payload_size >= 2,
+                            "the 'request configuration' message requires a payload size of at least 2 bytes");
+              uint8_t configuration_requested = buffer[1];
+              if(configuration_requested & 0x01)  // Steering servo.
+              {
+                sendSteeringServoConfigurationMessage();
+              }
+              if(configuration_requested & 0x02)  // ESC or throttle servo.
+              {
+                sendEscConfigurationMessage();
+              }
+              if(configuration_requested & 0x04)  // Gearbox servo.
+              {
+                sendGearboxServoConfigurationMessage();
+              }
+              if(configuration_requested & 0x80)  // Radio.
+              {
+                sendRadioConfigurationMessage();
               }
             } break;
             default:
@@ -297,6 +321,109 @@ namespace earth_rover_vcu
         {
           return false;  // Ignore the altitude request if we don't have a valid altitude.
         }
+      }
+
+      //! Send a message with the current configuration of the steering servo.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
+      bool sendSteeringServoConfigurationMessage()
+      {
+        static_assert(nrf24l01_payload_size >= 8,
+                      "the 'steering servo configuration' message requires a payload size of at least 8 bytes");
+        uint8_t buffer[nrf24l01_payload_size];
+        // Compose the steering servo configuration message.
+        buffer[0] = static_cast<uint8_t>(ResponseMessageType::SteeringServoConfiguration);
+        auto configuration = vcu.getSteeringServoConfiguration();
+        buffer[1] = configuration.pulse_width_left & 0x00ff;
+        buffer[2] = (configuration.pulse_width_left & 0xff00) >> 8;
+        buffer[3] = configuration.pulse_width_center & 0x00ff;
+        buffer[4] = (configuration.pulse_width_center & 0xff00) >> 8;
+        buffer[5] = configuration.pulse_width_right & 0x00ff;
+        buffer[6] = (configuration.pulse_width_right & 0xff00) >> 8;
+        buffer[7] = vcu.getSteeringInputChannel();
+        // Transmit the steering servo configuration message.
+        return sendMessage(buffer);
+      }
+
+      //! Send a message with the current configuration of the ESC or throttle servo.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
+      bool sendEscConfigurationMessage()
+      {
+        static_assert(nrf24l01_payload_size >= 8,
+                      "the 'ESC servo configuration' message requires a payload size of at least 8 bytes");
+        uint8_t buffer[nrf24l01_payload_size];
+        // Compose the ESC configuration message.
+        buffer[0] = static_cast<uint8_t>(ResponseMessageType::EscConfiguration);
+        auto configuration = vcu.getPowertrainConfiguration();
+        buffer[1] = configuration.esc.pulse_width_reverse & 0x00ff;
+        buffer[2] = (configuration.esc.pulse_width_reverse & 0xff00) >> 8;
+        buffer[3] = configuration.esc.pulse_width_stop & 0x00ff;
+        buffer[4] = (configuration.esc.pulse_width_stop & 0xff00) >> 8;
+        buffer[5] = configuration.esc.pulse_width_forward & 0x00ff;
+        buffer[6] = (configuration.esc.pulse_width_forward & 0xff00) >> 8;
+        buffer[7] = vcu.getThrottleInputChannel();
+        // Transmit the ESC configuration message.
+        return sendMessage(buffer);
+      }
+
+      //! Send (a) message(s) with the current configuration of the gearbox servo.
+      /*!
+       *  \return True if the message(s) was/were successfully sent, false if not.
+       */
+      bool sendGearboxServoConfigurationMessage()
+      {
+        static_assert(nrf24l01_payload_size >= 8,
+                      "the 'gearbox servo configuration' message requires a payload size of at least 9 bytes");
+        uint8_t buffer[nrf24l01_payload_size];
+        // Compose and transmit the gearbox servo configuration message(s).
+        bool success = true;
+        buffer[0] = static_cast<uint8_t>(ResponseMessageType::GearboxServoConfiguration);
+        auto configuration = vcu.getPowertrainConfiguration();
+        uint8_t reverse_gears = configuration.gearbox.gear[0].number < 0? -configuration.gearbox.gear[0].number: 0;
+        uint8_t forward_gears = configuration.gearbox.gear[configuration.gearbox.gear_count - 1].number;
+        bool has_neutral_gear = !(configuration.gearbox.gear_count == reverse_gears + forward_gears);
+        buffer[1] = (reverse_gears & 0x07) | ((has_neutral_gear & 0x01) << 3) | ((forward_gears & 0x0f) << 4);
+        buffer[8] = vcu.getGearboxInputChannel();
+        for(uint8_t index = 0; index < configuration.gearbox.gear_count; index += 2)
+        {
+          buffer[2] = configuration.gearbox.gear[index].number;
+          buffer[3] = configuration.gearbox.gear[index].pulse_width & 0x00ff;
+          buffer[4] = (configuration.gearbox.gear[index].pulse_width & 0xff00) >> 8;
+          if(index + 1 < configuration.gearbox.gear_count)
+          {
+            buffer[5] = configuration.gearbox.gear[index + 1].number;
+            buffer[6] = configuration.gearbox.gear[index + 1].pulse_width & 0x00ff;
+            buffer[7] = (configuration.gearbox.gear[index + 1].pulse_width & 0xff00) >> 8;
+          }
+          else
+          {
+            buffer[5] = 0x80;
+            buffer[6] = 0x00;
+            buffer[7] = 0x00;
+          }
+          success &= sendMessage(buffer);
+        }
+        // Return the status.
+        return success;
+      }
+
+      //! Send a message with the current configuration of the radios.
+      /*!
+       *  \return True if the message was successfully sent, false if not.
+       */
+      bool sendRadioConfigurationMessage()
+      {
+        static_assert(nrf24l01_payload_size >= 8,
+                      "the 'radio configuration' message requires a payload size of at least 3 bytes");
+        uint8_t buffer[nrf24l01_payload_size];
+        buffer[0] = static_cast<uint8_t>(ResponseMessageType::RadioConfiguration);
+        buffer[1] = 0x01;  // TODO!
+        buffer[2] = 0x01;  // TODO!
+        // Transmit radio configuration message.
+        return sendMessage(buffer);
       }
 
       //! Send a message via the nRF24L01+ transceiver.

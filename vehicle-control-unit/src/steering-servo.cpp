@@ -15,7 +15,7 @@ namespace earth_rover_vcu
   SteeringServo::SteeringServo(uint8_t pin_number)
   :
     pin_number {pin_number},
-    steering_servo {pin_number, 2000u, 1000u, 1500u, true},
+    steering_servo {pin_number, 2000u, 1500u, 1000u, true},
     current_steering_angle {0}
   {
     ;

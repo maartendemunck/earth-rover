@@ -19,8 +19,8 @@ namespace earth_rover_vcu
   :
     esc_pin_number {esc_pin_number},
     gearbox_servo_pin_number {gearbox_servo_pin_number},
-    esc {esc_pin_number, 1000u, 2000u, 1500u, true},
-    gearbox_servo {gearbox_servo_pin_number, 1000u, 2000u, 1500u, false},
+    esc {esc_pin_number, 1000u, 1500u, 2000u, true},
+    gearbox_servo {gearbox_servo_pin_number, 1000u, 1500u, 2000u, false},
     gearbox_pulse_widths {1480u, 1150u, 1800u},
     current_throttle_setting {0},
     current_gear {0}

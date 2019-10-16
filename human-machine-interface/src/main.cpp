@@ -39,9 +39,12 @@ earth_rover_hmi::ServoConfigParams esc_defaults {4u, 1000u, 1500u, 2000u, true};
 uint16_t gearbox_servo_pulse_widths[4] {1500u, 1150u, 1800u};
 //! Gearbox servo defaults.
 earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults {3u, gearbox_servo_pulse_widths};
+//! Radio defaults.
+earth_rover_hmi::RadioConfigParams radio_defaults {1u, 1u};
 //! Car state (digital twin). 
 earth_rover_hmi::CarState car_state
-  {std::move(steering_servo_defaults), std::move(esc_defaults), std::move(gearbox_servo_defaults)};
+  {std::move(steering_servo_defaults), std::move(esc_defaults), std::move(gearbox_servo_defaults),
+   std::move(radio_defaults)};
 //! HMI communicator.
 earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_state};
 //! HMI display.

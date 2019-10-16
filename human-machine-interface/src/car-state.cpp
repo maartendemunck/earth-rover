@@ -15,11 +15,12 @@ namespace earth_rover_hmi
 
   CarState::CarState(
     ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
-    GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults)
+    GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults, RadioConfigParams radio_defaults)
   :
     steering_servo {std::move(steering_servo_defaults)},
     esc {std::move(esc_defaults)},
     gearbox_servo {std::move(gearbox_servo_defaults)},
+    radio {std::move(radio_defaults)},
     speedometer {1000u},
     orientation {1000u},
     location {5000u},
@@ -177,6 +178,22 @@ namespace earth_rover_hmi
     GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
     current_configuration.setPulseWidth(gear, pulse_width);;
     gearbox_servo.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setHmiRadioPower(uint8_t power_level)
+  {
+    RadioConfigParams current_configuration {radio.getCurrentConfiguration()};
+    current_configuration.tx_power = power_level;
+    radio.setCurrentConfiguration(current_configuration);
+  }
+
+
+  void CarState::setVcuRadioPower(uint8_t power_level)
+  {
+    RadioConfigParams current_configuration {radio.getCurrentConfiguration()};
+    current_configuration.rx_power = power_level;
+    radio.setCurrentConfiguration(current_configuration);
   }
 
 

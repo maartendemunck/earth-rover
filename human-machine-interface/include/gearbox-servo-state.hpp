@@ -172,6 +172,24 @@ namespace earth_rover_hmi
       //! Default destructor.
       ~GearboxServoState() = default;
 
+      //! Set the configuration stored in the VCU.
+      /*!
+       *  \param new_configuration Configuration stored in the VCU to store in our State object.
+       */
+      void setStoredConfiguration(const Configuration_t & new_configuration)
+      {
+        configuration.setStoredValue(new_configuration);
+      }
+
+      //! Check whether the configuration stored in the VCU is available to us.
+      /*!
+       *  \return True if the configuration stored in the VCU is available to us, false if it isn't.
+       */
+      bool isStoredConfigurationAvailable()
+      {
+        return configuration.isAvailable();
+      }
+
       //! Set the new configuration.
       /*!
        *  \param new_configuration New configuration.
@@ -181,26 +199,22 @@ namespace earth_rover_hmi
         return configuration.setCurrentValue(new_configuration);
       }
       
-      //! Check whether the current configuration is changed.
-      /*!
-       *  Wheck whether the current configuration is changed since the last getCurrentConfiguration() call with
-       *  reset_changed = true.
-       * 
-       *  \return True if the current configuration is changed, false if not.
-       */
-      bool isCurrentConfigurationChanged()
-      {
-        return configuration.isCurrentValueChanged();
-      }
-
       //! Get the current configuration.
       /*!
-       *  \param reset_changed True to reset the changed flag, false to keep its current state.
        *  \return A const reference to the current configuration.
        */
-      const Configuration_t & getCurrentConfiguration(bool reset_changed = true)
+      const Configuration_t & getCurrentConfiguration()
       {
-        return configuration.getCurrentValue(reset_changed);
+        return configuration.getCurrentValue();
+      }
+
+      //! Check whether the current configuration is stored in non-volatile memory.
+      /*!
+       *  \return True if the current configuration is stored, false if not.
+       */
+      bool isCurrentConfigurationStored()
+      {
+        return configuration.isCurrentValueStored();
       }
 
       //! Set the current gear.

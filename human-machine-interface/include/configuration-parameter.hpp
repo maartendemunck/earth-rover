@@ -29,10 +29,9 @@ namespace earth_rover_hmi
   {
     private:
 
-      ConfigurationParameter_t current_value;  //!< Current value of the configuration parameter.
-      ConfigurationParameter_t stored_value;   //!< Value of the configuration parameter stored in the VCU.
-      bool stored_value_available;             //!< Flag indicating whether the value stored in the VCU is available.
-      bool changed;                            //!< Flag indicating whether the configuration parameter changed.
+      ConfigurationParameter_t value;  //!< Current value of the configuration parameter.
+      bool is_available;               //!< Flag indicating whether the value stored in the VCU is or was available.
+      bool is_stored;                  //!< Flag indicating whether the current value is stored in the VCU.
 
     public:
 
@@ -42,27 +41,28 @@ namespace earth_rover_hmi
        */
       ConfigurationParameter()
       :
-        current_value {},
-        stored_value {},
-        stored_value_available {false},
-        changed {false}
+        value {},
+        is_available {false},
+        is_stored {false}
       {
         ;
       }
 
       //! Constructor.
       /*!
-       *  The current value is initialized using the given value. The stored value, although reported as unavailable,
-       *  is initialized using the same value, to prevent errors with types without a default constructor.
+       *  Initialize the current value using the given value. If the is_initialized flag is false (the default), the
+       *  parameter is reported as unavailable nevertheless. This feature is needed to prevent errors with configuration
+       *  parameter types without a default constructor.
        * 
        *  \param default_value Default value for the configuration parameter.
+       *  \param is_available False (default) to mark the configuration parameter as unavailable, true to mark it as
+       *                      available.
        */
-      ConfigurationParameter(ConfigurationParameter_t default_value)
+      ConfigurationParameter(ConfigurationParameter_t default_value, bool is_available = false)
       :
-        current_value {default_value},
-        stored_value {std::move(default_value)},
-        stored_value_available {false},
-        changed {false}
+        value {default_value},
+        is_available {is_available},
+        is_stored {is_available}
       {
         ;
       }
@@ -70,72 +70,63 @@ namespace earth_rover_hmi
       //! Default destructor.
       ~ConfigurationParameter() = default;
 
+      //! Set the value stored in non-volatile memory.
+      /*!
+       *  \param new_value New value.
+       *  \param is_complete True to mark the stored configuration parameter as available; false to mark it as
+       *                     unavailable because it's still incomplete.
+       */
+      void setStoredValue(ConfigurationParameter_t new_value, bool is_complete = true)
+      {
+        value = new_value;
+        is_available = is_available;
+        is_stored = is_available;
+      }
+
+      //! Check whether value stored in non-volatile memory is available.
+      /*!
+       *  \return True if the stored value is available, false if it isn't.
+       */
+      bool isAvailable()
+      {
+        return is_available;
+      }
+
       //! Set the current value.
       /*!
        *  \param new_value New value.
        */
       void setCurrentValue(ConfigurationParameter_t new_value)
       {
-        if(new_value != current_value)
+        if(new_value != value)
         {
-          changed = true;
-          current_value = new_value;
+          is_stored = false;
+          value = new_value;
         }
-      }
-
-      //! Check whether the current value changed.
-      /*!
-       *  Check whether the current value changed since the last getCurrentValue() call with reset_changed = true.
-       * 
-       *  \return True if the current value changed.
-       */
-      bool isCurrentValueChanged()
-      {
-        return changed;
       }
 
       //! Get the current value.
       /*!
-       *  \param reset_changed True to reset the changed flag, false to keep its current state.
        *  \return The current value.
        */
-      ConfigurationParameter_t & getCurrentValue(bool reset_changed = false)
+      const ConfigurationParameter_t & getCurrentValue()
       {
-        if(reset_changed)
-        {
-          changed = false;
-        }
-        return current_value;
+        return value;
       }
 
-      //! Set the value stored on the VCU.
+      //! Check whether the current value is stored in non-volatile memory.
       /*!
-       *  \param new_value New value.
-       *  \param is_available True to mark the stored configuration parameter as available; false to mark it as
-       *                      unavailable (e.g. still incomplete).
+       *  \return True if the current value is stored in non-volatile memory, false if not.
        */
-      void setStoredValue(ConfigurationParameter_t new_value, bool is_available = true)
+      bool isCurrentValueStored()
       {
-        stored_value = new_value;
-        stored_value_available = is_available;
+        return is_stored;
       }
 
-      //! Check whether the stored value is available.
-      /*!
-       *  \return True if the stored value is available, fals if it isn't.
-       */
-      bool isStoredValueAvailable()
+      //! Set the current value as stored.
+      void setCurrentValueStored()
       {
-        return stored_value_available;
-      }
-
-      //! Get the stored value.
-      /*!
-       *  \return The stored value.
-       */
-      const ConfigurationParameter_t & getStoredValue()
-      {
-        return stored_value;
+        is_stored = true;
       }
 
   };

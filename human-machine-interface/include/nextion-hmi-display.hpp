@@ -255,19 +255,17 @@ namespace earth_rover_hmi
                       break;
                   }
                   break;
-              /*
                 case HmiPage::RadioSettings:
                   switch(setting)
                   {
                     case 1:
-                      car_configuration.getRadioConfig().setTxPower(value, Configuration::Changed::Display);
+                      car_state.setHmiRadioPower(value);
                       break;
                     case 2:
-                      car_configuration.getRadioConfig().setRxPower(value, Configuration::Changed::Display);
+                      car_state.setVcuRadioPower(value);
                       break;
                   }
                   break;
-                */
               }
             }
             // Reset receive buffer pointer.
@@ -287,6 +285,18 @@ namespace earth_rover_hmi
       }
 
     private:
+
+      //! Enable the configuration pages.
+      void enableConfigurationPages()
+      {
+        serial_device.printf("speedometer.var_ensettings.val=1\xff\xff\xff");
+      }
+
+      //! Enable the configuration pages.
+      void disableConfigurationPages()
+      {
+        serial_device.printf("speedometer.var_ensettings.val=0\xff\xff\xff");
+      }
 
       //! Update the right turn signal's button on the display.
       /*!

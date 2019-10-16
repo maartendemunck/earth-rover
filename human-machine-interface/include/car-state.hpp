@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <DMS.h>
 #include "gearbox-servo-state.hpp"
+#include "radio-state.hpp"
 #include "sensor-state.hpp"
 #include "servo-state.hpp"
 #include "limit-value.hpp"
@@ -141,6 +142,9 @@ namespace earth_rover_hmi
       //! Flag used to shut off the right turn signal using the steering command.
       bool turn_signal_right_cancelled {false};
 
+      //! Radio state.
+      RadioState radio;
+
       //! Speed, odometer and trip meter measurement.
       SensorState<Speedometer> speedometer;
       //! Orientation measurement.
@@ -160,7 +164,7 @@ namespace earth_rover_hmi
        */
       CarState(
         ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
-        GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults);
+        GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults, RadioConfigParams radio_defaults);
 
       //! Default destructor.
       ~CarState() = default;
@@ -284,6 +288,18 @@ namespace earth_rover_hmi
       {
         return gearbox_servo.getCurrentGear();
       }
+
+      //! Set the HMI radio's power level.
+      /*!
+       *  \param power_level The HMI radio's power level.
+       */
+      void setHmiRadioPower(uint8_t power_level);
+
+      //! Set the VCU radio's power level.
+      /*!
+       *  \param power_level The VCU radio's power level.
+       */
+      void setVcuRadioPower(uint8_t power_level);
 
       //! Set right turn signal input.
       /*!

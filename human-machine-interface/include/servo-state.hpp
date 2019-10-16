@@ -108,7 +108,6 @@ namespace earth_rover_hmi
       void setStoredConfiguration(const ServoConfigParams & new_configuration)
       {
         configuration.setStoredValue(new_configuration);
-        configuration.setCurrentValue(new_configuration);
       }
 
       //! Check whether the configuration stored in the VCU is available to us.
@@ -117,7 +116,7 @@ namespace earth_rover_hmi
        */
       bool isStoredConfigurationAvailable()
       {
-        return configuration.isStoredValueAvailable();
+        return configuration.isAvailable();
       }
 
       //! Set the new configuration.
@@ -129,26 +128,22 @@ namespace earth_rover_hmi
         return configuration.setCurrentValue(new_configuration);
       }
       
-      //! Check whether the current configuration is changed.
-      /*!
-       *  Wheck whether the current configuration is changed since the last getCurrentConfiguration() call with
-       *  reset_changed = true.
-       * 
-       *  \return True if the current configuration is changed, false if not.
-       */
-      bool isCurrentConfigurationChanged()
-      {
-        return configuration.isCurrentValueChanged();
-      }
-
       //! Get the current configuration.
       /*!
-       *  \param reset_changed True to reset the changed flag, false to keep its current state.
        *  \return A const reference to the current configuration.
        */
-      const ServoConfigParams & getCurrentConfiguration(bool reset_changed = true)
+      const ServoConfigParams & getCurrentConfiguration()
       {
-        return configuration.getCurrentValue(reset_changed);
+        return configuration.getCurrentValue();
+      }
+
+      //! Check whether the current configuration is stored in non-volatile memory.
+      /*!
+       *  \return True if the current configuration is stored, false if not.
+       */
+      bool isCurrentConfigurationStored()
+      {
+        return configuration.isCurrentValueStored();
       }
 
       //! Store the position of the servo.

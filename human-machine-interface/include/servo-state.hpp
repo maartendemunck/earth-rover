@@ -77,12 +77,12 @@ namespace earth_rover_hmi
   /*!
    *  \ingroup HMI
    */
-  class ServoState
+  class ServoState: public ConfigurationParameter<ServoConfigParams>
   {
     private:
 
-      ConfigurationParameter<ServoConfigParams> configuration; //!< Servo configuration.
-      int16_t position;                                        //!< Current position.
+      //!< Current position.
+      int16_t position;
 
     public:
 
@@ -92,7 +92,7 @@ namespace earth_rover_hmi
        */
       ServoState(ServoConfigParams default_configuration)
       :
-        configuration {std::move(default_configuration)},
+        ConfigurationParameter {std::move(default_configuration)},
         position {0}
       {
         ;
@@ -100,51 +100,6 @@ namespace earth_rover_hmi
 
       //! Default destructor.
       ~ServoState() = default;
-
-      //! Set the configuration stored in the VCU.
-      /*!
-       *  \param new_configuration Configuration stored in the VCU to store in our State object.
-       */
-      void setStoredConfiguration(const ServoConfigParams & new_configuration)
-      {
-        configuration.setStoredValue(new_configuration);
-      }
-
-      //! Check whether the configuration stored in the VCU is available to us.
-      /*!
-       *  \return True if the configuration stored in the VCU is available to us, false if it isn't.
-       */
-      bool isStoredConfigurationAvailable()
-      {
-        return configuration.isAvailable();
-      }
-
-      //! Set the new configuration.
-      /*!
-       *  \param new_configuration New configuration.
-       */
-      void setCurrentConfiguration(const ServoConfigParams & new_configuration)
-      {
-        return configuration.setCurrentValue(new_configuration);
-      }
-      
-      //! Get the current configuration.
-      /*!
-       *  \return A const reference to the current configuration.
-       */
-      const ServoConfigParams & getCurrentConfiguration()
-      {
-        return configuration.getCurrentValue();
-      }
-
-      //! Check whether the current configuration is stored in non-volatile memory.
-      /*!
-       *  \return True if the current configuration is stored, false if not.
-       */
-      bool isCurrentConfigurationStored()
-      {
-        return configuration.isCurrentValueStored();
-      }
 
       //! Store the position of the servo.
       /*!

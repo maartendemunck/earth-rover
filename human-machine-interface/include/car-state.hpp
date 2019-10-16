@@ -161,6 +161,7 @@ namespace earth_rover_hmi
        *  \param steering_servo_defaults Default settings for the steering servo.
        *  \param esc_defaults Default settings for the ESC or throttle servo.
        *  \param gearbox_servo_defaults Default settings for the gearbox servo.
+       *  \param radio_defaults Default settings for the HMI and VCU radios.
        */
       CarState(
         ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,

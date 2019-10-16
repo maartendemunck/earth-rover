@@ -143,15 +143,16 @@ namespace earth_rover_hmi
    *  \ingroup HMI
    */
   template <uint8_t reverse_gears, bool has_neutral_gear, uint8_t forward_gears>
-  class GearboxServoState
+  class GearboxServoState:
+    public ConfigurationParameter<GearboxServoConfigParams<reverse_gears, has_neutral_gear, forward_gears>>
   {
     private:
 
-      //! Alias for the configuration type.
-      using Configuration_t = GearboxServoConfigParams<reverse_gears, has_neutral_gear, forward_gears>;
+      //! Alias for the GearboxServoConfigParams template type.
+      using GearboxServoConfigParams_t = GearboxServoConfigParams<reverse_gears, has_neutral_gear, forward_gears>;
 
-      ConfigurationParameter<Configuration_t> configuration;  //!< Gearbox servo configuration.
-      int8_t gear;                                            //!< Current gear.
+      //! Current gear.
+      int8_t current_gear {has_neutral_gear? 0: 1};
 
     public:
 
@@ -159,63 +160,15 @@ namespace earth_rover_hmi
       /*!
        *  \param default_configuration Default configuration.
        */
-      GearboxServoState(Configuration_t default_configuration)
+      GearboxServoState(GearboxServoConfigParams_t default_configuration)
       :
-        configuration {std::move(default_configuration)},
-        gear {has_neutral_gear? 0: 1}
+        ConfigurationParameter<GearboxServoConfigParams_t> {std::move(default_configuration)}
       {
         static_assert(forward_gears > 0, "At least one forward gear is required");
-        static_assert(forward_gears <= 15, "Maximum 15 forward gears are supported");
-        static_assert(reverse_gears <= 7, "Maximum 7 reverse gears are supported");
       }
 
       //! Default destructor.
       ~GearboxServoState() = default;
-
-      //! Set the configuration stored in the VCU.
-      /*!
-       *  \param new_configuration Configuration stored in the VCU to store in our State object.
-       */
-      void setStoredConfiguration(const Configuration_t & new_configuration)
-      {
-        configuration.setStoredValue(new_configuration);
-      }
-
-      //! Check whether the configuration stored in the VCU is available to us.
-      /*!
-       *  \return True if the configuration stored in the VCU is available to us, false if it isn't.
-       */
-      bool isStoredConfigurationAvailable()
-      {
-        return configuration.isAvailable();
-      }
-
-      //! Set the new configuration.
-      /*!
-       *  \param new_configuration New configuration.
-       */
-      void setCurrentConfiguration(const Configuration_t & new_configuration)
-      {
-        return configuration.setCurrentValue(new_configuration);
-      }
-      
-      //! Get the current configuration.
-      /*!
-       *  \return A const reference to the current configuration.
-       */
-      const Configuration_t & getCurrentConfiguration()
-      {
-        return configuration.getCurrentValue();
-      }
-
-      //! Check whether the current configuration is stored in non-volatile memory.
-      /*!
-       *  \return True if the current configuration is stored, false if not.
-       */
-      bool isCurrentConfigurationStored()
-      {
-        return configuration.isCurrentValueStored();
-      }
 
       //! Set the current gear.
       /*!
@@ -225,9 +178,9 @@ namespace earth_rover_hmi
        */
       void setCurrentGear(int8_t new_gear)
       {
-        if(gear >= -reverse_gears && gear <= forward_gears && (has_neutral_gear || gear != 0))
+        if(new_gear >= -reverse_gears && new_gear <= forward_gears && (has_neutral_gear || new_gear != 0))
         {
-          gear = new_gear;
+          current_gear = new_gear;
         }
         else
         {
@@ -241,32 +194,32 @@ namespace earth_rover_hmi
        */
       int8_t getCurrentGear()
       {
-        return gear;
+        return current_gear;
       }
 
       //! Shift up one gear.
       void shiftUp()
       {
-        gear = limit_value(int8_t(gear + 1), int8_t(-reverse_gears), int8_t(forward_gears));
-        if(gear == 0 && !has_neutral_gear)
+        current_gear = limit_value(int8_t(current_gear + 1), int8_t(-reverse_gears), int8_t(forward_gears));
+        if(current_gear == 0 && !has_neutral_gear)
         {
-          gear = 1;
+          current_gear = 1;
         }
       }
 
       //! Shift down one gear.
       void shiftDown()
       {
-        gear = limit_value(int8_t(gear - 1), int8_t(-reverse_gears), int8_t(forward_gears));
-        if(gear == 0 && !has_neutral_gear)
+        current_gear = limit_value(int8_t(current_gear - 1), int8_t(-reverse_gears), int8_t(forward_gears));
+        if(current_gear == 0 && !has_neutral_gear)
         {
           if(reverse_gears >= 1)
           {
-            gear = -1;
+            current_gear = -1;
           }
           else
           {
-            gear = 1;
+            current_gear = 1;
           }
         }
       }

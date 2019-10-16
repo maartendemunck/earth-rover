@@ -17,6 +17,7 @@ namespace earth_rover_hmi
     ServoConfigParams steering_servo_defaults, ServoConfigParams esc_defaults,
     GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults, RadioConfigParams radio_defaults)
   :
+    configuration_available {false},
     steering_servo {std::move(steering_servo_defaults)},
     esc {std::move(esc_defaults)},
     gearbox_servo {std::move(gearbox_servo_defaults)},
@@ -76,33 +77,33 @@ namespace earth_rover_hmi
 
   void CarState::setSteeringInputChannel(uint8_t input_channel)
   {
-    ServoConfigParams current_configuration {steering_servo.getCurrentValue()};
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
     current_configuration.input_channel = input_channel;
-    steering_servo.setCurrentValue(current_configuration);
+    steering_servo.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setSteerLeftPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {steering_servo.getCurrentValue()};
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
     current_configuration.pulse_width_minimum = pulse_width;
-    steering_servo.setCurrentValue(current_configuration);
+    steering_servo.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setSteerCenterPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {steering_servo.getCurrentValue()};
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
     current_configuration.pulse_width_center = pulse_width;
-    steering_servo.setCurrentValue(current_configuration);
+    steering_servo.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setSteerRightPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {steering_servo.getCurrentValue()};
+    ServoConfigParams current_configuration {steering_servo.getCurrentConfiguration()};
     current_configuration.pulse_width_maximum = pulse_width;
-    steering_servo.setCurrentValue(current_configuration);
+    steering_servo.setCurrentConfiguration(current_configuration);
   }
 
 
@@ -114,33 +115,33 @@ namespace earth_rover_hmi
 
   void CarState::setThrottleInputChannel(uint8_t input_channel)
   {
-    ServoConfigParams current_configuration {esc.getCurrentValue()};
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
     current_configuration.input_channel = input_channel;
-    esc.setCurrentValue(current_configuration);
+    esc.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setFullBackwardsPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {esc.getCurrentValue()};
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
     current_configuration.pulse_width_minimum = pulse_width;
-    esc.setCurrentValue(current_configuration);
+    esc.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setStopPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {esc.getCurrentValue()};
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
     current_configuration.pulse_width_center = pulse_width;
-    esc.setCurrentValue(current_configuration);
+    esc.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setFullForwardPulseWidth(uint16_t pulse_width)
   {
-    ServoConfigParams current_configuration {esc.getCurrentValue()};
+    ServoConfigParams current_configuration {esc.getCurrentConfiguration()};
     current_configuration.pulse_width_maximum = pulse_width;
-    esc.setCurrentValue(current_configuration);
+    esc.setCurrentConfiguration(current_configuration);
   }
 
 
@@ -167,33 +168,33 @@ namespace earth_rover_hmi
 
   void CarState::setGearboxInputChannel(uint8_t input_channel)
   {
-    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentValue()};
+    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
     current_configuration.input_channel = input_channel;
-    gearbox_servo.setCurrentValue(current_configuration);
+    gearbox_servo.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setGearPulseWidth(int8_t gear, uint16_t pulse_width)
   {
-    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentValue()};
+    GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
     current_configuration.setPulseWidth(gear, pulse_width);;
-    gearbox_servo.setCurrentValue(current_configuration);
+    gearbox_servo.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setHmiRadioPower(uint8_t power_level)
   {
-    RadioConfigParams current_configuration {radio.getCurrentValue()};
+    RadioConfigParams current_configuration {radio.getCurrentConfiguration()};
     current_configuration.tx_power = power_level;
-    radio.setCurrentValue(current_configuration);
+    radio.setCurrentConfiguration(current_configuration);
   }
 
 
   void CarState::setVcuRadioPower(uint8_t power_level)
   {
-    RadioConfigParams current_configuration {radio.getCurrentValue()};
+    RadioConfigParams current_configuration {radio.getCurrentConfiguration()};
     current_configuration.rx_power = power_level;
-    radio.setCurrentValue(current_configuration);
+    radio.setCurrentConfiguration(current_configuration);
   }
 
 

@@ -76,11 +76,11 @@ namespace earth_rover_hmi
        *  \param is_complete True to mark the stored configuration parameter as available; false to mark it as
        *                     unavailable because it's still incomplete.
        */
-      void setStoredValue(ConfigurationParameter_t new_value, bool is_complete = true)
+      void setStoredConfiguration(const ConfigurationParameter_t & new_value, bool is_complete = true)
       {
         value = new_value;
-        is_available = is_available;
-        is_stored = is_available;
+        is_available = is_complete;
+        is_stored = is_complete;
       }
 
       //! Check whether value stored in non-volatile memory is available.
@@ -96,7 +96,7 @@ namespace earth_rover_hmi
       /*!
        *  \param new_value New value.
        */
-      void setCurrentValue(ConfigurationParameter_t new_value)
+      void setCurrentConfiguration(ConfigurationParameter_t new_value)
       {
         if(new_value != value)
         {
@@ -109,7 +109,7 @@ namespace earth_rover_hmi
       /*!
        *  \return The current value.
        */
-      const ConfigurationParameter_t & getCurrentValue()
+      const ConfigurationParameter_t & getCurrentConfiguration()
       {
         return value;
       }
@@ -118,13 +118,13 @@ namespace earth_rover_hmi
       /*!
        *  \return True if the current value is stored in non-volatile memory, false if not.
        */
-      bool isCurrentValueStored()
+      bool isCurrentConfigurationStored()
       {
         return is_stored;
       }
 
       //! Set the current value as stored.
-      void setCurrentValueStored()
+      void setCurrentConfigurationStored()
       {
         is_stored = true;
       }

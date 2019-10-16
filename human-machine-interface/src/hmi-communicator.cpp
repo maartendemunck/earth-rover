@@ -69,11 +69,16 @@ namespace earth_rover_hmi
       {
         sendRequestStateMessage(0x08);
       }
+      if(!car_state.isConfigurationAvailable() && control_message_sent && update_sequence_id % 2 == 1)
+      {
+        requestNextConfigurationParameter();
+      }
       ++ update_sequence_id;
       channel_changed = false;
     }
     while(nrf24l01_device.available())
     {
+      bool configuration_updated = false;
       uint8_t buffer[nrf24l01_payload_size];
       nrf24l01_device.read(buffer, nrf24l01_payload_size);
       switch(static_cast<ResponseMessageType>(buffer[0]))
@@ -107,11 +112,32 @@ namespace earth_rover_hmi
         {
           car_state.setAltitude(int32_t(buffer[1] | (buffer[2] << 8)
                                 | (buffer[3] << 16) | (buffer[4] << 24)), true);
-        }
+        } break;
+        case ResponseMessageType::SteeringServoConfiguration:
+        {
+          ServoConfigParams stored_configuration
+          {
+            uint8_t(buffer[7]),                      // Input channel.
+            uint16_t(buffer[1] | (buffer[2] << 8)),  // Pulse width to steer left.
+            uint16_t(buffer[3] | (buffer[4] << 8)),  // Pulse width to drive straight ahead.
+            uint16_t(buffer[5] | (buffer[6] << 8)),  // Pulse width to steer right.
+            true                                     // Enforce pulse width limits.
+          };
+          car_state.setStoredSteeringConfiguration(stored_configuration);
+          Serial.println("Stored steering configuration.");
+        } break;
       }
     }
   }
 
+
+  void HmiCommunicator::requestNextConfigurationParameter()
+  {
+    if(!car_state.isSteeringConfigurationAvailable())
+    {
+      sendRequestConfigurationMessage(0x01);
+    }
+  }
 
   bool HmiCommunicator::sendControlMessage()
   {
@@ -145,6 +171,24 @@ namespace earth_rover_hmi
     uint8_t buffer[nrf24l01_payload_size];
     buffer[0] = to_integral(RequestMessageType::RequestState);
     buffer[1] = requested_state;
+    // buffer[2] = 0;  // Padding.
+    // buffer[3] = 0;  // Padding.
+    // buffer[4] = 0;  // Padding.
+    // buffer[5] = 0;  // Padding.
+    // buffer[6] = 0;  // Padding.
+    // buffer[7] = 0;  // Padding.
+    // buffer[8] = 0;  // Padding.
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendRequestConfigurationMessage(uint8_t requested_configuration)
+  {
+    static_assert(nrf24l01_payload_size >= 2,
+                  "the 'request state' message requires a payload size of at least 2 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::RequestConfiguration);
+    buffer[1] = requested_configuration;
     // buffer[2] = 0;  // Padding.
     // buffer[3] = 0;  // Padding.
     // buffer[4] = 0;  // Padding.

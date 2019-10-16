@@ -124,6 +124,9 @@ namespace earth_rover_hmi
 
     private:
 
+      //! Flag indicatin whether the configuration stored in the VCU is available.
+      bool configuration_available;
+
       //! Steering servo configuration and state.
       ServoState steering_servo;
       //! ESC configuration and state.
@@ -154,6 +157,12 @@ namespace earth_rover_hmi
       //! GPS altitude measurement.
       SensorState<int32_t> altitude;
 
+      //! Check whether the configuration stored in the VCU is known.
+      void checkStoredConfiguration()
+      {
+        configuration_available = steering_servo.isAvailable(); // TODO add (&) other configurations.
+      }
+
     public:
 
       //! Constructor.
@@ -182,11 +191,48 @@ namespace earth_rover_hmi
         ;
       }
 
+      //! Check whether the configuration stored in the VCU is available.
+      /*!
+       *  \return True if the (full) configuration is received from the VCU, false if not.
+       */
+      bool isConfigurationAvailable()
+      {
+        return configuration_available;
+      }
+
       //! Set the steering input.
       /*!
        *  \param steering Steering input (-1000...0...+1000).
        */
       void setSteeringInput(int16_t steering);
+
+      //! Set the steering configuration stored in the VCU.
+      /*!
+       *  \param stored_configuration Steering configuration stored in the VCU.
+       */
+      void setStoredSteeringConfiguration(const ServoConfigParams & stored_configuration)
+      {
+        steering_servo.setStoredConfiguration(stored_configuration, true);
+        checkStoredConfiguration();
+      }
+
+      //! Check whether the steering configuration stored in the VCU is available in the HMI.
+      /*!
+       *  \return True if the steering configuration stored in the VCU is available, false if not.
+       */
+      bool isSteeringConfigurationAvailable()
+      {
+        return steering_servo.isAvailable();
+      }
+
+      //! Get the current steering configuration.
+      /*!
+       *  \return The current (stored in the VCU or modified) steering configuration.
+       */
+      const ServoConfigParams & getSteeringConfiguration()
+      {
+        return steering_servo.getCurrentConfiguration();
+      }
 
       //! Set the physical input channel used for steering.
       /*!

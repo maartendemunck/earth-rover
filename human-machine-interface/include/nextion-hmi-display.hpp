@@ -59,6 +59,7 @@ namespace earth_rover_hmi
       CarState & car_state;                         //!< Current car state (digital twin).
 
       HmiPage current_page;                         //!< Active information or configuration page.
+      bool configuration_pages_available;           //!< True if the configuration pages are available, false if not.
 
     public:
 
@@ -71,7 +72,8 @@ namespace earth_rover_hmi
       :
         serial_device {serial_device},
         rx_buffer_pointer {0u},
-        car_state {car_state}
+        car_state {car_state},
+        configuration_pages_available {false}
       {
         ;
       }
@@ -107,6 +109,8 @@ namespace earth_rover_hmi
         delay(20);
         serial_device.print("\xff\xff\xff");
         serial_device.print("bkcmd=0\xff\xff\xff");
+        // Disable configuration pages.
+        disableConfigurationPages();
         // Send current settings to display.
         updateSettingsOnDisplay(true);
         // Switch to speedometer page.
@@ -121,6 +125,11 @@ namespace earth_rover_hmi
        */
       void spinOnce()
       {
+        if(!configuration_pages_available && car_state.isConfigurationAvailable())
+        {
+          sendConfigurationToDisplay();
+          enableConfigurationPages();
+        }
         if(car_state.getTurnSignalRightCancelled(true))
         {
           setTurnSignalRight(false);
@@ -170,11 +179,9 @@ namespace earth_rover_hmi
               {
                 case Light::TurnSignalRight:
                   car_state.setTurnSignalRight(state);
-                  Serial.printf("Turn signal right: %d\n", int16_t(state));
                   break;
                 case Light::TurnSignalLeft:
                   car_state.setTurnSignalLeft(state);
-                  Serial.printf("Turn signal left: %d\n", int16_t(state));
                   break;
                 case Light::DippedBeam:
                   car_state.setDippedBeam(state);
@@ -289,13 +296,17 @@ namespace earth_rover_hmi
       //! Enable the configuration pages.
       void enableConfigurationPages()
       {
-        serial_device.printf("speedometer.var_ensettings.val=1\xff\xff\xff");
+        serial_device.print("speedometer.var_settings.val=1\xff\xff\xff");
+        serial_device.flush();
+        configuration_pages_available = true;
       }
 
       //! Enable the configuration pages.
       void disableConfigurationPages()
       {
-        serial_device.printf("speedometer.var_ensettings.val=0\xff\xff\xff");
+        serial_device.print("speedometer.var_settings.val=0\xff\xff\xff");
+        serial_device.flush();
+        configuration_pages_available = false;
       }
 
       //! Update the right turn signal's button on the display.
@@ -305,6 +316,7 @@ namespace earth_rover_hmi
       void setTurnSignalRight(bool state)
       {
         serial_device.printf("speedometer.var_tsright.val=%d\xff\xff\xff", int16_t(state));
+        serial_device.flush();
       }
 
       //! Update the left turn signal's button on the display.
@@ -314,6 +326,7 @@ namespace earth_rover_hmi
       void setTurnSignalLeft(bool state)
       {
         serial_device.printf("speedometer.var_tsleft.val=%d\xff\xff\xff", int16_t(state));
+        serial_device.flush();
       }
 
       //! Update displayed measurements and configuration parameters.
@@ -396,21 +409,20 @@ namespace earth_rover_hmi
           
           serial_device.flush();
         }
-        /*
-        // Update steering servo settings.
-        if(force_update || car_configuration.getSteeringConfig().isConfigurationChanged())
+      }
+
+      //! Send the configuration received from the VCU to the Nextion display's configuration pages.
+      void sendConfigurationToDisplay()
+      {
+        if(car_state.isSteeringConfigurationAvailable())
         {
-          auto steering_servo_config = car_configuration.getSteeringConfig().resetConfigurationChanged();
-          serial_device.printf("set_steering.var_left.val=%d\xff\xff\xff", steering_servo_config.minimum);
-          serial_device.printf("set_steering.var_center.val=%d\xff\xff\xff", steering_servo_config.center);
-          serial_device.printf("set_steering.var_right.val=%d\xff\xff\xff", steering_servo_config.maximum);
-          serial_device.printf("set_steering.var_channel.val=%d\xff\xff\xff", steering_servo_config.input_channel);
-          serial_device.flush();
-          if(current_page == HmiPage::SteeringSettings)
-          {
-            serial_device.print("page set_steering\xff\xff\xff");
-          }
+          auto config = car_state.getSteeringConfiguration();
+          serial_device.printf("set_steering.var_left.val=%d\xff\xff\xff", config.pulse_width_minimum);
+          serial_device.printf("set_steering.var_center.val=%d\xff\xff\xff", config.pulse_width_center);
+          serial_device.printf("set_steering.var_right.val=%d\xff\xff\xff", config.pulse_width_maximum);
+          serial_device.printf("set_steering.var_channel.val=%d\xff\xff\xff", config.input_channel + 1);
         }
+        /*
         // Update electronic speed controller settings.
         if(force_update || car_configuration.getThrottleConfig().isConfigurationChanged())
         {

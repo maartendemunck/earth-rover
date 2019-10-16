@@ -31,10 +31,16 @@ namespace earth_rover_hmi
 
       //! Request message IDs.
       enum class RequestMessageType: uint8_t
-        { Control = 0x00, RequestState = 0x10 };
+      {
+        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30
+      };
       //! Response message IDs.
       enum class ResponseMessageType: uint8_t
-        { Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93 };
+      {
+        Speedometer = 0x90, Orientation = 0x91, Location = 0x92, Altitude = 0x93,
+        SteeringServoConfiguration = 0xb0, EscConfiguration = 0xb1, GearboxServoConfiguration = 0xb2,
+        RadioConfiguration = 0xb4
+      };
 
       //! nRF24L01+ device.
       RF24 nrf24l01_device;
@@ -85,6 +91,9 @@ namespace earth_rover_hmi
 
     private:
 
+      //! Request the next missing configuration parameter.
+      void requestNextConfigurationParameter();
+
       //! Send a control message to the VCU.
       /*!
        *  Send a control message with the current car state.
@@ -100,6 +109,14 @@ namespace earth_rover_hmi
        *  \return True if the message was sent successfully, false if not.
        */
       bool sendRequestStateMessage(uint8_t requested_state);
+
+      //! Send a request configuration message to the VCU.
+      /*!
+       *  \param requested_configuration Requested configuration (bit 0: steering servo configuration, bit 1: ESC
+       *                                 configuration, bit 2: gearbox configuration, bit 7: radio configuration).
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendRequestConfigurationMessage(uint8_t requested_configuration);
 
       //! Send a message to the VCU.
       /*!

@@ -48,7 +48,10 @@ earth_rover_hmi::CarState car_state
 //! HMI communicator.
 earth_rover_hmi::HmiCommunicator communicator {rf24_ce_pin, rf24_csn_pin, car_state};
 //! HMI display.
-earth_rover_hmi::NextionHmiDisplay<decltype(Serial1)> display {Serial1, car_state};
+/*!
+ *  There should be a callback handler calling receiveData for this serial device.
+ */
+earth_rover_hmi::NextionHmiDisplay<decltype(Serial2)> display {Serial2, car_state};
 
 
 /*
@@ -115,11 +118,11 @@ void loop()
 }
 
 
-//! Serial1 callback handler.
+//! Serial2 callback handler.
 /*!
- *  Incoming data on Serial1 is handled by the HMI display.
+ *  Incoming data on Serial2 is handled by the HMI display.
  */
-void serialEvent1()
+void serialEvent2()
 {
   display.receiveData();
 }

@@ -51,7 +51,7 @@ namespace earth_rover_hmi
         HazardFlashers = 0x05u
       };
 
-      SerialDevice_t & serial_device;                 //!< Serial device used to communicate with the Nextion display.
+      SerialDevice_t & serial_device;               //!< Serial device used to communicate with the Nextion display.
       static constexpr uint16_t rx_buffer_size{8};  //!< Size of the receive buffer (can contain the largest message).
       uint8_t rx_buffer[rx_buffer_size];            //!< Receive buffer.
       uint16_t rx_buffer_pointer;                   //!< Relative location of the next byte in the receive buffer.
@@ -60,6 +60,8 @@ namespace earth_rover_hmi
 
       HmiPage current_page;                         //!< Active information or configuration page.
       bool configuration_pages_available;           //!< True if the configuration pages are available, false if not.
+
+      bool display_configuration_complete;          //!< Prevent processing data before configuring the display.
 
     public:
 
@@ -73,7 +75,8 @@ namespace earth_rover_hmi
         serial_device {serial_device},
         rx_buffer_pointer {0u},
         car_state {car_state},
-        configuration_pages_available {false}
+        configuration_pages_available {false},
+        display_configuration_complete {false}
       {
         ;
       }
@@ -100,13 +103,19 @@ namespace earth_rover_hmi
         // setting), switch to 115200 baud. If the display is already configured
         // for 115200 baud, this code will have no effect.
         serial_device.begin(9600u);
-        delay(20);
+        while(!serial_device)
+        {
+          ;
+        }
         serial_device.print("bkcmd=0\xff\xff\xff");
         serial_device.print("baud=115200\xff\xff\xff");
         serial_device.flush();
         delay(60);
         serial_device.begin(115200u);
-        delay(20);
+        while(!serial_device)
+        {
+          ;
+        }
         serial_device.print("\xff\xff\xff");
         serial_device.print("bkcmd=0\xff\xff\xff");
         // Disable configuration pages.
@@ -116,7 +125,10 @@ namespace earth_rover_hmi
         // Switch to speedometer page.
         serial_device.print("page speedometer\xff\xff\xff");
         serial_device.flush();
+        delay(100);
+        serial_device.clear();
         current_page = HmiPage::Speedometer;
+        display_configuration_complete = true;
       }
 
       //! Spinning loop.
@@ -143,6 +155,10 @@ namespace earth_rover_hmi
       //! Callback to process data received from the serial port.
       void receiveData()
       {
+        if(!display_configuration_complete)
+        {
+          return;  // Do not process possible garbage before the display is configured.
+        }
         while(serial_device.available())
         {
           rx_buffer[rx_buffer_pointer ++] = char(serial_device.read() & 0x00ffu);
@@ -152,6 +168,7 @@ namespace earth_rover_hmi
               && rx_buffer[rx_buffer_pointer - 3] == 0xffu)
           {
             // Print response.
+            /*
             {
               Serial.print("Data from Nextion display:");
               for(auto i = 0; i < rx_buffer_pointer - 3; ++ i)
@@ -160,6 +177,7 @@ namespace earth_rover_hmi
               }
               Serial.println("");
             }
+            */
             // Process response.
             if(rx_buffer[0] == 0xa0u && rx_buffer_pointer == 5)  // Page change.
             {
@@ -198,7 +216,7 @@ namespace earth_rover_hmi
               HmiPage page = from_integral<HmiPage>(rx_buffer[1]);
               uint8_t setting = rx_buffer[2];
               uint16_t value = (rx_buffer[4] << 8) + rx_buffer[3];
-              Serial.printf("Setting %02x:%02x changed to %u\n", to_integral(page), setting, value);
+              // Serial.printf("Setting %02x:%02x changed to %u\n", to_integral(page), setting, value);
               switch(page)
               {
                 case HmiPage::Speedometer:
@@ -285,7 +303,7 @@ namespace earth_rover_hmi
             {
               rx_buffer[i - 1] = rx_buffer[i];
             }
-            Serial.println("Read buffer for Nextion data overflowed");
+            // Serial.println("Read buffer for Nextion data overflowed");
           }
         }
       }

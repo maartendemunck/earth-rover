@@ -32,13 +32,13 @@ constexpr uint8_t rf24_csn_pin = 15;            //!< I/O pin used for the nRF24L
  */
 
 //! Steering servo defaults.
-earth_rover_hmi::ServoConfigParams steering_servo_defaults {1u, 1000u, 1500u, 2000u, true};
+earth_rover_hmi::ServoConfigParams steering_servo_defaults {0u, 0u, 0u, 0u, true};
 //! ESC defaults.
-earth_rover_hmi::ServoConfigParams esc_defaults {4u, 1000u, 1500u, 2000u, true};
+earth_rover_hmi::ServoConfigParams esc_defaults {3u, 0u, 0u, 0u, true};
 //! Gearbox servo pulse widths for the different gears (from low to high).
-uint16_t gearbox_servo_pulse_widths[4] {1500u, 1150u, 1800u};
+uint16_t gearbox_servo_pulse_widths[4] {0u, 0u, 0u};
 //! Gearbox servo defaults.
-earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults {3u, gearbox_servo_pulse_widths};
+earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults {2u, gearbox_servo_pulse_widths};
 //! Radio defaults.
 earth_rover_hmi::RadioConfigParams radio_defaults {1u, 1u};
 //! Car state (digital twin). 

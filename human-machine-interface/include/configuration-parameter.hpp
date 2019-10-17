@@ -43,7 +43,7 @@ namespace earth_rover_hmi
       :
         value {},
         is_available {false},
-        is_stored {false}
+        is_stored {true}
       {
         ;
       }
@@ -62,7 +62,7 @@ namespace earth_rover_hmi
       :
         value {default_value},
         is_available {is_available},
-        is_stored {is_available}
+        is_stored {true}
       {
         ;
       }
@@ -80,14 +80,13 @@ namespace earth_rover_hmi
       {
         value = new_value;
         is_available = is_complete;
-        is_stored = is_complete;
       }
 
       //! Check whether value stored in non-volatile memory is available.
       /*!
        *  \return True if the stored value is available, false if it isn't.
        */
-      bool isAvailable()
+      bool isConfigurationAvailable()
       {
         return is_available;
       }
@@ -114,7 +113,7 @@ namespace earth_rover_hmi
         return value;
       }
 
-      //! Check whether the current value is stored in non-volatile memory.
+      //! Check whether the current value is stored in non-volatile memory (or unavailable).
       /*!
        *  \return True if the current value is stored in non-volatile memory, false if not.
        */

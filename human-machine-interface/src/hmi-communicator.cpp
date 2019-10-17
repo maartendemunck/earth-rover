@@ -78,7 +78,6 @@ namespace earth_rover_hmi
     }
     while(nrf24l01_device.available())
     {
-      bool configuration_updated = false;
       uint8_t buffer[nrf24l01_payload_size];
       nrf24l01_device.read(buffer, nrf24l01_payload_size);
       switch(static_cast<ResponseMessageType>(buffer[0]))
@@ -124,7 +123,41 @@ namespace earth_rover_hmi
             true                                     // Enforce pulse width limits.
           };
           car_state.setStoredSteeringConfiguration(stored_configuration);
-          Serial.println("Stored steering configuration.");
+        } break;
+        case ResponseMessageType::EscConfiguration:
+        {
+          ServoConfigParams stored_configuration
+          {
+            uint8_t(buffer[7]),                      // Input channel.
+            uint16_t(buffer[1] | (buffer[2] << 8)),  // Pulse width to drive backwards.
+            uint16_t(buffer[3] | (buffer[4] << 8)),  // Pulse width to stop.
+            uint16_t(buffer[5] | (buffer[6] << 8)),  // Pulse width to drive forward.
+            true                                     // Enforce pulse width limits.
+          };
+          car_state.setStoredThrottleConfiguration(stored_configuration);
+        } break;
+        case ResponseMessageType::GearboxServoConfiguration:
+        {
+          auto stored_configuration = car_state.getGearboxConfiguration();
+          stored_configuration.input_channel = uint8_t(buffer[8]);
+          for(unsigned index = 0; index < 2; ++ index)
+          {
+            int8_t gear = int8_t(buffer[2 + index * 3]);
+            uint16_t pulse_width = uint16_t(buffer[3 + index * 3] | (buffer[4 + index * 3] << 8));
+            if(gear >= 0 && gear <= 2)
+            {
+              stored_configuration.setPulseWidth(gear, pulse_width);
+            }
+          }
+          bool complete = true;
+          for(unsigned index = 0; index <= 2; ++ index)
+          {
+            if(stored_configuration.getPulseWidth(index) == 0 || stored_configuration.getPulseWidth(index) == 0xffff)
+            {
+              complete = false;
+            }
+          }
+          car_state.setStoredGearboxConfiguration(stored_configuration, complete);
         } break;
       }
     }
@@ -137,6 +170,20 @@ namespace earth_rover_hmi
     {
       sendRequestConfigurationMessage(0x01);
     }
+    else if(!car_state.isThrottleConfigurationAvailable())
+    {
+      sendRequestConfigurationMessage(0x02);
+    }
+    else if(!car_state.isGearboxConfigurationAvailable())
+    {
+      sendRequestConfigurationMessage(0x04);
+    }
+    /*
+    else if(!car_state.isRadioConfigurationAvailable())
+    {
+      sendRequestConfigurationMessage(0x80);
+    }
+    */
   }
 
   bool HmiCommunicator::sendControlMessage()
@@ -158,8 +205,6 @@ namespace earth_rover_hmi
                 | (lighting.dipped_beam << 2)
                 | (lighting.high_beam << 3)
                 | (lighting.hazard_flashers << 4);
-    // buffer[7] = 0;  // Padding.
-    // buffer[8] = 0;  // Padding.
     return sendMessage(buffer);
   }
 
@@ -171,13 +216,6 @@ namespace earth_rover_hmi
     uint8_t buffer[nrf24l01_payload_size];
     buffer[0] = to_integral(RequestMessageType::RequestState);
     buffer[1] = requested_state;
-    // buffer[2] = 0;  // Padding.
-    // buffer[3] = 0;  // Padding.
-    // buffer[4] = 0;  // Padding.
-    // buffer[5] = 0;  // Padding.
-    // buffer[6] = 0;  // Padding.
-    // buffer[7] = 0;  // Padding.
-    // buffer[8] = 0;  // Padding.
     return sendMessage(buffer);
   }
 
@@ -189,13 +227,6 @@ namespace earth_rover_hmi
     uint8_t buffer[nrf24l01_payload_size];
     buffer[0] = to_integral(RequestMessageType::RequestConfiguration);
     buffer[1] = requested_configuration;
-    // buffer[2] = 0;  // Padding.
-    // buffer[3] = 0;  // Padding.
-    // buffer[4] = 0;  // Padding.
-    // buffer[5] = 0;  // Padding.
-    // buffer[6] = 0;  // Padding.
-    // buffer[7] = 0;  // Padding.
-    // buffer[8] = 0;  // Padding.
     return sendMessage(buffer);
   }
 

@@ -160,7 +160,10 @@ namespace earth_rover_hmi
       //! Check whether the configuration stored in the VCU is known.
       void checkStoredConfiguration()
       {
-        configuration_available = steering_servo.isAvailable(); // TODO add (&) other configurations.
+        configuration_available =
+          steering_servo.isConfigurationAvailable() // TODO add (&) other configurations.
+          & esc.isConfigurationAvailable()
+          & gearbox_servo.isConfigurationAvailable();
       }
 
     public:
@@ -222,7 +225,7 @@ namespace earth_rover_hmi
        */
       bool isSteeringConfigurationAvailable()
       {
-        return steering_servo.isAvailable();
+        return steering_servo.isConfigurationAvailable();
       }
 
       //! Get the current steering configuration.
@@ -273,6 +276,34 @@ namespace earth_rover_hmi
        */
       void setThrottleInput(int16_t throttle);
 
+      //! Set the throttle configuration stored in the VCU.
+      /*!
+       *  \param stored_configuration Throttle configuration stored in the VCU.
+       */
+      void setStoredThrottleConfiguration(const ServoConfigParams & stored_configuration)
+      {
+        esc.setStoredConfiguration(stored_configuration, true);
+        checkStoredConfiguration();
+      }
+
+      //! Check whether the throttle configuration stored in the VCU is available in the HMI.
+      /*!
+       *  \return True if the throttle configuration stored in the VCU is available, false if not.
+       */
+      bool isThrottleConfigurationAvailable()
+      {
+        return esc.isConfigurationAvailable();
+      }
+
+      //! Get the current throttle configuration.
+      /*!
+       *  \return The current (stored in the VCU or modified) throttle configuration.
+       */
+      const ServoConfigParams & getThrottleConfiguration()
+      {
+        return esc.getCurrentConfiguration();
+      }
+
       //! Set the physical input channel used for the throttle.
       /*!
        *  \param input_channel Physical input channel used for the throttle.
@@ -311,6 +342,35 @@ namespace earth_rover_hmi
        *  \param gearbox Gearbox input (-1000...0...+1000).
        */
       void setGearboxInput(int16_t gearbox);
+
+      //! Update the gearbox configuration stored in the VCU.
+      /*!
+       *  \param stored_configuration Gearbox configuration stored in the VCU.
+       *  \param complete True if the gearbox configuration is complete, false if it's still incomplete.
+       */
+      void setStoredGearboxConfiguration(const GearboxServoConfigParams<0, 1, 2> & stored_configuration, bool complete)
+      {
+        gearbox_servo.setStoredConfiguration(stored_configuration, complete);
+        checkStoredConfiguration();
+      }
+
+      //! Check whether the gearbox configuration stored in the VCU is available in the HMI.
+      /*!
+       *  \return True if the gearbox configuration stored in the VCU is available, false if not.
+       */
+      bool isGearboxConfigurationAvailable()
+      {
+        return gearbox_servo.isConfigurationAvailable();
+      }
+
+      //! Get the current gearbox configuration.
+      /*!
+       *  \return The current (stored in the VCU or modified) gearbox configuration.
+       */
+      const GearboxServoConfigParams<0, 1, 2> & getGearboxConfiguration()
+      {
+        return gearbox_servo.getCurrentConfiguration();
+      }
 
       //! Set the physical input channel used to shift.
       /*!

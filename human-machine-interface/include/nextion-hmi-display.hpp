@@ -127,7 +127,6 @@ namespace earth_rover_hmi
       {
         if(!configuration_pages_available && car_state.isConfigurationAvailable())
         {
-          sendConfigurationToDisplay();
           enableConfigurationPages();
         }
         if(car_state.getTurnSignalRightCancelled(true))
@@ -215,7 +214,7 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_state.setSteeringInputChannel(value);
+                      car_state.setSteeringInputChannel(value - 1);
                       break;
                     case 1:
                       car_state.setSteerLeftPulseWidth(value);
@@ -232,7 +231,7 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_state.setThrottleInputChannel(value);
+                      car_state.setThrottleInputChannel(value - 1);
                       break;
                     case 1:
                       car_state.setFullBackwardsPulseWidth(value);
@@ -249,7 +248,7 @@ namespace earth_rover_hmi
                   switch(setting)
                   {
                     case 0:
-                      car_state.setGearboxInputChannel(value);
+                      car_state.setGearboxInputChannel(value - 1);
                       break;
                     case 1:
                       car_state.setGearPulseWidth(0, value);
@@ -409,48 +408,40 @@ namespace earth_rover_hmi
           
           serial_device.flush();
         }
-      }
-
-      //! Send the configuration received from the VCU to the Nextion display's configuration pages.
-      void sendConfigurationToDisplay()
-      {
-        if(car_state.isSteeringConfigurationAvailable())
+        // Update steering settings.
+        if(current_page == HmiPage::SteeringSettings && force_update)
         {
           auto config = car_state.getSteeringConfiguration();
-          serial_device.printf("set_steering.var_left.val=%d\xff\xff\xff", config.pulse_width_minimum);
-          serial_device.printf("set_steering.var_center.val=%d\xff\xff\xff", config.pulse_width_center);
-          serial_device.printf("set_steering.var_right.val=%d\xff\xff\xff", config.pulse_width_maximum);
-          serial_device.printf("set_steering.var_channel.val=%d\xff\xff\xff", config.input_channel + 1);
-        }
-        /*
-        // Update electronic speed controller settings.
-        if(force_update || car_configuration.getThrottleConfig().isConfigurationChanged())
-        {
-          auto speed_controller_config = car_configuration.getThrottleConfig().resetConfigurationChanged();
-          serial_device.printf("set_throttle.var_reverse.val=%d\xff\xff\xff", speed_controller_config.minimum);
-          serial_device.printf("set_throttle.var_stop.val=%d\xff\xff\xff", speed_controller_config.center);
-          serial_device.printf("set_throttle.var_forward.val=%d\xff\xff\xff", speed_controller_config.maximum);
-          serial_device.printf("set_throttle.var_channel.val=%d\xff\xff\xff", speed_controller_config.input_channel);
+          serial_device.printf("set_steering.var_left.val=%u\xff\xff\xff", config.pulse_width_minimum);
+          serial_device.printf("set_steering.var_center.val=%u\xff\xff\xff", config.pulse_width_center);
+          serial_device.printf("set_steering.var_right.val=%u\xff\xff\xff", config.pulse_width_maximum);
+          serial_device.printf("set_steering.var_channel.val=%u\xff\xff\xff", config.input_channel + 1);
+          serial_device.print("page set_steering\xff\xff\xff");
           serial_device.flush();
-          if(current_page == HmiPage::ThrottleSettings)
-          {
-            serial_device.print("page set_throttle\xff\xff\xff");
-          }
         }
-        // Update gearbox servo settings.
-        if(force_update || car_configuration.getGearboxConfig().isConfigurationChanged())
+        if(current_page == HmiPage::ThrottleSettings && force_update)
         {
-          auto gearbox_servo_config = car_configuration.getGearboxConfig().resetConfigurationChanged();
-          serial_device.printf("set_gearbox.var_low.val=%d\xff\xff\xff", gearbox_servo_config.minimum);
-          serial_device.printf("set_gearbox.var_neutral.val=%d\xff\xff\xff", gearbox_servo_config.center);
-          serial_device.printf("set_gearbox.var_high.val=%d\xff\xff\xff", gearbox_servo_config.maximum);
-          serial_device.printf("set_gearbox.var_channel.val=%d\xff\xff\xff", gearbox_servo_config.input_channel);
+          auto config = car_state.getThrottleConfiguration();
+          serial_device.printf("set_throttle.var_reverse.val=%u\xff\xff\xff", config.pulse_width_minimum);
+          serial_device.printf("set_throttle.var_stop.val=%u\xff\xff\xff", config.pulse_width_center);
+          serial_device.printf("set_throttle.var_forward.val=%u\xff\xff\xff", config.pulse_width_maximum);
+          serial_device.printf("set_throttle.var_channel.val=%u\xff\xff\xff", config.input_channel + 1);
+          serial_device.print("page set_throttle\xff\xff\xff");
           serial_device.flush();
-          if(current_page == HmiPage::GearboxSettings)
-          {
-            serial_device.print("page set_gearbox\xff\xff\xff");
-          }
         }
+        if(current_page == HmiPage::GearboxSettings && force_update)
+        {
+          auto config = car_state.getGearboxConfiguration();
+          serial_device.printf("set_gearbox.var_neutral.val=%d\xff\xff\xff", config.getPulseWidth(0));
+          serial_device.printf("set_gearbox.var_low.val=%d\xff\xff\xff", config.getPulseWidth(1));
+          serial_device.printf("set_gearbox.var_high.val=%d\xff\xff\xff", config.getPulseWidth(2));
+          serial_device.printf("set_gearbox.var_channel.val=%d\xff\xff\xff", config.input_channel + 1);
+          serial_device.print("page set_gearbox\xff\xff\xff");
+          serial_device.flush();
+        }
+      }
+
+/*
         // Update the radio settings.
         if(force_update || car_configuration.getRadioConfig().isConfigurationChanged())
         {
@@ -463,8 +454,8 @@ namespace earth_rover_hmi
             serial_device.print("page set_radio\xff\xff\xff");
           }
         }
-        */
       }
+*/
 
   };
 

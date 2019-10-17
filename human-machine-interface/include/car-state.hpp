@@ -161,9 +161,10 @@ namespace earth_rover_hmi
       void checkStoredConfiguration()
       {
         configuration_available =
-          steering_servo.isConfigurationAvailable() // TODO add (&) other configurations.
+          steering_servo.isConfigurationAvailable()
           & esc.isConfigurationAvailable()
-          & gearbox_servo.isConfigurationAvailable();
+          & gearbox_servo.isConfigurationAvailable()
+          & radio.isConfigurationAvailable();
       }
 
     public:
@@ -394,6 +395,34 @@ namespace earth_rover_hmi
       int8_t getCurrentGear()
       {
         return gearbox_servo.getCurrentGear();
+      }
+
+      //! Update the radio configuration stored in the VCU.
+      /*!
+       *  \param stored_configuration Radio configuration stored in the VCU.
+       */
+      void setStoredRadioConfiguration(const RadioConfigParams & stored_configuration)
+      {
+        radio.setStoredConfiguration(stored_configuration);
+        checkStoredConfiguration();
+      }
+
+      //! Check whether the radio configuration stored in the VCU is available in the HMI.
+      /*!
+       *  \return True if the radio configuration stored in the VCU is available, false if not.
+       */
+      bool isRadioConfigurationAvailable()
+      {
+        return radio.isConfigurationAvailable();
+      }
+
+      //! Get the current radio configuration.
+      /*!
+       *  \return The current (stored in the VCU or modified) radio configuration.
+       */
+      const RadioConfigParams & getRadioConfiguration()
+      {
+        return radio.getCurrentConfiguration();
       }
 
       //! Set the HMI radio's power level.

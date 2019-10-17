@@ -457,23 +457,15 @@ namespace earth_rover_hmi
           serial_device.print("page set_gearbox\xff\xff\xff");
           serial_device.flush();
         }
-      }
-
-/*
-        // Update the radio settings.
-        if(force_update || car_configuration.getRadioConfig().isConfigurationChanged())
+        if(current_page == HmiPage::RadioSettings && force_update)
         {
-          auto radio_config = car_configuration.getRadioConfig().resetConfigurationChanged();
-          serial_device.printf("set_radio.var_tx_power.val=%d\xff\xff\xff", radio_config.tx_power);
-          serial_device.printf("set_radio.var_rx_power.val=%d\xff\xff\xff", radio_config.rx_power);
+          auto config = car_state.getRadioConfiguration();
+          serial_device.printf("set_radio.var_tx_power.val=%d\xff\xff\xff", config.tx_power);
+          serial_device.printf("set_radio.var_rx_power.val=%d\xff\xff\xff", config.rx_power);
+          serial_device.print("page set_radio\xff\xff\xff");
           serial_device.flush();
-          if(current_page == HmiPage::RadioSettings)
-          {
-            serial_device.print("page set_radio\xff\xff\xff");
-          }
         }
       }
-*/
 
   };
 

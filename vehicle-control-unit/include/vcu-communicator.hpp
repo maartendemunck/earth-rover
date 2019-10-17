@@ -420,8 +420,8 @@ namespace earth_rover_vcu
                       "the 'radio configuration' message requires a payload size of at least 3 bytes");
         uint8_t buffer[nrf24l01_payload_size];
         buffer[0] = static_cast<uint8_t>(ResponseMessageType::RadioConfiguration);
-        buffer[1] = 0x01;  // TODO!
-        buffer[2] = 0x01;  // TODO!
+        buffer[1] = vcu.getHmiRadioPowerLevel();
+        buffer[2] = vcu.getVcuRadioPowerLevel();
         // Transmit radio configuration message.
         return sendMessage(buffer);
       }

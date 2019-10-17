@@ -46,6 +46,8 @@ namespace earth_rover_vcu
       uint8_t steering_input_channel {0};        //!< Steering servo input channel.
       uint8_t throttle_input_channel {3};        //!< ESC or throttle servo input channel.
       uint8_t gearbox_input_channel {2};         //!< Gearbox servo input channel.
+      uint8_t hmi_radio_power {1};               //!< HMI radio power level.
+      uint8_t vcu_radio_power {1};               //!< VCU radio power level.
 
       elapsedMillis since_last_control_message;  //!< Time since we received a control message.
       bool timeout_handler_called;               //!< Control message timeout called.
@@ -243,6 +245,24 @@ namespace earth_rover_vcu
       uint8_t getGearboxInputChannel()
       {
         return gearbox_input_channel;
+      }
+
+      //! Get the HMI radio's power level.
+      /*!
+       *  \return The HMI radio's power level.
+       */
+      uint8_t getHmiRadioPowerLevel()
+      {
+        return hmi_radio_power;
+      }
+
+      //! Get the VCU radio's power level.
+      /*!
+       *  \return The VCU radio's power level.
+       */
+      uint8_t getVcuRadioPowerLevel()
+      {
+        return vcu_radio_power;
       }
 
     private:

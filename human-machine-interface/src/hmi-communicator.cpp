@@ -159,6 +159,11 @@ namespace earth_rover_hmi
           }
           car_state.setStoredGearboxConfiguration(stored_configuration, complete);
         } break;
+        case ResponseMessageType::RadioConfiguration:
+        {
+          RadioConfigParams stored_configuration {buffer[1], buffer[2]};
+          car_state.setStoredRadioConfiguration(stored_configuration);
+        } break;
       }
     }
   }
@@ -178,12 +183,10 @@ namespace earth_rover_hmi
     {
       sendRequestConfigurationMessage(0x04);
     }
-    /*
     else if(!car_state.isRadioConfigurationAvailable())
     {
       sendRequestConfigurationMessage(0x80);
     }
-    */
   }
 
   bool HmiCommunicator::sendControlMessage()

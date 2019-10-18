@@ -211,6 +211,17 @@ namespace earth_rover_vcu
         return steering.getConfiguration();
       }
 
+      //! Configure the steering servo.
+      /*!
+       *  \param pulse_width_left Pulse width to maximally steer to the left.
+       *  \param pulse_width_center Pulse width to steer straight.
+       *  \param pulse_width_right Pulse width to maximally steer to the right.
+       */
+      void configureSteeringServo(uint16_t pulse_width_left, uint16_t pulse_width_center, uint16_t pulse_width_right)
+      {
+        steering.configureSteeringServo(pulse_width_left, pulse_width_center, pulse_width_right);
+      }
+
       //! Get the steering input channel.
       /*!
        *  \return The steering input channel.
@@ -218,6 +229,15 @@ namespace earth_rover_vcu
       uint8_t getSteeringInputChannel()
       {
         return steering_input_channel;
+      }
+
+      //! Set the steering input channel.
+      /*!
+       *  \param input_channel Steering input channel.
+       */
+      void setSteeringInputChannel(uint8_t input_channel)
+      {
+        steering_input_channel = input_channel;
       }
 
       //! Get the current configuration of the powertrain.
@@ -229,6 +249,17 @@ namespace earth_rover_vcu
         return powertrain.getConfiguration();
       }
 
+      //! Configure the ESC.
+      /*!
+       *  \param pulse_width_reverse Pulse width for full speed backwards.
+       *  \param pulse_width_stop Pulse width for stop.
+       *  \param pulse_width_forward Pulse width for full speed forwards.
+       */
+      void configureESC(uint16_t pulse_width_reverse, uint16_t pulse_width_stop, uint16_t pulse_width_forward)
+      {
+        powertrain.configureESC(pulse_width_reverse, pulse_width_stop, pulse_width_forward);
+      }
+
       //! Get the throttle input channel.
       /*!
        *  \return The steering input channel.
@@ -238,6 +269,25 @@ namespace earth_rover_vcu
         return throttle_input_channel;
       }
 
+      //! Set the throttle input channel.
+      /*!
+       *  \param input_channel Throttle input channel.
+       */
+      void setThrottleInputChannel(uint8_t input_channel)
+      {
+        throttle_input_channel = input_channel;
+      }
+
+      //! Configure the gearbox servo.
+      /*!
+       *  \param gear Gear.
+       *  \param pulse_width Pulse with for this gear.
+       */
+      void configureGearboxServo(int8_t gear, uint16_t pulse_width)
+      {
+        powertrain.configureGearboxServo(gear, pulse_width);
+      }
+
       //! Get the steering input channel.
       /*!
        *  \return The steering input channel.
@@ -245,6 +295,15 @@ namespace earth_rover_vcu
       uint8_t getGearboxInputChannel()
       {
         return gearbox_input_channel;
+      }
+
+      //! Set the gearbox input channel.
+      /*!
+       *  \param input_channel Gearbox input channel.
+       */
+      void setGearboxInputChannel(uint8_t input_channel)
+      {
+        gearbox_input_channel = input_channel;
       }
 
       //! Get the HMI radio's power level.

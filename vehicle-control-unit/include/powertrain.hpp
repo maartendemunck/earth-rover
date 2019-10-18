@@ -23,7 +23,7 @@ namespace earth_rover_vcu
 
   //! Powertrain (ESC and gearbox servo) device driver for the Earth Rover's VCU.
   /*!
-   *  This class abstracts the powertrain used in the Earth Rover.
+   *  This class abstracts the powertrain (ESC and two-speed transmission) used in the Earth Rover.
    * 
    *  \ingroup VCU
    */
@@ -44,13 +44,9 @@ namespace earth_rover_vcu
         //! Gearbox servo configuration.
         struct
         {
-          const uint8_t gear_count {3};  //!< Number of gears.
-          //! Gear configuration.
-          struct
-          {
-            int8_t number;         //!< Gear number (sequential, <0: reverse, 0: neutral, >0 forward or bidirectional).
-            uint16_t pulse_width;  //!< Pulse width for gear.
-          } gear[3];
+          uint16_t pulse_width_neutral;
+          uint16_t pulse_width_low;
+          uint16_t pulse_width_high;
         } gearbox;
       };
 
@@ -126,6 +122,13 @@ namespace earth_rover_vcu
        *  \param pulse_width_high Pulse width for high (second) gear.
        */
       void configureGearboxServo(uint16_t pulse_width_neutral, uint16_t pulse_width_low, uint16_t pulse_width_high);
+
+      //! Configure the gearbox servo.
+      /*!
+       *  \param gear Gear.
+       *  \param pulse_width Pulse width for this gear.
+       */
+      void configureGearboxServo(int8_t gear, uint16_t pulse_width);
 
       //! Get the current configuration.
       /*!

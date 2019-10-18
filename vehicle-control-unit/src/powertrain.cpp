@@ -88,6 +88,19 @@ namespace earth_rover_vcu
   }
 
 
+  void Powertrain::configureGearboxServo(int8_t gear, uint16_t pulse_width)
+  {
+    if(gear >= 0 && gear <= 2)
+    {
+      gearbox_pulse_widths[gear] = pulse_width;
+      if(gear == current_gear)
+      {
+        gearbox_servo.setPulseWidth(gearbox_pulse_widths[current_gear]);
+      }
+    }
+  }
+
+
   Powertrain::Configuration Powertrain::getConfiguration()
   {
     Configuration configuration;
@@ -95,11 +108,9 @@ namespace earth_rover_vcu
     configuration.esc.pulse_width_reverse = esc_configuration.minimum_pulse_width;
     configuration.esc.pulse_width_stop = esc_configuration.center_pulse_width;
     configuration.esc.pulse_width_forward = esc_configuration.maximum_pulse_width;
-    for(uint8_t index = 0; index <= 2; ++ index)
-    {
-      configuration.gearbox.gear[index].number = index;
-      configuration.gearbox.gear[index].pulse_width = gearbox_pulse_widths[index];
-    }
+    configuration.gearbox.pulse_width_neutral = gearbox_pulse_widths[0];
+    configuration.gearbox.pulse_width_low = gearbox_pulse_widths[1];
+    configuration.gearbox.pulse_width_high = gearbox_pulse_widths[2];
     return configuration;
   }
 

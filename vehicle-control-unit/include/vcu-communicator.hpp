@@ -36,7 +36,9 @@ namespace earth_rover_vcu
       //! Request message IDs.
       enum class RequestMessageType: uint8_t
       {
-        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30
+        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30,
+        ConfigureSteeringServo = 0x20, ConfigureEsc = 0x21, ConfigureGearboxServo = 0x22, ConfigureRadio = 0x24,
+        SaveConfiguration = 0x2f
       };
       //! Response message IDs.
       enum class ResponseMessageType: uint8_t
@@ -191,6 +193,38 @@ namespace earth_rover_vcu
                 sendRadioConfigurationMessage();
               }
             } break;
+            case RequestMessageType::ConfigureSteeringServo:
+            {
+              static_assert(nrf24l01_payload_size >= 8,
+                            "the 'configure steering servo' message requires a payload size of at least 8 bytes");
+              auto pulse_width_left = buffer[1] | (buffer[2] << 8);
+              auto pulse_width_center = buffer[3] | (buffer[4] << 8);
+              auto pulse_width_right = buffer[5] | (buffer[6] << 8);
+              vcu.configureSteeringServo(pulse_width_left, pulse_width_center, pulse_width_right);
+              vcu.setSteeringInputChannel(buffer[7]);
+            } break;
+            case RequestMessageType::ConfigureEsc:
+            {
+              static_assert(nrf24l01_payload_size >= 8,
+                            "the 'configure esc' message requires a payload size of at least 8 bytes");
+              auto pulse_width_backwards = buffer[1] | (buffer[2] << 8);
+              auto pulse_width_stop = buffer[3] | (buffer[4] << 8);
+              auto pulse_width_forward = buffer[5] | (buffer[6] << 8);
+              vcu.configureESC(pulse_width_backwards, pulse_width_stop, pulse_width_forward);
+              vcu.setThrottleInputChannel(buffer[7]);
+            } break;
+            case RequestMessageType::ConfigureGearboxServo:
+              static_assert(nrf24l01_payload_size >= 8,
+                            "the 'configure esc' message requires a payload size of at least 9 bytes");
+              for(unsigned index = 0; index < 2; ++ index)
+              {
+                if(buffer[2 + 3 * index] != 0x80)
+                {
+                  vcu.configureGearboxServo(
+                    buffer[2 + 3 * index], buffer[3 + 3 * index] | (buffer[4 + 3 * index] << 8));
+                }
+                vcu.setGearboxInputChannel(buffer[8]);
+              } break;
             default:
             {
               message_processed = false;
@@ -382,30 +416,22 @@ namespace earth_rover_vcu
         bool success = true;
         buffer[0] = static_cast<uint8_t>(ResponseMessageType::GearboxServoConfiguration);
         auto configuration = vcu.getPowertrainConfiguration();
-        uint8_t reverse_gears = configuration.gearbox.gear[0].number < 0? -configuration.gearbox.gear[0].number: 0;
-        uint8_t forward_gears = configuration.gearbox.gear[configuration.gearbox.gear_count - 1].number;
-        bool has_neutral_gear = !(configuration.gearbox.gear_count == reverse_gears + forward_gears);
-        buffer[1] = (reverse_gears & 0x07) | ((has_neutral_gear & 0x01) << 3) | ((forward_gears & 0x0f) << 4);
+        buffer[1] = 0x28;  // No reverse gears, has neutral, two forward gears.
+        buffer[2] = 0;
+        buffer[3] = configuration.gearbox.pulse_width_neutral & 0x00ff;
+        buffer[4] = (configuration.gearbox.pulse_width_neutral & 0xff00) >> 8;
+        buffer[5] = 1;
+        buffer[6] = configuration.gearbox.pulse_width_low & 0x00ff;
+        buffer[7] = (configuration.gearbox.pulse_width_low & 0xff00) >> 8;
         buffer[8] = vcu.getGearboxInputChannel();
-        for(uint8_t index = 0; index < configuration.gearbox.gear_count; index += 2)
-        {
-          buffer[2] = configuration.gearbox.gear[index].number;
-          buffer[3] = configuration.gearbox.gear[index].pulse_width & 0x00ff;
-          buffer[4] = (configuration.gearbox.gear[index].pulse_width & 0xff00) >> 8;
-          if(index + 1 < configuration.gearbox.gear_count)
-          {
-            buffer[5] = configuration.gearbox.gear[index + 1].number;
-            buffer[6] = configuration.gearbox.gear[index + 1].pulse_width & 0x00ff;
-            buffer[7] = (configuration.gearbox.gear[index + 1].pulse_width & 0xff00) >> 8;
-          }
-          else
-          {
-            buffer[5] = 0x80;
-            buffer[6] = 0x00;
-            buffer[7] = 0x00;
-          }
-          success &= sendMessage(buffer);
-        }
+        success &= sendMessage(buffer);
+        buffer[2] = 2;
+        buffer[3] = configuration.gearbox.pulse_width_high & 0x00ff;
+        buffer[4] = (configuration.gearbox.pulse_width_high & 0xff00) >> 8;
+        buffer[5] = 0x80;  // Unused
+        buffer[6] = 0x00;
+        buffer[7] = 0x00;
+        success &= sendMessage(buffer);
         // Return the status.
         return success;
       }

@@ -32,7 +32,9 @@ namespace earth_rover_hmi
       //! Request message IDs.
       enum class RequestMessageType: uint8_t
       {
-        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30
+        Control = 0x00, RequestState = 0x10, RequestConfiguration = 0x30,
+        ConfigureSteeringServo = 0x20, ConfigureEsc = 0x21, ConfigureGearboxServo = 0x22, ConfigureRadio = 0x24,
+        SaveConfiguration = 0x2f
       };
       //! Response message IDs.
       enum class ResponseMessageType: uint8_t
@@ -94,6 +96,9 @@ namespace earth_rover_hmi
       //! Request the next missing configuration parameter.
       void requestNextConfigurationParameter();
 
+      //! Send the next changed configuration parameter to the VCU.
+      void sendNextConfigurationParameter();
+
       //! Send a control message to the VCU.
       /*!
        *  Send a control message with the current car state.
@@ -117,6 +122,36 @@ namespace earth_rover_hmi
        *  \return True if the message was sent successfully, false if not.
        */
       bool sendRequestConfigurationMessage(uint8_t requested_configuration);
+
+      //! Send the current steering configuration to the VCU.
+      /*!
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendCurrentSteeringConfiguration();
+
+      //! Send the current steering configuration to the VCU.
+      /*!
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendCurrentThrottleConfiguration();
+
+      //! Send the current steering configuration to the VCU.
+      /*!
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendCurrentGearboxConfiguration();
+
+      //! Send the current steering configuration to the VCU.
+      /*!
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendCurrentRadioConfiguration();
+
+      //! Send a save configuration message to the VCU.
+      /*!
+       *  \return True if the message was sent successfully, false if not.
+       */
+      bool sendSaveConfigurationMessage();
 
       //! Send a message to the VCU.
       /*!

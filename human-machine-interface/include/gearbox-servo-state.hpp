@@ -73,7 +73,7 @@ namespace earth_rover_hmi
             return true;
           }
         }
-        return false;
+        return input_channel != rhs.input_channel;
       }
 
       //! Set pulse widths for all gears.

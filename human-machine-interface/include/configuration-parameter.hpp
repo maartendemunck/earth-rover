@@ -70,7 +70,7 @@ namespace earth_rover_hmi
       //! Default destructor.
       ~ConfigurationParameter() = default;
 
-      //! Set the value stored in non-volatile memory.
+      //! Set the value stored in the VCU.
       /*!
        *  \param new_value New value.
        *  \param is_complete True to mark the stored configuration parameter as available; false to mark it as
@@ -82,7 +82,7 @@ namespace earth_rover_hmi
         is_available = is_complete;
       }
 
-      //! Check whether value stored in non-volatile memory is available.
+      //! Check whether value stored in the VCU is available.
       /*!
        *  \return True if the stored value is available, false if it isn't.
        */
@@ -113,9 +113,9 @@ namespace earth_rover_hmi
         return value;
       }
 
-      //! Check whether the current value is stored in non-volatile memory (or unavailable).
+      //! Check whether the configuration parameter is available and the current value is stored in the VCU.
       /*!
-       *  \return True if the current value is stored in non-volatile memory, false if not.
+       *  \return True if the current value is stored in the VCU, false if not.
        */
       bool isCurrentConfigurationStored()
       {

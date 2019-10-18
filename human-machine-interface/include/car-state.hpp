@@ -124,8 +124,10 @@ namespace earth_rover_hmi
 
     private:
 
-      //! Flag indicatin whether the configuration stored in the VCU is available.
+      //! Flag indicating whether the configuration stored in the VCU is available.
       bool configuration_available;
+      //! Flag indicating that the current configuration should be saved to non-volatile memory.
+      bool configuration_save_request;
 
       //! Steering servo configuration and state.
       ServoState steering_servo;
@@ -162,9 +164,9 @@ namespace earth_rover_hmi
       {
         configuration_available =
           steering_servo.isConfigurationAvailable()
-          & esc.isConfigurationAvailable()
-          & gearbox_servo.isConfigurationAvailable()
-          & radio.isConfigurationAvailable();
+          && esc.isConfigurationAvailable()
+          && gearbox_servo.isConfigurationAvailable()
+          && radio.isConfigurationAvailable();
       }
 
     public:
@@ -204,6 +206,43 @@ namespace earth_rover_hmi
         return configuration_available;
       }
 
+      //! Check whether the current configuration is sent to the VCU.
+      /*!
+       *  \return True if the current configuration is sent to the VCU.
+       */
+      bool isCurrentConfigurationStored()
+      {
+        return
+          steering_servo.isCurrentConfigurationStored()
+          && esc.isCurrentConfigurationStored()
+          && gearbox_servo.isCurrentConfigurationStored()
+          && radio.isCurrentConfigurationStored();
+      }
+
+      //! Ask to save the current configuration.
+      void requestConfigurationSave()
+      {
+        if(configuration_available)  // Prevent overwriting the configuration before the VCU configuration is known.
+        {
+          configuration_save_request = true;
+        }
+      }
+
+      //! Check whether there is a request to save the configuration.
+      /*!
+       *  \return True if the the configuration should be saved to non-volatile memory.
+       */
+      bool isConfigurationSaveRequested()
+      {
+        return configuration_save_request;
+      }
+
+      //! Reset the save configuration flag.
+      void configurationSaved()
+      {
+        configuration_save_request = false;
+      }
+
       //! Set the steering input.
       /*!
        *  \param steering Steering input (-1000...0...+1000).
@@ -236,6 +275,21 @@ namespace earth_rover_hmi
       const ServoConfigParams & getSteeringConfiguration()
       {
         return steering_servo.getCurrentConfiguration();
+      }
+
+      //! Check whether all steering configuration changes in the HMI are stored in the VCU.
+      /*!
+       *  \return True if all steering configuration changes in the HMI are stored in the VCU.
+       */
+      bool isCurrentSteeringConfigurationStored()
+      {
+        return steering_servo.isCurrentConfigurationStored();
+      }
+
+      //! Mark the current steering configuration as stored in the VCU.
+      void steeringConfigurationStored()
+      {
+        steering_servo.setCurrentConfigurationStored();
       }
 
       //! Set the physical input channel used for steering.
@@ -303,6 +357,21 @@ namespace earth_rover_hmi
       const ServoConfigParams & getThrottleConfiguration()
       {
         return esc.getCurrentConfiguration();
+      }
+
+      //! Check whether all throttle configuration changes in the HMI are stored in the VCU.
+      /*!
+       *  \return True if all throttle configuration changes in the HMI are stored in the VCU.
+       */
+      bool isCurrentThrottleConfigurationStored()
+      {
+        return esc.isCurrentConfigurationStored();
+      }
+
+      //! Mark the current throttle configuration as stored in the VCU.
+      void throttleConfigurationStored()
+      {
+        esc.setCurrentConfigurationStored();
       }
 
       //! Set the physical input channel used for the throttle.
@@ -373,6 +442,21 @@ namespace earth_rover_hmi
         return gearbox_servo.getCurrentConfiguration();
       }
 
+      //! Check whether all gearbox configuration changes in the HMI are stored in the VCU.
+      /*!
+       *  \return True if all gearbox configuration changes in the HMI are stored in the VCU.
+       */
+      bool isCurrentGearboxConfigurationStored()
+      {
+        return gearbox_servo.isCurrentConfigurationStored();
+      }
+
+      //! Mark the current gearbox configuration as stored in the VCU.
+      void gearboxConfigurationStored()
+      {
+        gearbox_servo.setCurrentConfigurationStored();
+      }
+
       //! Set the physical input channel used to shift.
       /*!
        *  \param input_channel Physical input channel used to shift.
@@ -423,6 +507,21 @@ namespace earth_rover_hmi
       const RadioConfigParams & getRadioConfiguration()
       {
         return radio.getCurrentConfiguration();
+      }
+
+      //! Check whether all radio configuration changes in the HMI are stored in the VCU.
+      /*!
+       *  \return True if all radio configuration changes in the HMI are stored in the VCU.
+       */
+      bool isCurrentRadioConfigurationStored()
+      {
+        return radio.isCurrentConfigurationStored();
+      }
+
+      //! Mark the current radio configuration as stored in the VCU.
+      void radioConfigurationStored()
+      {
+        radio.setCurrentConfigurationStored();
       }
 
       //! Set the HMI radio's power level.

@@ -182,6 +182,13 @@ namespace earth_rover_hmi
             if(rx_buffer[0] == 0xa0u && rx_buffer_pointer == 5)  // Page change.
             {
               auto new_page = from_integral<HmiPage>(rx_buffer[1]);
+              if((current_page == HmiPage::SteeringSettings || current_page == HmiPage::ThrottleSettings
+                  || current_page == HmiPage::GearboxSettings || current_page == HmiPage::RadioSettings)
+                 && (new_page == HmiPage::Speedometer || new_page == HmiPage::Orientation
+                     || new_page == HmiPage::Location))
+              {
+                car_state.requestConfigurationSave();
+              }
               if(new_page != current_page)
               {
                 current_page = new_page;

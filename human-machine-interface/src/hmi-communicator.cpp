@@ -69,9 +69,26 @@ namespace earth_rover_hmi
       {
         sendRequestStateMessage(0x08);
       }
-      if(!car_state.isConfigurationAvailable() && control_message_sent && update_sequence_id % 2 == 1)
+      if(control_message_sent && update_sequence_id % 2 == 1)  // Use the odd sequence IDs for configuration.
       {
-        requestNextConfigurationParameter();
+        if(!car_state.isConfigurationAvailable())
+        {
+          // If the configuration stored in the VCU is not available, get it first.
+          requestNextConfigurationParameter();
+        }
+        else if(!car_state.isCurrentConfigurationStored())
+        {
+          // If the configuration is changed on the HMI, send it to the VCU.
+          sendNextConfigurationParameter();
+        }
+        else if(car_state.isConfigurationSaveRequested())
+        {
+          // If the configuration should be saved, send a 'save configuration' request to the VCU.
+          if(sendSaveConfigurationMessage())
+          {
+            car_state.configurationSaved();
+          }
+        }
       }
       ++ update_sequence_id;
       channel_changed = false;
@@ -189,6 +206,40 @@ namespace earth_rover_hmi
     }
   }
 
+
+  void HmiCommunicator::sendNextConfigurationParameter()
+  {
+    if(!car_state.isCurrentSteeringConfigurationStored())
+    {
+      if(sendCurrentSteeringConfiguration())
+      {
+        car_state.steeringConfigurationStored();
+      }
+    }
+    else if(!car_state.isCurrentThrottleConfigurationStored())
+    {
+      if(sendCurrentThrottleConfiguration())
+      {
+        car_state.throttleConfigurationStored();
+      }
+    }
+    else if(!car_state.isCurrentGearboxConfigurationStored())
+    {
+      if(sendCurrentGearboxConfiguration())
+      {
+        car_state.gearboxConfigurationStored();
+      }
+    }
+    else if(!car_state.isCurrentRadioConfigurationStored())
+    {
+      if(sendCurrentRadioConfiguration())
+      {
+        car_state.radioConfigurationStored();
+      }
+    }
+  }
+
+
   bool HmiCommunicator::sendControlMessage()
   {
     static_assert(nrf24l01_payload_size >= 5, "control message requires a payload size of at least 5 bytes");
@@ -226,10 +277,96 @@ namespace earth_rover_hmi
   bool HmiCommunicator::sendRequestConfigurationMessage(uint8_t requested_configuration)
   {
     static_assert(nrf24l01_payload_size >= 2,
-                  "the 'request state' message requires a payload size of at least 2 bytes");
+                  "the 'request configuration' message requires a payload size of at least 2 bytes");
     uint8_t buffer[nrf24l01_payload_size];
     buffer[0] = to_integral(RequestMessageType::RequestConfiguration);
     buffer[1] = requested_configuration;
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendCurrentSteeringConfiguration()
+  {
+    static_assert(nrf24l01_payload_size >= 8,
+                  "the 'send steering configuration' message requires a payload size of at least 8 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::ConfigureSteeringServo);
+    auto configuration = car_state.getSteeringConfiguration();
+    buffer[1] = (configuration.pulse_width_minimum & 0x00ff);
+    buffer[2] = (configuration.pulse_width_minimum & 0xff00) >> 8;
+    buffer[3] = (configuration.pulse_width_center & 0x00ff);
+    buffer[4] = (configuration.pulse_width_center & 0xff00) >> 8;
+    buffer[5] = (configuration.pulse_width_maximum & 0x00ff);
+    buffer[6] = (configuration.pulse_width_maximum & 0xff00) >> 8;
+    buffer[7] = configuration.input_channel;
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendCurrentThrottleConfiguration()
+  {
+    static_assert(nrf24l01_payload_size >= 8,
+                  "the 'send throttle configuration' message requires a payload size of at least 8 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::ConfigureEsc);
+    auto configuration = car_state.getThrottleConfiguration();
+    buffer[1] = (configuration.pulse_width_minimum & 0x00ff);
+    buffer[2] = (configuration.pulse_width_minimum & 0xff00) >> 8;
+    buffer[3] = (configuration.pulse_width_center & 0x00ff);
+    buffer[4] = (configuration.pulse_width_center & 0xff00) >> 8;
+    buffer[5] = (configuration.pulse_width_maximum & 0x00ff);
+    buffer[6] = (configuration.pulse_width_maximum & 0xff00) >> 8;
+    buffer[7] = configuration.input_channel;
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendCurrentGearboxConfiguration()
+  {
+    static_assert(nrf24l01_payload_size >= 9,
+                  "the 'send gearbox configuration' message requires a payload size of at least 9 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::ConfigureGearboxServo);
+    auto configuration = car_state.getGearboxConfiguration();
+    buffer[1] = 0x28;  // No reverse gears, has neutral, two forward gears.
+    buffer[2] = 0u;
+    buffer[3] = (configuration.getPulseWidth(0) & 0x00ff);
+    buffer[4] = (configuration.getPulseWidth(0) & 0xff00) >> 8;
+    buffer[5] = 1u;
+    buffer[6] = (configuration.getPulseWidth(1) & 0x00ff);
+    buffer[7] = (configuration.getPulseWidth(1) & 0xff00) >> 8;
+    buffer[8] = configuration.input_channel;
+    bool success = sendMessage(buffer);
+    buffer[2] = 2u;
+    buffer[3] = (configuration.getPulseWidth(2) & 0x00ff);
+    buffer[4] = (configuration.getPulseWidth(2) & 0xff00) >> 8;
+    buffer[5] = 0x80;
+    buffer[6] = 0x00;
+    buffer[7] = 0x00;
+    success &= sendMessage(buffer);
+    return success;
+  }
+  
+
+  bool HmiCommunicator::sendCurrentRadioConfiguration()
+  {
+    static_assert(nrf24l01_payload_size >= 8,
+                  "the 'send thradiorottle configuration' message requires a payload size of at least 3 bytes");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::ConfigureRadio);
+    auto configuration = car_state.getRadioConfiguration();
+    buffer[1] = configuration.tx_power;
+    buffer[2] = configuration.rx_power;
+    return sendMessage(buffer);
+  }
+
+
+  bool HmiCommunicator::sendSaveConfigurationMessage()
+  {
+    static_assert(nrf24l01_payload_size >= 1,
+                  "the 'save configuration' message requires a payload size of at least 1 byte");
+    uint8_t buffer[nrf24l01_payload_size];
+    buffer[0] = to_integral(RequestMessageType::SaveConfiguration);
     return sendMessage(buffer);
   }
 

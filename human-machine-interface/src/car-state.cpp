@@ -18,6 +18,7 @@ namespace earth_rover_hmi
     GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults, RadioConfigParams radio_defaults)
   :
     configuration_available {false},
+    configuration_save_request {false},
     steering_servo {std::move(steering_servo_defaults)},
     esc {std::move(esc_defaults)},
     gearbox_servo {std::move(gearbox_servo_defaults)},
@@ -177,7 +178,7 @@ namespace earth_rover_hmi
   void CarState::setGearPulseWidth(int8_t gear, uint16_t pulse_width)
   {
     GearboxServoConfigParams<0, 1, 2> current_configuration {gearbox_servo.getCurrentConfiguration()};
-    current_configuration.setPulseWidth(gear, pulse_width);;
+    current_configuration.setPulseWidth(gear, pulse_width);
     gearbox_servo.setCurrentConfiguration(current_configuration);
   }
 

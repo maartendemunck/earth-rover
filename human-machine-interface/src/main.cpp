@@ -99,13 +99,9 @@ void loop()
   }
 
   // Set drive commands.
-  // TODO: get channels from configuration;
-  constexpr uint8_t steering_channel = 1;
-  constexpr uint8_t throttle_channel = 4;
-  constexpr uint8_t gearbox_channel = 3;
-  car_state.setSteeringInput(inputs[steering_channel - 1]);
-  car_state.setThrottleInput(inputs[throttle_channel - 1]);
-  car_state.setGearboxInput(inputs[gearbox_channel - 1]);
+  car_state.setSteeringInput(inputs[car_state.getSteeringConfiguration().input_channel]);
+  car_state.setThrottleInput(inputs[car_state.getThrottleConfiguration().input_channel]);
+  car_state.setGearboxInput(inputs[car_state.getGearboxConfiguration().input_channel]);
 
   // Update car configuration and state.
   car_state.spinOnce();

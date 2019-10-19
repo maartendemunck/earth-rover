@@ -44,9 +44,9 @@ namespace earth_rover_vcu
         //! Gearbox servo configuration.
         struct
         {
-          uint16_t pulse_width_neutral;
-          uint16_t pulse_width_low;
-          uint16_t pulse_width_high;
+          uint16_t pulse_width_neutral;  //!< Pulse width for neutral gear.
+          uint16_t pulse_width_low;      //!< Pulse width for first (low) gear.
+          uint16_t pulse_width_high;     //!< Pulse width for second (high) gear.
         } gearbox;
       };
 

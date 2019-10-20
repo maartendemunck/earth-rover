@@ -46,6 +46,8 @@ namespace earth_rover_hmi
 
       //! nRF24L01+ device.
       RF24 nrf24l01_device;
+      //! nRF24L01+ radio power level.
+      uint8_t nrf24l01_power_level;
       //! Payload size of the nRF24L01+ packahes.
       static constexpr uint8_t nrf24l01_payload_size {9u};
       //! FHSS channel sequence.

@@ -18,6 +18,7 @@ namespace earth_rover_hmi
 
   HmiCommunicator::HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarState & car_state):
     nrf24l01_device {ce_pin, csn_pin},
+    nrf24l01_power_level {1u},
     nrf24l01_fhss_channel_index {0u},
     update_sequence_id {0u},
     car_state {car_state}
@@ -30,7 +31,7 @@ namespace earth_rover_hmi
   {
     // Setup nRF24L01+.
     nrf24l01_device.begin();
-    nrf24l01_device.setPALevel(RF24_PA_LOW);
+    nrf24l01_device.setPALevel(nrf24l01_power_level);
     nrf24l01_device.setDataRate(RF24_250KBPS);
     nrf24l01_device.setChannel(nrf24l01_fhss_channels[nrf24l01_fhss_channel_index]);
     nrf24l01_device.setRetries(4, 10);
@@ -46,6 +47,12 @@ namespace earth_rover_hmi
   {
     if(channel_changed == false && since_update >= update_interval - 10u)
     {
+      auto requested_power_level = car_state.getRadioConfiguration().tx_power;
+      if(nrf24l01_power_level != requested_power_level)
+      {
+        nrf24l01_device.setPALevel(nrf24l01_power_level);
+        nrf24l01_power_level = requested_power_level;
+      }
       changeChannel();
       channel_changed = true;
     }

@@ -306,6 +306,17 @@ namespace earth_rover_vcu
         gearbox_input_channel = input_channel;
       }
 
+      //! Configure the radios.
+      /*!
+       *  \param tx_power_level PA power level of the HMI's radio.
+       *  \param rx_power_level PA power level of the VCU's radio.
+       */
+      void configureRadios(uint8_t tx_power_level, uint8_t rx_power_level)
+      {
+        hmi_radio_power = tx_power_level;
+        vcu_radio_power = rx_power_level;
+      }
+
       //! Get the HMI radio's power level.
       /*!
        *  \return The HMI radio's power level.

@@ -225,6 +225,13 @@ namespace earth_rover_vcu
                 }
                 vcu.setGearboxInputChannel(buffer[8]);
               } break;
+            case RequestMessageType::ConfigureRadio:
+            {
+              static_assert(nrf24l01_payload_size >= 3,
+                            "the 'configure esc' message requires a payload size of at least 3 bytes");
+              vcu.configureRadios(buffer[1], buffer[2]);
+              nrf24l01_device.setPALevel(buffer[2]);  // Set the VCU radio PA power level directly from here.
+            } break;
             default:
             {
               message_processed = false;

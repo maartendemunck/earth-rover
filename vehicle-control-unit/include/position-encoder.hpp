@@ -35,10 +35,13 @@ namespace earth_rover_vcu
       ISRWrapper<digitalPinToInterrupt(hall_sensor_a_pin)> isr_wrapper;  //!< ISR for the first Hall effect sensor.
       const uint16_t pulses_per_km;                           //!< Number of pulses per km.
       volatile uint32_t odometer;                             //!< Current value of the odometer (in pulses).
+      uint32_t odometer_eeprom;                               //!< Value of the odometer saved in EEPROM (in pulses).
       volatile uint32_t tripmeter;                            //!< Current value of the trip meter (in pulses).
       elapsedMicros since_last_pulse;                         //!< Elapsed time since the last pulse.
       static constexpr uint8_t available_intervals = 8;       //!< Number of between-pulse-intervals stored.
       volatile uint32_t between_pulses[available_intervals];  //!< Stored between-pulse-intervals.
+
+      static constexpr uint16_t serialized_resolution {16};   //!< Resolution of serialized odometer value.
 
     public:
 
@@ -52,6 +55,7 @@ namespace earth_rover_vcu
       :
         pulses_per_km {pulses_per_km},
         odometer {odometer},
+        odometer_eeprom {odometer},
         tripmeter {tripmeter}
       {
         ;
@@ -131,6 +135,83 @@ namespace earth_rover_vcu
       void resetTripmeter()
       {
         tripmeter = 0;
+      }
+
+      //! Check whether the odometer record in EEPROM should be updated.
+      /*!
+       *  \return True if the odometer record in EEPROM should be updated.
+       */
+      bool saveRequired()
+      {
+        return (odometer - odometer_eeprom) > 16u;
+      }
+
+      //! Serialize the current value of the odometer.
+      /*!
+       *  This function uses the technique described [here](https://arduino.stackexchange.com/questions/16301/)
+       *  using (size - 2) counters and adds a 16 bit (uint16) offset.
+       *
+       *  \param buffer Output buffer.
+       *  \param size Size of the buffer.
+       *  \return True to write a new record, false to update the existing record (or if the serialization failed).
+       */
+      bool serialize(uint8_t * buffer, uint16_t size)
+      {
+        // Check size of the serialized record to prevent buffer overflows.
+        if(size < 3)
+        {
+          return false;
+        }
+        uint16_t counter_range = ((size - 2u) * UINT8_MAX + 1);
+        // Calculate values.
+        uint32_t value = odometer / serialized_resolution;
+        uint16_t offset = value / counter_range;
+        uint16_t counter = value % counter_range;
+        uint8_t base = counter / (size - 2u);
+        uint8_t augmented = counter % (size - 2u);
+        // Check whether we'd prefer to update the existing record or to write a new one.
+        bool write_new_record = false;
+        if(offset != (buffer[0] | (buffer[1] << 8)))
+        {
+          write_new_record = true;
+          buffer[0] = offset & 0x00ff;
+          buffer[1] = (offset & 0xff00) >> 8;
+        }
+        // Compose record.
+        for(uint8_t index = 0; index < size - 2u; ++ index)
+        {
+          buffer[2 + index] = index < augmented? base + 1: base;
+        }
+        odometer_eeprom = value * serialized_resolution;
+        return write_new_record;
+      }
+
+      //! Read the value of the odometer from a serialized record.
+      /*!
+       *  \param buffer Output buffer.
+       *  \param size Size of the output buffer.
+       *  \return True if the deserialization was successful, false if it failed.
+       */
+      bool deserialize(uint8_t * buffer, uint16_t size)
+      {
+        // Check size of the serialized record to prevent buffer overflows.
+        if(size < 3)
+        {
+          return false;
+        }
+        // Restore odometer value and set odometer.
+        uint16_t offset = buffer[0] | (buffer[1] << 8);
+        uint8_t base = buffer[size - 1];
+        uint8_t augmented = 0;
+        while(buffer[2 + augmented] > base)
+        {
+          ++ augmented;
+        }
+        uint32_t value = offset * ((size - 2u) * UINT8_MAX + 1) + (base * (size - 2u)) + augmented;
+        odometer_eeprom = value * serialized_resolution;
+        odometer = odometer_eeprom;
+        // Odometer successfully restored.
+        return true;
       }
 
     private:

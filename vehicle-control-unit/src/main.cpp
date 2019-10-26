@@ -17,9 +17,11 @@
 #include "neogps-wrapper.hpp"
 #include "vcu.hpp"
 #include "vcu-communicator.hpp"
+#include "vcu-configuration-manager.hpp"
 
 
 // #define SERIAL_DEBUG
+// #define RESET_EEPROM_MEMORY
 
 
 /*
@@ -64,6 +66,8 @@ earth_rover_vcu::NeoGpsWrapper<HardwareSerial> gps {Serial1, 0, 1};
 auto vcu = earth_rover_vcu::makeVcu(steering_servo, powertrain, lighting, position_encoder, imu, gps);
 //! VCU communicator.
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
+//! VCU configuration.
+auto configuration_manager = earth_rover_vcu::makeVcuConfigurationManager(position_encoder, 0u, 2048u);
 
 
 /*
@@ -84,8 +88,25 @@ void setup()
       ;
     }
   #endif
+  // Reset EEPROM memory (of enabled).
+  #ifdef RESET_EEPROM_MEMORY
+    for(uint16_t index = 0; index < 2048; ++ index)
+    {
+      EEPROM.update(index, 0xffu);
+    }
+    Serial.println("EEPROM memory cleared.");
+    while(true)
+    {
+      digitalWrite(LED_BUILTIN, 0);
+      delay(250);
+      digitalWrite(LED_BUILTIN, 1);
+      delay(250);
+    }
+  #endif
   // Configure SPI.
   SPI.setSCK(spi_sck_pin);  // Use the default SCK pin 13 as status LED.
+  // Read the configuration stored in EEPROM.
+  configuration_manager.setup();
   // Setup the VCU.
   vcu.setup();
   // Configure nRF24L01+ communication module.
@@ -99,4 +120,5 @@ void loop()
 {
   communicator.spinOnce();
   vcu.spinOnce();
+  configuration_manager.spinOnce();
 }

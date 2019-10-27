@@ -28,7 +28,7 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template <typename PositionEncoder_t>
+  template <typename PositionEncoder_t, typename Imu_t>
   class VcuConfigurationManager
   {
     private:
@@ -57,6 +57,7 @@ namespace earth_rover_vcu
       uint32_t newest_record_sequence;                  //!< Most recent sequence number used.
 
       PositionEncoder_t & position_encoder;  //!< Reference to the position encoder.
+      Imu_t & imu;                           //!< Reference to the IMU.
 
       //! Calculate the Fletcher-16 checksum.
       /*!
@@ -194,13 +195,14 @@ namespace earth_rover_vcu
        *  \param eeprom_size Size of the configuration area in the EEPROM memory.
        */
       VcuConfigurationManager(
-        PositionEncoder_t & position_encoder, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
+        PositionEncoder_t & position_encoder, Imu_t & imu, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
       :
         eeprom_offset {eeprom_offset},
         eeprom_size {eeprom_size},
         newest_record_index {UINT16_MAX},
         newest_record_sequence {0u},
-        position_encoder {position_encoder}
+        position_encoder {position_encoder},
+        imu {imu}
       {
         for(uint8_t index = 0; index < record_type_count; ++ index)
         {
@@ -246,12 +248,15 @@ namespace earth_rover_vcu
               switch(record_type)
               {
                 case RecordType::Odometer:
+                {
                   success = position_encoder.deserialize(record_data, record_data_size);
-                  break;
+                } break;
                 case RecordType::PositionEncoderCalibration:
                   break;
                 case RecordType::ImuCalibration:
-                  break;
+                {
+                  success = imu.deserialize(record_data, record_data_size);
+                } break;
                 case RecordType::SteeringServoConfiguration:
                   break;
                 case RecordType::EscConfiguration:
@@ -294,7 +299,14 @@ namespace earth_rover_vcu
        */
       void spinOnce()
       {
-        updateStoredConfiguration(position_encoder, RecordType::Odometer, false);
+        if(updateStoredConfiguration(position_encoder, RecordType::Odometer, false))
+        {
+          ;
+        }
+        else if(updateStoredConfiguration(imu, RecordType::ImuCalibration, true))
+        {
+          ;
+        }
       }
 
   };
@@ -310,10 +322,11 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template<typename PositionEncoder_t>
-  auto makeVcuConfigurationManager(PositionEncoder_t & position_encoder, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
+  template<typename PositionEncoder_t, typename Imu_t>
+  auto makeVcuConfigurationManager(
+    PositionEncoder_t & position_encoder, Imu_t & imu, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {
-    return VcuConfigurationManager<PositionEncoder_t>(position_encoder, eeprom_offset, eeprom_size);
+    return VcuConfigurationManager<PositionEncoder_t, Imu_t>(position_encoder, imu, eeprom_offset, eeprom_size);
   }
 
 }

@@ -386,9 +386,9 @@ namespace earth_rover_hmi
           {
             serial_device.printf("z_yaw.val=%d\xff\xff\xff", (90 + int16_t(orientation.data.yaw)) % 360);
             serial_device.printf("z_pitch.val=%d\xff\xff\xff",
-                (90 + 2 * int16_t(limit_value(orientation.data.pitch, -60., 60.))) % 360);
+                (360 + 90 + 2 * int16_t(limit_value(orientation.data.pitch, -60., 60.))) % 360);
             serial_device.printf("z_roll.val=%d\xff\xff\xff",
-                (90 + 2 * int16_t(limit_value(orientation.data.roll, -60., 60.))) % 360);
+                (360 + 90 + 2 * int16_t(limit_value(orientation.data.roll, -60., 60.))) % 360);
             serial_device.flush();
           }
           else

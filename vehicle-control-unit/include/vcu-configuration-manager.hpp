@@ -191,6 +191,7 @@ namespace earth_rover_vcu
       //! Constructor.
       /*!
        *  \param position_encoder Position encoder (for odometer value).
+       *  \param imu IMU (for calibration).
        *  \param eeprom_offset Location of the configuration area in the EEPROM memory.
        *  \param eeprom_size Size of the configuration area in the EEPROM memory.
        */
@@ -315,7 +316,9 @@ namespace earth_rover_vcu
   //! Factory function to create a VcuConfigurationManager object.
   /*!
    *  \tparam PositionEncoder_t Position encoder device driver type.
+   *  \tparam Imu_t IMU device driver type.
    *  \param position_encoder Position encoder device driver.
+   *  \param imu IMU device driver.
    *  \param eeprom_offset Offset of the configuration area in the EEPROM memory.
    *  \param eeprom_size Size of the configuration area in the EEPROM memory.
    *  \return VCU configuration manager with the given device drivers.

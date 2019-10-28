@@ -232,9 +232,9 @@ namespace earth_rover_vcu
               vcu.configureRadios(buffer[1], buffer[2]);
               nrf24l01_device.setPALevel(buffer[2]);  // Set the VCU radio PA power level directly from here.
             } break;
-            default:
+            case RequestMessageType::SaveConfiguration:
             {
-              message_processed = false;
+              vcu.saveConfiguration();
             } break;
           }
           if(message_processed == true)
@@ -283,7 +283,8 @@ namespace earth_rover_vcu
        */
       bool sendOrientationMessage()
       {
-        static_assert(nrf24l01_payload_size >= 8, "the 'orientation' message requires a payload size of at least 8 bytes");
+        static_assert(nrf24l01_payload_size >= 8,
+          "the 'orientation' message requires a payload size of at least 8 bytes");
         uint8_t buffer[nrf24l01_payload_size];
         // Compose orientation message.
         buffer[0] = static_cast<uint8_t>(ResponseMessageType::Orientation);

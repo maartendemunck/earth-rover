@@ -47,6 +47,7 @@ namespace earth_rover_vcu
       AdafruitBNO055<I2CDevice_t> bno055_device;  //!< Adafruit BNO055 device driver.
       bool bno055_device_configured;              //!< True if the device is configured.
       bool calibration_is_stored_in_eeprom;       //!< True if the calibration values are stored in EEPROM.
+      elapsedMillis since_last_calibration_save;  //!< Time since the calibration was stored in EEPROM.
 
     public:
 
@@ -119,17 +120,25 @@ namespace earth_rover_vcu
       bool isFullyCalibrated()
       {
         auto calibration_status = bno055_device.getCalibrationStatus();
+        /*
+        Serial.printf("BNO055 calib: sys = %u, acc = %u, gyr = %u, mag = %u\n",
+          uint16_t(calibration_status.system), uint16_t(calibration_status.accelerometer),
+          uint16_t(calibration_status.gyroscope), uint16_t(calibration_status.magnetometer));
+        */
         return (calibration_status.system == 3 && calibration_status.accelerometer == 3
                 && calibration_status.gyroscope == 3 && calibration_status.magnetometer == 3);
       }
 
       //! Check whether the IMU calibration should be written to the EEPROM.
       /*!
+       *  The calibration is written to EEPROM if the sensor is fully calibrated and the value was never written to
+       *  EEPROM or the calibration was written to EEPROM longer than 10 minutes ago.
        *  \return True if the IMU calibration should be written to the EEPROM.
        */
       bool saveRequired()
       {
-        return (calibration_is_stored_in_eeprom == false) && (isFullyCalibrated() == true);
+        return (calibration_is_stored_in_eeprom == false || since_last_calibration_save >= 10u*60u*1000u)
+               && (isFullyCalibrated() == true);
       }
 
       //! Save the configuration to a buffer.
@@ -168,7 +177,12 @@ namespace earth_rover_vcu
           data[19] = (calibration_values.accel_radius & 0xff00) >> 8;
           data[20] = calibration_values.mag_radius & 0x00ff;
           data[21] = (calibration_values.mag_radius & 0xff00) >> 8;
+          for(unsigned index = 22; index < size; ++ index)
+          {
+            data[index] = 0xffu;
+          }
           calibration_is_stored_in_eeprom = true;  // The calibration will be stored in the EEPROM.
+          since_last_calibration_save = 0u;
           return true;
         }
         else
@@ -206,9 +220,9 @@ namespace earth_rover_vcu
             setup();  // If the device is not yet configured, configure it now, before writing the calibration to it.
           }
           bno055_device.setCalibrationValues(calibration_values);
-          // We read the calibration from the EEPROM, so it is stored there, but mark it as not stored in EEPROM to
-          // allow a new calibration to be written to EEPROM if we redo the calibration procedure.
-          calibration_is_stored_in_eeprom = false;
+          // We read the calibration from the EEPROM, so it is stored there, but allow for recalibration.
+          calibration_is_stored_in_eeprom = true;
+          since_last_calibration_save = 0u;
           return true;
         }
         else

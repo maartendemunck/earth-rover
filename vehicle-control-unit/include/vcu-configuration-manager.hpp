@@ -28,7 +28,7 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template <typename PositionEncoder_t, typename Imu_t>
+  template <typename Steering_t, typename PositionEncoder_t, typename Imu_t>
   class VcuConfigurationManager
   {
     private:
@@ -56,6 +56,7 @@ namespace earth_rover_vcu
       uint16_t newest_record_index;                     //!< Most recent record index used.
       uint32_t newest_record_sequence;                  //!< Most recent sequence number used.
 
+      Steering_t & steering;                 //!< Reference to the steering servo.
       PositionEncoder_t & position_encoder;  //!< Reference to the position encoder.
       Imu_t & imu;                           //!< Reference to the IMU.
 
@@ -196,12 +197,15 @@ namespace earth_rover_vcu
        *  \param eeprom_size Size of the configuration area in the EEPROM memory.
        */
       VcuConfigurationManager(
-        PositionEncoder_t & position_encoder, Imu_t & imu, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
+        Steering_t & steering,
+        PositionEncoder_t & position_encoder, Imu_t & imu,
+        uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
       :
         eeprom_offset {eeprom_offset},
         eeprom_size {eeprom_size},
         newest_record_index {UINT16_MAX},
         newest_record_sequence {0u},
+        steering {steering},
         position_encoder {position_encoder},
         imu {imu}
       {
@@ -308,6 +312,10 @@ namespace earth_rover_vcu
         {
           ;
         }
+        else if(updateStoredConfiguration(steering, RecordType::SteeringServoConfiguration, true))
+        {
+          Serial.println("Stored steering servo configuration");
+        }
       }
 
   };
@@ -325,11 +333,14 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template<typename PositionEncoder_t, typename Imu_t>
+  template<typename SteeringServo_t, typename PositionEncoder_t, typename Imu_t>
   auto makeVcuConfigurationManager(
-    PositionEncoder_t & position_encoder, Imu_t & imu, uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
+    SteeringServo_t & steering_servo,
+    PositionEncoder_t & position_encoder, Imu_t & imu,
+    uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {
-    return VcuConfigurationManager<PositionEncoder_t, Imu_t>(position_encoder, imu, eeprom_offset, eeprom_size);
+    return VcuConfigurationManager<SteeringServo_t, PositionEncoder_t, Imu_t>(
+      steering_servo, position_encoder, imu, eeprom_offset, eeprom_size);
   }
 
 }

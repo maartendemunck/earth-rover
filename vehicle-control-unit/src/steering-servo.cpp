@@ -16,6 +16,9 @@ namespace earth_rover_vcu
   :
     pin_number {pin_number},
     steering_servo {pin_number, 2000u, 1500u, 1000u, true},
+    input_channel {0u},
+    input_channel_changed {false},
+    save_required {false},
     current_steering_angle {0}
   {
     ;
@@ -32,7 +35,7 @@ namespace earth_rover_vcu
   }
 
 
-  bool SteeringServo::saveConfiguration(uint8_t * data, uint16_t size)
+  bool SteeringServo::serialize(uint8_t * data, uint16_t size)
   {
     if(size >= 7u)
     {
@@ -43,7 +46,15 @@ namespace earth_rover_vcu
       data[3] = (configuration.center_pulse_width & 0xff00) >> 8;
       data[4] = configuration.maximum_pulse_width & 0x00ff;
       data[5] = (configuration.maximum_pulse_width & 0xff00) >> 8;
-      data[6] = data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5];
+      data[6] = input_channel;
+      for(unsigned index = 7; index < size; ++ index)
+      {
+        data[index] = 0xff;
+      }
+      // Reset changed and save flags (we write this configuration to EEPROM, so changes are stored).
+      steering_servo.resetConfigurationChanged();
+      input_channel_changed = false;
+      save_required = false;
       return true;
     }
     else
@@ -53,9 +64,9 @@ namespace earth_rover_vcu
   }
 
 
-  bool SteeringServo::loadConfiguration(uint8_t * data, uint16_t size)
+  bool SteeringServo::deserialize(uint8_t * data, uint16_t size)
   {
-    if(size >= 7 && data[6] == (data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5]))
+    if(size >= 7u)
     {
       auto pulse_width_left = uint16_t(data[0] | (data[1] << 8));
       auto pulse_width_center = uint16_t(data[2] | (data[3] << 8));
@@ -63,7 +74,12 @@ namespace earth_rover_vcu
       decltype(steering_servo)::Configuration configuration
         {pulse_width_left, pulse_width_center, pulse_width_right, pulse_width_center, true};
       steering_servo.setConfiguration(configuration);
-      steering_servo.setPosition(current_steering_angle);
+      steering_servo.setPosition(current_steering_angle);  // Enforce new pulse width limits.
+      input_channel = data[6];
+      // Reset changed and save flags (we got this configuration from EEPROM, so it's not a change).
+      steering_servo.resetConfigurationChanged();
+      input_channel_changed = false;
+      save_required = false;
       return true;
     }
     else

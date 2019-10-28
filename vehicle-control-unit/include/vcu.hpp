@@ -43,7 +43,6 @@ namespace earth_rover_vcu
       Gps_t & gps;                               //!< GPS device driver.
 
       // TODO: this is not the responsibility of the VCU. Move to configuration object.
-      uint8_t steering_input_channel {0};        //!< Steering servo input channel.
       uint8_t throttle_input_channel {3};        //!< ESC or throttle servo input channel.
       uint8_t gearbox_input_channel {2};         //!< Gearbox servo input channel.
       uint8_t hmi_radio_power {1};               //!< HMI radio power level.
@@ -228,7 +227,7 @@ namespace earth_rover_vcu
        */
       uint8_t getSteeringInputChannel()
       {
-        return steering_input_channel;
+        return steering.getInputChannel();
       }
 
       //! Set the steering input channel.
@@ -237,7 +236,7 @@ namespace earth_rover_vcu
        */
       void setSteeringInputChannel(uint8_t input_channel)
       {
-        steering_input_channel = input_channel;
+        steering.setInputChannel(input_channel);
       }
 
       //! Get the current configuration of the powertrain.
@@ -333,6 +332,15 @@ namespace earth_rover_vcu
       uint8_t getVcuRadioPowerLevel()
       {
         return vcu_radio_power;
+      }
+
+      //! Save the configuration to EEPROM.
+      void saveConfiguration()
+      {
+        steering.saveConfiguration();
+        // powertrain.saveConfiguration();
+        // TODO: move radio to a separate object and save the configuration to EEPROM.
+        // radio.saveConfiguration();  
       }
 
     private:

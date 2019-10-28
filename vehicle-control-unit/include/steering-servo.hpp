@@ -39,6 +39,9 @@ namespace earth_rover_vcu
 
       uint8_t pin_number;              //!< I/O pin used to control the steering servo.
       ConfiguredServo steering_servo;  //!< Steering servo controller.
+      uint8_t input_channel;           //!< Steering servo input channel.
+      bool input_channel_changed;      //!< True if the input channel changed.
+      bool save_required;              //!< True if the configuration should be saved to EEPROM.
       int16_t current_steering_angle;  //!< Current (normalized) steering angle (-1000...0...+1000).
 
     public:
@@ -99,8 +102,45 @@ namespace earth_rover_vcu
           {configuration.minimum_pulse_width, configuration.center_pulse_width, configuration.maximum_pulse_width};
       }
 
-      //! The (minimal) size of the configuration block.
-      static constexpr uint16_t configuration_size = 7u;
+      //! Set the steering servo's input channel.
+      /*!
+       *  \param new_input_channel New steering input channel.
+       */
+      void setInputChannel(uint8_t new_input_channel)
+      {
+        if(new_input_channel != input_channel)
+        {
+          input_channel = new_input_channel;
+          input_channel_changed = true;
+        }
+      }
+
+      //! Get the steering servo's input channel.
+      /*!
+       *  \return The steering input channel.
+       */
+      uint8_t getInputChannel()
+      {
+        return input_channel;
+      }
+
+      //! Save the steering servo's configuration to EEPROM.
+      void saveConfiguration()
+      {
+        if(steering_servo.isConfigurationChanged() || input_channel_changed)
+        {
+          save_required = true;
+        }
+      }
+
+      //! Check whether the steering servo's configuration should be written to EEPROM.
+      /*!
+       *  \return True if the steering servo's configuration should be written to EEPROM.
+       */
+      bool saveRequired()
+      {
+        return save_required;
+      }
 
       //! Save the configuration to a buffer.
       /*!
@@ -110,7 +150,7 @@ namespace earth_rover_vcu
        *  \param size Size of the buffer.
        *  \return true if the configuration is written; false if not (if the buffer isn't large enough).
        */
-      bool saveConfiguration(uint8_t * data, uint16_t size);
+      bool serialize(uint8_t * data, uint16_t size);
 
       //! Load the configuration from a buffer.
       /*!
@@ -120,7 +160,7 @@ namespace earth_rover_vcu
        *  \param size Size of the buffer.
        *  \return true if the configuration is applied; false if not (buffer not large enough or checksum wrong).
        */
-      bool loadConfiguration(uint8_t * data, uint16_t size);
+      bool deserialize(uint8_t * data, uint16_t size);
 
   };
 

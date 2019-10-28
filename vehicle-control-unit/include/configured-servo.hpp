@@ -35,6 +35,7 @@ namespace earth_rover_vcu
         uint16_t maximum_pulse_width;     //!< Maximum (normalized position = +1000) pulse width.
         uint16_t initial_pulse_width;     //!< Initial pulse width.
         bool enforce_pulse_width_limits;  //!< Enforce the minimum and maximum pulse widths when calling setPulseWidth.
+
         //! Constructor.
         /*!
          *  \param minimum_pulse_width Minimum (normalized position = -1000) pulse width.
@@ -55,6 +56,20 @@ namespace earth_rover_vcu
         {
           ;
         }
+
+        //! != operator.
+        /*!
+         *  \param rhs Right hand side of the comparison.
+         *  \return True if the configurations are different, false if they are equal.
+         */
+        bool operator!= (const Configuration & rhs) const
+        {
+          return minimum_pulse_width != rhs.minimum_pulse_width
+                 || center_pulse_width != rhs.center_pulse_width
+                 || maximum_pulse_width != rhs.maximum_pulse_width
+                 || initial_pulse_width != rhs.initial_pulse_width
+                 || enforce_pulse_width_limits != rhs.enforce_pulse_width_limits;
+        }
       };
 
     private:
@@ -65,6 +80,7 @@ namespace earth_rover_vcu
       Servo servo;                          //!< Servo instance.
       Configuration configuration;          //!< Current configuration.
       uint16_t current_pulse_width;         //!< Current pulse width.
+      bool changed;                         //!< True if the configuration is changed.
 
     public:
 
@@ -127,6 +143,16 @@ namespace earth_rover_vcu
       const Configuration & getConfiguration() const
       {
         return configuration;
+      }
+
+      bool isConfigurationChanged()
+      {
+        return changed;
+      }
+
+      void resetConfigurationChanged()
+      {
+        changed = false;
       }
 
     private:

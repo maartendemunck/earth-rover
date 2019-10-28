@@ -99,20 +99,28 @@ namespace earth_rover_vcu
 
   void ConfiguredServo::setDefaultConfiguration()
   {
-    configuration = default_configuration;
-    if(configuration.enforce_pulse_width_limits)
+    if(configuration != default_configuration)
     {
-      setPulseWidth(current_pulse_width);
+      configuration = default_configuration;
+      changed = true;
+      if(configuration.enforce_pulse_width_limits)
+      {
+        setPulseWidth(current_pulse_width);
+      }
     }
   }
 
 
   void ConfiguredServo::setConfiguration(const ConfiguredServo::Configuration & new_configuration)
   {
-    configuration = new_configuration;
-    if(configuration.enforce_pulse_width_limits)
+    if(new_configuration != configuration)
     {
-      setPulseWidth(current_pulse_width);
+      configuration = new_configuration;
+      changed = true;
+      if(configuration.enforce_pulse_width_limits)
+      {
+        setPulseWidth(current_pulse_width);
+      }
     }
   }
 

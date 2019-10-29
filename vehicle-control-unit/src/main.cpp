@@ -68,7 +68,7 @@ auto vcu = earth_rover_vcu::makeVcu(steering_servo, powertrain, lighting, positi
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 //! VCU configuration.
 auto configuration_manager = earth_rover_vcu::makeVcuConfigurationManager(
-  steering_servo, position_encoder, imu, 0u, 2048u);
+  steering_servo, powertrain, position_encoder, imu, 0u, 2048u);
 
 
 /*

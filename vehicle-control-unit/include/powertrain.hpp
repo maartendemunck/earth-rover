@@ -57,6 +57,10 @@ namespace earth_rover_vcu
       ConfiguredServo esc;               //!< ESC controller.
       ConfiguredServo gearbox_servo;     //!< Gearbox servo controller.
       uint16_t gearbox_pulse_widths[3];  //!< Gearbox servo pulse widths for the different gears.
+      uint8_t throttle_input_channel;    //!< Throttle input channel.
+      uint8_t gearbox_input_channel;     //!< Gearbox input channel.
+      bool input_channel_changed;        //!< True if one of the input channels changed.
+      bool save_required;                //!< True if the configuration should be saved to EEPROM.
       int16_t current_throttle_setting;  //!< Current (normalized) throttle setting (-1000...0...+1000).
       int8_t current_gear;               //!< Current gear.
       int8_t requested_gear;             //!< Requested gear.
@@ -136,28 +140,83 @@ namespace earth_rover_vcu
        */
       Configuration getConfiguration();
 
-      //! The (minimal) size of the configuration block.
-      static constexpr uint16_t configuration_size = 13u;
+      //! Set the throttle input channel.
+      /*!
+       *  \param new_input_channel New throttle input channel.
+       */
+      void setThrottleInputChannel(uint8_t new_input_channel)
+      {
+        if(new_input_channel != throttle_input_channel)
+        {
+          throttle_input_channel = new_input_channel;
+          input_channel_changed = true;
+        }
+      }
+
+      //! Get the throttle input channel.
+      /*!
+       *  \return The throttle input channel.
+       */
+      uint8_t getThrottleInputChannel()
+      {
+        return throttle_input_channel;
+      }
+
+      //! Set the gearbox servo's input channel.
+      /*!
+       *  \param new_input_channel New gearbox servo input channel.
+       */
+      void setGearboxInputChannel(uint8_t new_input_channel)
+      {
+        if(new_input_channel != gearbox_input_channel)
+        {
+          gearbox_input_channel = new_input_channel;
+          input_channel_changed = true;
+        }
+      }
+
+      //! Get the gearbox servo's input channel.
+      /*!
+       *  \return The gearbox servo's input channel.
+       */
+      uint8_t getGearboxInputChannel()
+      {
+        return gearbox_input_channel;
+      }
+
+      //! Save the powertrain's configuration to EEPROM.
+      void saveConfiguration()
+      {
+        if(esc.isConfigurationChanged() || gearbox_servo.isConfigurationChanged() || input_channel_changed)
+        {
+          save_required = true;
+        }
+      }
+
+      //! Check whether the powertrain's configuration should be written to EEPROM.
+      /*!
+       *  \return True if the powertrain's configuration should be written to EEPROM.
+       */
+      bool saveRequired()
+      {
+        return save_required;
+      }
 
       //! Save the configuration to a buffer.
       /*!
-       *  The buffer should be at least getConfigurationSize bytes. If not, no configuration is written.
-       * 
        *  \param data Pointer to the buffer.
        *  \param size Size of the buffer.
        *  \return true if the configuration is written; false if not (if the buffer isn't large enough).
        */
-      bool saveConfiguration(uint8_t * data, uint16_t size);
+      bool serialize(uint8_t * data, uint16_t size);
 
       //! Load the configuration from a buffer.
       /*!
-       *  The buffer should be at least getConfigurationSize bytes. If not, no configuration is read or applied.
-       * 
        *  \param data Pointer to the buffer.
        *  \param size Size of the buffer.
        *  \return true if the configuration is applied; false if not (buffer not large enough or checksum wrong).
        */
-      bool loadConfiguration(uint8_t * data, uint16_t size);
+      bool deserialize(uint8_t * data, uint16_t size);
       
   };
 

@@ -22,6 +22,10 @@ namespace earth_rover_vcu
     esc {esc_pin_number, 1000u, 1500u, 2000u, true},
     gearbox_servo {gearbox_servo_pin_number, 1000u, 1500u, 2000u, false},
     gearbox_pulse_widths {1480u, 1150u, 1800u},
+    throttle_input_channel {3u},
+    gearbox_input_channel {2u},
+    input_channel_changed {false},
+    save_required {false},
     current_throttle_setting {0},
     current_gear {0}
   {
@@ -115,9 +119,9 @@ namespace earth_rover_vcu
   }
 
   
-  bool Powertrain::saveConfiguration(uint8_t * data, uint16_t size)
+  bool Powertrain::serialize(uint8_t * data, uint16_t size)
   {
-    if(size >= 13u)
+    if(size >= 14u)
     {
       auto esc_configuration = esc.getConfiguration();
       data[0] = esc_configuration.minimum_pulse_width & 0x00ff;
@@ -132,8 +136,17 @@ namespace earth_rover_vcu
       data[9] = (gearbox_pulse_widths[1] & 0xff00) >> 8;
       data[10] = gearbox_pulse_widths[2] & 0x00ff;
       data[11] = (gearbox_pulse_widths[2] & 0xff00) >> 8;
-      data[12] = data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5] ^ data[6] ^ data[7] ^ data[8] ^ data[9]
-                 ^ data[10] ^ data[11];
+      data[12] = throttle_input_channel;
+      data[13] = gearbox_input_channel;
+      for(unsigned index = 14; index < size; ++ index)
+      {
+        data[index] = 0xff;
+      }
+      // Reset changed and save flags (we write this configuration to EEPROM, so changes are stored).
+      esc.resetConfigurationChanged();
+      gearbox_servo.resetConfigurationChanged();
+      input_channel_changed = false;
+      save_required = false;
       return true;
     }
     else
@@ -144,10 +157,9 @@ namespace earth_rover_vcu
   }
 
 
-  bool Powertrain::loadConfiguration(uint8_t * data, uint16_t size)
+  bool Powertrain::deserialize(uint8_t * data, uint16_t size)
   {
-    if(size >= 13u && data[12] == (data[0] ^ data[1] ^ data[2] ^ data[3] ^ data[4] ^ data[5]
-                                   ^ data[6] ^ data[7] ^ data[8] ^ data[9] ^ data[10] ^ data[11]))
+    if(size >= 14u)
     {
       auto pulse_width_reverse = uint16_t(data[0] | (data[1] << 8));
       auto pulse_width_stop = uint16_t(data[2] | (data[3] << 8));
@@ -159,6 +171,13 @@ namespace earth_rover_vcu
       gearbox_pulse_widths[0] = uint16_t(data[6] | (data[7] << 8));
       gearbox_pulse_widths[1] = uint16_t(data[8] | (data[9] << 8));
       gearbox_pulse_widths[2] = uint16_t(data[10] | (data[11] << 8));
+      throttle_input_channel = data[12];
+      gearbox_input_channel = data[13];
+      // Reset changed and save flags (we got this configuration from EEPROM, so it's not a change).
+      esc.resetConfigurationChanged();
+      gearbox_servo.resetConfigurationChanged();
+      input_channel_changed = false;
+      save_required = false;
       return true;
     }
     else

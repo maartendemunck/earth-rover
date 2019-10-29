@@ -144,8 +144,6 @@ namespace earth_rover_vcu
 
       //! Save the configuration to a buffer.
       /*!
-       *  The buffer should be at least getConfigurationSize bytes. If not, no configuration is written.
-       * 
        *  \param data Pointer to the buffer.
        *  \param size Size of the buffer.
        *  \return true if the configuration is written; false if not (if the buffer isn't large enough).
@@ -154,8 +152,6 @@ namespace earth_rover_vcu
 
       //! Load the configuration from a buffer.
       /*!
-       *  The buffer should be at least getConfigurationSize bytes. If not, no configuration is read or applied.
-       * 
        *  \param data Pointer to the buffer.
        *  \param size Size of the buffer.
        *  \return true if the configuration is applied; false if not (buffer not large enough or checksum wrong).

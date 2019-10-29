@@ -43,8 +43,6 @@ namespace earth_rover_vcu
       Gps_t & gps;                               //!< GPS device driver.
 
       // TODO: this is not the responsibility of the VCU. Move to configuration object.
-      uint8_t throttle_input_channel {3};        //!< ESC or throttle servo input channel.
-      uint8_t gearbox_input_channel {2};         //!< Gearbox servo input channel.
       uint8_t hmi_radio_power {1};               //!< HMI radio power level.
       uint8_t vcu_radio_power {1};               //!< VCU radio power level.
 
@@ -265,7 +263,7 @@ namespace earth_rover_vcu
        */
       uint8_t getThrottleInputChannel()
       {
-        return throttle_input_channel;
+        return powertrain.getThrottleInputChannel();
       }
 
       //! Set the throttle input channel.
@@ -274,7 +272,7 @@ namespace earth_rover_vcu
        */
       void setThrottleInputChannel(uint8_t input_channel)
       {
-        throttle_input_channel = input_channel;
+        powertrain.setThrottleInputChannel(input_channel);
       }
 
       //! Configure the gearbox servo.
@@ -293,7 +291,7 @@ namespace earth_rover_vcu
        */
       uint8_t getGearboxInputChannel()
       {
-        return gearbox_input_channel;
+        return powertrain.getGearboxInputChannel();
       }
 
       //! Set the gearbox input channel.
@@ -302,7 +300,7 @@ namespace earth_rover_vcu
        */
       void setGearboxInputChannel(uint8_t input_channel)
       {
-        gearbox_input_channel = input_channel;
+        powertrain.setGearboxInputChannel(input_channel);
       }
 
       //! Configure the radios.

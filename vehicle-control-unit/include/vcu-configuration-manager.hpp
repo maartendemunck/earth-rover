@@ -24,13 +24,14 @@ namespace earth_rover_vcu
    *  implements some kind of wear leveling algorithm to enhance the life of the Teensy's EEPROM. The actual
    *  serialization of configuration and calibration settings is done by the subsystems.
    * 
-   *  \tparam Steering_t Actual type of the steering servo device driver.
+   *  \tparam Steering_t Actual type of the steering device driver.
+   *  \tparam Powertrain_t Actual type of the powertrain device driver.
    *  \tparam PositionEncoder_t Actual type of the position encoder device driver.
    *  \tparam Imu_t Actual type of the IMU device driver.
    * 
    *  \ingroup VCU
    */
-  template <typename Steering_t, typename PositionEncoder_t, typename Imu_t>
+  template <typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t>
   class VcuConfigurationManager
   {
     private:
@@ -45,11 +46,10 @@ namespace earth_rover_vcu
         PositionEncoderCalibration,  //!< Calibration of the position encoder.
         ImuCalibration,              //!< Calibration of the IMU.
         SteeringServoConfiguration,  //!< Configuration of the steering servo.
-        EscConfiguration,            //!< Configuration of the ESC.
-        GearboxServoConfiguration,   //!< Configuration of the Gearbox servo.
+        PowertrainConfiguration,     //!< Configuration of the powertrain (ESC and gearbox servo).
         RadioConfiguration           //!< Configuration of the radios.
       };
-      static constexpr uint8_t record_type_count {7u};  //!< Number of record types (for array sizes).
+      static constexpr uint8_t record_type_count {6u};  //!< Number of record types (for array sizes).
 
       uint32_t eeprom_offset;  //!< Location of the configuration area in the EEPROM memory.
       uint32_t eeprom_size;    //!< Size of the configuration area in the EEPROM memory.
@@ -59,6 +59,7 @@ namespace earth_rover_vcu
       uint32_t newest_record_sequence;                  //!< Most recent sequence number used.
 
       Steering_t & steering;                 //!< Reference to the steering servo.
+      Powertrain_t & powertrain;             //!< Reference to the powertrain.
       PositionEncoder_t & position_encoder;  //!< Reference to the position encoder.
       Imu_t & imu;                           //!< Reference to the IMU.
 
@@ -194,13 +195,14 @@ namespace earth_rover_vcu
       //! Constructor.
       /*!
        *  \param steering Steering servo (for steering servo configuration).
+       *  \param powertrain Powertrain (for ESC and gearbox servo configuration).
        *  \param position_encoder Position encoder (for odometer value).
        *  \param imu IMU (for calibration).
        *  \param eeprom_offset Location of the configuration area in the EEPROM memory.
        *  \param eeprom_size Size of the configuration area in the EEPROM memory.
        */
       VcuConfigurationManager(
-        Steering_t & steering,
+        Steering_t & steering, Powertrain_t & powertrain,
         PositionEncoder_t & position_encoder, Imu_t & imu,
         uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
       :
@@ -209,6 +211,7 @@ namespace earth_rover_vcu
         newest_record_index {UINT16_MAX},
         newest_record_sequence {0u},
         steering {steering},
+        powertrain {powertrain},
         position_encoder {position_encoder},
         imu {imu}
       {
@@ -260,19 +263,25 @@ namespace earth_rover_vcu
                   success = position_encoder.deserialize(record_data, record_data_size);
                 } break;
                 case RecordType::PositionEncoderCalibration:
-                  break;
+                {
+                  // Currently unused.
+                } break;
                 case RecordType::ImuCalibration:
                 {
                   success = imu.deserialize(record_data, record_data_size);
                 } break;
                 case RecordType::SteeringServoConfiguration:
-                  break;
-                case RecordType::EscConfiguration:
-                  break;
-                case RecordType::GearboxServoConfiguration:
-                  break;
+                {
+                  success = steering.deserialize(record_data, record_data_size);
+                } break;
+                case RecordType::PowertrainConfiguration:
+                {
+                  success = powertrain.deserialize(record_data, record_data_size);
+                } break;
                 case RecordType::RadioConfiguration:
-                  break;
+                {
+                  // TODO!
+                } break;
               }
               if(success)
               {
@@ -317,7 +326,11 @@ namespace earth_rover_vcu
         }
         else if(updateStoredConfiguration(steering, RecordType::SteeringServoConfiguration, true))
         {
-          Serial.println("Stored steering servo configuration");
+          Serial.println("Stored steering configuration");  // DEBUG
+        }
+        else if(updateStoredConfiguration(powertrain, RecordType::PowertrainConfiguration, true))
+        {
+          Serial.println("Stored powertrain configuration");  // DEBUG
         }
       }
 
@@ -327,9 +340,11 @@ namespace earth_rover_vcu
   //! Factory function to create a VcuConfigurationManager object.
   /*!
    *  \tparam Steering_t Steering device driver type.
+   *  \tparam Powertrain_t Powertrain device driver type.
    *  \tparam PositionEncoder_t Position encoder device driver type.
    *  \tparam Imu_t IMU device driver type.
    *  \param steering Steering device driver.
+   *  \param powertrain Powertrain device driver.
    *  \param position_encoder Position encoder device driver.
    *  \param imu IMU device driver.
    *  \param eeprom_offset Offset of the configuration area in the EEPROM memory.
@@ -338,14 +353,14 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template<typename Steering_t, typename PositionEncoder_t, typename Imu_t>
+  template<typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t>
   auto makeVcuConfigurationManager(
-    Steering_t & steering,
+    Steering_t & steering, Powertrain_t powertrain,
     PositionEncoder_t & position_encoder, Imu_t & imu,
     uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {
-    return VcuConfigurationManager<Steering_t, PositionEncoder_t, Imu_t>(
-      steering, position_encoder, imu, eeprom_offset, eeprom_size);
+    return VcuConfigurationManager<Steering_t, Powertrain_t, PositionEncoder_t, Imu_t>(
+      steering, powertrain, position_encoder, imu, eeprom_offset, eeprom_size);
   }
 
 }

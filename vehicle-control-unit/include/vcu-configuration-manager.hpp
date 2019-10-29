@@ -330,15 +330,21 @@ namespace earth_rover_vcu
         }
         else if(updateStoredConfiguration(steering, RecordType::SteeringServoConfiguration, true))
         {
-          Serial.println("Stored steering configuration");  // DEBUG
+          // DEBUG
+          // Serial.println("Stored steering configuration");
+          ;
         }
         else if(updateStoredConfiguration(powertrain, RecordType::PowertrainConfiguration, true))
         {
-          Serial.println("Stored powertrain configuration");  // DEBUG
+          // DEBUG
+          // Serial.println("Stored powertrain configuration");
+          ;
         }
         else if(updateStoredConfiguration(radio, RecordType::RadioConfiguration, true))
         {
-          Serial.println("Stored radio configuration");  // DEBUG
+          // DEBUG
+          // Serial.println("Stored radio configuration");
+          ;
         }
       }
 
@@ -365,7 +371,7 @@ namespace earth_rover_vcu
    */
   template<typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t, typename Radio_t>
   auto makeVcuConfigurationManager(
-    Steering_t & steering, Powertrain_t powertrain,
+    Steering_t & steering, Powertrain_t & powertrain,
     PositionEncoder_t & position_encoder, Imu_t & imu, Radio_t & radio,
     uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {

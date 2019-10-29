@@ -28,10 +28,11 @@ namespace earth_rover_vcu
    *  \tparam Powertrain_t Actual type of the powertrain device driver.
    *  \tparam PositionEncoder_t Actual type of the position encoder device driver.
    *  \tparam Imu_t Actual type of the IMU device driver.
+   *  \tparam Radio_t Actual type of the radio configuration.
    * 
    *  \ingroup VCU
    */
-  template <typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t>
+  template <typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t, typename Radio_t>
   class VcuConfigurationManager
   {
     private:
@@ -62,6 +63,7 @@ namespace earth_rover_vcu
       Powertrain_t & powertrain;             //!< Reference to the powertrain.
       PositionEncoder_t & position_encoder;  //!< Reference to the position encoder.
       Imu_t & imu;                           //!< Reference to the IMU.
+      Radio_t & radio;                       //!< Reference to the radio configuration.
 
       //! Calculate the Fletcher-16 checksum.
       /*!
@@ -198,12 +200,13 @@ namespace earth_rover_vcu
        *  \param powertrain Powertrain (for ESC and gearbox servo configuration).
        *  \param position_encoder Position encoder (for odometer value).
        *  \param imu IMU (for calibration).
+       *  \param radio Radio configuration.
        *  \param eeprom_offset Location of the configuration area in the EEPROM memory.
        *  \param eeprom_size Size of the configuration area in the EEPROM memory.
        */
       VcuConfigurationManager(
         Steering_t & steering, Powertrain_t & powertrain,
-        PositionEncoder_t & position_encoder, Imu_t & imu,
+        PositionEncoder_t & position_encoder, Imu_t & imu, Radio_t & radio,
         uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
       :
         eeprom_offset {eeprom_offset},
@@ -213,7 +216,8 @@ namespace earth_rover_vcu
         steering {steering},
         powertrain {powertrain},
         position_encoder {position_encoder},
-        imu {imu}
+        imu {imu},
+        radio {radio}
       {
         for(uint8_t index = 0; index < record_type_count; ++ index)
         {
@@ -280,7 +284,7 @@ namespace earth_rover_vcu
                 } break;
                 case RecordType::RadioConfiguration:
                 {
-                  // TODO!
+                  success = radio.deserialize(record_data, record_data_size);
                 } break;
               }
               if(success)
@@ -332,6 +336,10 @@ namespace earth_rover_vcu
         {
           Serial.println("Stored powertrain configuration");  // DEBUG
         }
+        else if(updateStoredConfiguration(radio, RecordType::RadioConfiguration, true))
+        {
+          Serial.println("Stored radio configuration");  // DEBUG
+        }
       }
 
   };
@@ -343,24 +351,26 @@ namespace earth_rover_vcu
    *  \tparam Powertrain_t Powertrain device driver type.
    *  \tparam PositionEncoder_t Position encoder device driver type.
    *  \tparam Imu_t IMU device driver type.
+   *  \tparam Radio_t Radio configuration type.
    *  \param steering Steering device driver.
    *  \param powertrain Powertrain device driver.
    *  \param position_encoder Position encoder device driver.
    *  \param imu IMU device driver.
+   *  \param radio Radio configuration.
    *  \param eeprom_offset Offset of the configuration area in the EEPROM memory.
    *  \param eeprom_size Size of the configuration area in the EEPROM memory.
    *  \return VCU configuration manager with the given device drivers.
    * 
    *  \ingroup VCU
    */
-  template<typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t>
+  template<typename Steering_t, typename Powertrain_t, typename PositionEncoder_t, typename Imu_t, typename Radio_t>
   auto makeVcuConfigurationManager(
     Steering_t & steering, Powertrain_t powertrain,
-    PositionEncoder_t & position_encoder, Imu_t & imu,
+    PositionEncoder_t & position_encoder, Imu_t & imu, Radio_t & radio,
     uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {
-    return VcuConfigurationManager<Steering_t, Powertrain_t, PositionEncoder_t, Imu_t>(
-      steering, powertrain, position_encoder, imu, eeprom_offset, eeprom_size);
+    return VcuConfigurationManager<Steering_t, Powertrain_t, PositionEncoder_t, Imu_t, Radio_t>(
+      steering, powertrain, position_encoder, imu, radio, eeprom_offset, eeprom_size);
   }
 
 }

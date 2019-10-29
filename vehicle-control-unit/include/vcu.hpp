@@ -30,7 +30,7 @@ namespace earth_rover_vcu
    *  \ingroup VCU
    */
   template<typename Steering_t, typename Powertrain_t, typename Lighting_t,
-           typename PositionEncoder_t, typename Imu_t, typename Gps_t>
+           typename PositionEncoder_t, typename Imu_t, typename Gps_t, typename Radio_t>
   class Vcu
   {
     private:
@@ -41,10 +41,7 @@ namespace earth_rover_vcu
       PositionEncoder_t & position_encoder;      //!< Position encoder device driver.
       Imu_t & imu;                               //!< IMU device driver.
       Gps_t & gps;                               //!< GPS device driver.
-
-      // TODO: this is not the responsibility of the VCU. Move to configuration object.
-      uint8_t hmi_radio_power {1};               //!< HMI radio power level.
-      uint8_t vcu_radio_power {1};               //!< VCU radio power level.
+      Radio_t & radio;                           //!< Radio configuration.
 
       elapsedMillis since_last_control_message;  //!< Time since we received a control message.
       bool timeout_handler_called;               //!< Control message timeout called.
@@ -59,17 +56,19 @@ namespace earth_rover_vcu
        *  \param position_encoder Configured device driver for the position encoder.
        *  \param imu Configured device driver for the IMU.
        *  \param gps Configured device driver for the GPS.
+       *  \param radio Radio configuration.
        */
       Vcu(
         Steering_t & steering, Powertrain_t & powertrain, Lighting_t & lighting,
-        PositionEncoder_t & position_encoder, Imu_t & imu, Gps_t & gps)
+        PositionEncoder_t & position_encoder, Imu_t & imu, Gps_t & gps, Radio_t & radio)
       :
         steering {steering},
         powertrain {powertrain},
         lighting {lighting},
         position_encoder {position_encoder},
         imu {imu},
-        gps {gps}
+        gps {gps},
+        radio {radio}
       {
         ;
       }
@@ -305,13 +304,13 @@ namespace earth_rover_vcu
 
       //! Configure the radios.
       /*!
-       *  \param tx_power_level PA power level of the HMI's radio.
-       *  \param rx_power_level PA power level of the VCU's radio.
+       *  \param hmi_radio_power_level PA power level of the HMI's radio.
+       *  \param vcu_radio_power_level PA power level of the VCU's radio.
        */
-      void configureRadios(uint8_t tx_power_level, uint8_t rx_power_level)
+      void configureRadios(uint8_t hmi_radio_power_level, uint8_t vcu_radio_power_level)
       {
-        hmi_radio_power = tx_power_level;
-        vcu_radio_power = rx_power_level;
+        radio.setHmiRadioPowerLevel(hmi_radio_power_level);
+        radio.setVcuRadioPowerLevel(vcu_radio_power_level);
       }
 
       //! Get the HMI radio's power level.
@@ -320,7 +319,7 @@ namespace earth_rover_vcu
        */
       uint8_t getHmiRadioPowerLevel()
       {
-        return hmi_radio_power;
+        return radio.getHmiRadioPowerLevel();
       }
 
       //! Get the VCU radio's power level.
@@ -329,16 +328,15 @@ namespace earth_rover_vcu
        */
       uint8_t getVcuRadioPowerLevel()
       {
-        return vcu_radio_power;
+        return radio.getVcuRadioPowerLevel();
       }
 
       //! Save the configuration to EEPROM.
       void saveConfiguration()
       {
         steering.saveConfiguration();
-        // powertrain.saveConfiguration();
-        // TODO: move radio to a separate object and save the configuration to EEPROM.
-        // radio.saveConfiguration();  
+        powertrain.saveConfiguration();
+        radio.saveConfiguration();  
       }
 
     private:
@@ -365,24 +363,26 @@ namespace earth_rover_vcu
    *  \tparam PositionEncoder_t Position encoder device driver type.
    *  \tparam Imu_t IMU device driver type.
    *  \tparam Gps_t GPS device driver.
+   *  \tparam Radio_t Radio configuration.
    *  \param steering Steering servo device driver.
    *  \param powertrain Powertrain device driver.
    *  \param lighting Automotive lighting device driver.
    *  \param position_encoder Position encoder device driver.
    *  \param imu IMU device driver.
    *  \param gps GPS device driver.
+   *  \param radio Radio configuration.
    *  \return VCU with the given device drivers.
    * 
    *  \ingroup VCU
    */
   template<typename Steering_t, typename Powertrain_t, typename Lighting_t,
-           typename PositionEncoder_t, typename Imu_t, typename Gps_t>
+           typename PositionEncoder_t, typename Imu_t, typename Gps_t, typename Radio_t>
   auto makeVcu(
     Steering_t & steering, Powertrain_t & powertrain, Lighting_t & lighting,
-    PositionEncoder_t & position_encoder, Imu_t & imu, Gps_t & gps)
+    PositionEncoder_t & position_encoder, Imu_t & imu, Gps_t & gps, Radio_t & radio)
   {
-    return Vcu<Steering_t, Powertrain_t, Lighting_t, PositionEncoder_t, Imu_t, Gps_t>(
-      steering, powertrain, lighting, position_encoder, imu, gps);
+    return Vcu<Steering_t, Powertrain_t, Lighting_t, PositionEncoder_t, Imu_t, Gps_t, Radio_t>(
+      steering, powertrain, lighting, position_encoder, imu, gps, radio);
   }
 
 }

@@ -15,6 +15,7 @@
 #include "position-encoder.hpp"
 #include "adafruit-bno055-wrapper.hpp"
 #include "neogps-wrapper.hpp"
+#include "radio-configuration.hpp"
 #include "vcu.hpp"
 #include "vcu-communicator.hpp"
 #include "vcu-configuration-manager.hpp"
@@ -61,14 +62,17 @@ earth_rover_vcu::PositionEncoder<7u, 8u> position_encoder {23000u, 0u, 0u};
 earth_rover_vcu::AdafruitBNO055Wrapper<i2c_t3> imu {imu_i2c, imu_i2c_scl_pin, imu_i2c_sda_pin};
 //! GPS device driver.
 earth_rover_vcu::NeoGpsWrapper<HardwareSerial> gps {Serial1, 0, 1};
+//! HMI and VCU radio (nRF24L01+) configuration.
+earth_rover_vcu::RadioConfiguration radio_configuration;
 
 //! VCU subsystem abstraction.
-auto vcu = earth_rover_vcu::makeVcu(steering_servo, powertrain, lighting, position_encoder, imu, gps);
+auto vcu = earth_rover_vcu::makeVcu(
+  steering_servo, powertrain, lighting, position_encoder, imu, gps, radio_configuration);
 //! VCU communicator.
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator {rf24_ce_pin, rf24_csn_pin, vcu};
 //! VCU configuration.
 auto configuration_manager = earth_rover_vcu::makeVcuConfigurationManager(
-  steering_servo, powertrain, position_encoder, imu, 0u, 2048u);
+  steering_servo, powertrain, position_encoder, imu, radio_configuration, 0u, 2048u);
 
 
 /*

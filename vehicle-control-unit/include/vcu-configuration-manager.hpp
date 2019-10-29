@@ -24,7 +24,9 @@ namespace earth_rover_vcu
    *  implements some kind of wear leveling algorithm to enhance the life of the Teensy's EEPROM. The actual
    *  serialization of configuration and calibration settings is done by the subsystems.
    * 
-   *  \tparam Actual type of the position encoder device driver.
+   *  \tparam Steering_t Actual type of the steering servo device driver.
+   *  \tparam PositionEncoder_t Actual type of the position encoder device driver.
+   *  \tparam Imu_t Actual type of the IMU device driver.
    * 
    *  \ingroup VCU
    */
@@ -191,6 +193,7 @@ namespace earth_rover_vcu
 
       //! Constructor.
       /*!
+       *  \param steering Steering servo (for steering servo configuration).
        *  \param position_encoder Position encoder (for odometer value).
        *  \param imu IMU (for calibration).
        *  \param eeprom_offset Location of the configuration area in the EEPROM memory.
@@ -323,8 +326,10 @@ namespace earth_rover_vcu
 
   //! Factory function to create a VcuConfigurationManager object.
   /*!
+   *  \tparam Steering_t Steering device driver type.
    *  \tparam PositionEncoder_t Position encoder device driver type.
    *  \tparam Imu_t IMU device driver type.
+   *  \param steering Steering device driver.
    *  \param position_encoder Position encoder device driver.
    *  \param imu IMU device driver.
    *  \param eeprom_offset Offset of the configuration area in the EEPROM memory.
@@ -333,14 +338,14 @@ namespace earth_rover_vcu
    * 
    *  \ingroup VCU
    */
-  template<typename SteeringServo_t, typename PositionEncoder_t, typename Imu_t>
+  template<typename Steering_t, typename PositionEncoder_t, typename Imu_t>
   auto makeVcuConfigurationManager(
-    SteeringServo_t & steering_servo,
+    Steering_t & steering,
     PositionEncoder_t & position_encoder, Imu_t & imu,
     uint32_t eeprom_offset = 0u, uint32_t eeprom_size = 2048u)
   {
-    return VcuConfigurationManager<SteeringServo_t, PositionEncoder_t, Imu_t>(
-      steering_servo, position_encoder, imu, eeprom_offset, eeprom_size);
+    return VcuConfigurationManager<Steering_t, PositionEncoder_t, Imu_t>(
+      steering, position_encoder, imu, eeprom_offset, eeprom_size);
   }
 
 }

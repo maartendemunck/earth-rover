@@ -145,11 +145,16 @@ namespace earth_rover_vcu
         return configuration;
       }
 
+      //! Check whether the configuration changed since the last resetConfigurationChanged() call.
+      /*!
+       *  \return True if the configuration changed.
+       */
       bool isConfigurationChanged()
       {
         return changed;
       }
 
+      //! Reset the configuration changed flag.
       void resetConfigurationChanged()
       {
         changed = false;

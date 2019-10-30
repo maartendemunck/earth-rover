@@ -103,7 +103,7 @@ namespace earth_rover_vcu
         // Get Euler angles from the Adafruit BNO055 IMU.
         auto angles_raw = bno055_device.getEulerAngles();
         // Adjust Euler angles for the orientation of the Adafruit BNO055 IMU in the car.
-        angles.yaw = - angles_raw.yaw + (M_PI / 2.);
+        angles.yaw = - angles_raw.yaw - (M_PI / 2.);
         while(angles.yaw < 0)
         {
           angles.yaw += 2. * M_PI;

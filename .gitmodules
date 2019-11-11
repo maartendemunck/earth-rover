@@ -1,3 +1,6 @@
 [submodule "remote-control"]
-	path = remote-control
+	path = software/remote-control
 	url = ../earth-rover-remote-control.git
+[submodule "electronics"]
+	path = electronics
+	url = ../earth-rover-electronics.git

@@ -5,7 +5,7 @@ EELAYER END
 $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 1 1
-Title "Position Encoder for RC Volvo C202"
+Title "Position Encoder for Earth Rover"
 Date "2019-11-11"
 Rev "1"
 Comp "Vijfendertig BVBA"
@@ -20,7 +20,7 @@ U 1 1 5DC99980
 P 2700 3000
 F 0 "U1" H 2473 3046 50  0000 R CNN
 F 1 "TLE4905L" H 2473 2955 50  0000 R CNN
-F 2 "" H 2700 3000 50  0001 C CNN
+F 2 "earth-rover-custom-footprints:PG-SSO-3-2_W2.54mm_Horizontal_Down" H 2700 3000 50  0001 C CNN
 F 3 "https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/hall-switches/tle4905l/" H 2700 3000 50  0001 C CNN
 	1    2700 3000
 	1    0    0    -1  
@@ -31,7 +31,7 @@ U 1 1 5DC9BFD9
 P 2700 5000
 F 0 "U2" H 2473 5046 50  0000 R CNN
 F 1 "TLE4905L" H 2473 4955 50  0000 R CNN
-F 2 "" H 2700 5000 50  0001 C CNN
+F 2 "earth-rover-custom-footprints:PG-SSO-3-2_W2.54mm_Horizontal_Down" H 2700 5000 50  0001 C CNN
 F 3 "https://www.infineon.com/cms/en/product/sensor/magnetic-sensors/magnetic-position-sensors/hall-switches/tle4905l/" H 2700 5000 50  0001 C CNN
 	1    2700 5000
 	1    0    0    -1  
@@ -214,23 +214,23 @@ Wire Wire Line
 $Comp
 L power:GND #PWR0105
 U 1 1 5DCC09FC
-P 5000 3300
-F 0 "#PWR0105" H 5000 3050 50  0001 C CNN
-F 1 "GND" H 5005 3127 50  0000 C CNN
-F 2 "" H 5000 3300 50  0001 C CNN
-F 3 "" H 5000 3300 50  0001 C CNN
-	1    5000 3300
+P 5500 3300
+F 0 "#PWR0105" H 5500 3050 50  0001 C CNN
+F 1 "GND" H 5505 3127 50  0000 C CNN
+F 2 "" H 5500 3300 50  0001 C CNN
+F 3 "" H 5500 3300 50  0001 C CNN
+	1    5500 3300
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+5V #PWR0106
 U 1 1 5DCC1747
-P 5000 2600
-F 0 "#PWR0106" H 5000 2450 50  0001 C CNN
-F 1 "+5V" H 5015 2773 50  0000 C CNN
-F 2 "" H 5000 2600 50  0001 C CNN
-F 3 "" H 5000 2600 50  0001 C CNN
-	1    5000 2600
+P 5300 2600
+F 0 "#PWR0106" H 5300 2450 50  0001 C CNN
+F 1 "+5V" H 5315 2773 50  0000 C CNN
+F 2 "" H 5300 2600 50  0001 C CNN
+F 3 "" H 5300 2600 50  0001 C CNN
+	1    5300 2600
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -258,43 +258,47 @@ Wire Wire Line
 $Comp
 L power:PWR_FLAG #FLG0101
 U 1 1 5DD0D13F
-P 5500 2600
-F 0 "#FLG0101" H 5500 2675 50  0001 C CNN
-F 1 "PWR_FLAG" H 5500 2773 50  0000 C CNN
-F 2 "" H 5500 2600 50  0001 C CNN
-F 3 "~" H 5500 2600 50  0001 C CNN
-	1    5500 2600
+P 4900 2600
+F 0 "#FLG0101" H 4900 2675 50  0001 C CNN
+F 1 "PWR_FLAG" H 4900 2773 50  0000 C CNN
+F 2 "" H 4900 2600 50  0001 C CNN
+F 3 "~" H 4900 2600 50  0001 C CNN
+	1    4900 2600
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:PWR_FLAG #FLG0102
 U 1 1 5DD0E731
-P 5500 3300
-F 0 "#FLG0102" H 5500 3375 50  0001 C CNN
-F 1 "PWR_FLAG" H 5500 3473 50  0000 C CNN
-F 2 "" H 5500 3300 50  0001 C CNN
-F 3 "~" H 5500 3300 50  0001 C CNN
-	1    5500 3300
+P 5100 3300
+F 0 "#FLG0102" H 5100 3375 50  0001 C CNN
+F 1 "PWR_FLAG" H 5100 3473 50  0000 C CNN
+F 2 "" H 5100 3300 50  0001 C CNN
+F 3 "~" H 5100 3300 50  0001 C CNN
+	1    5100 3300
 	1    0    0    1   
 $EndComp
 Wire Wire Line
 	4200 3100 5700 3100
 Wire Wire Line
-	5000 3300 5000 2900
+	5700 2800 5500 2800
 Wire Wire Line
-	5000 2900 5500 2900
+	5500 2800 5500 3200
 Wire Wire Line
-	5000 2600 5000 2800
+	5100 3300 5100 3200
 Wire Wire Line
-	5000 2800 5500 2800
+	5100 3200 5500 3200
+Connection ~ 5500 3200
 Wire Wire Line
-	5500 2600 5500 2800
-Connection ~ 5500 2800
+	5500 3200 5500 3300
 Wire Wire Line
-	5500 2800 5700 2800
+	5300 2600 5300 2700
 Wire Wire Line
-	5500 3300 5500 2900
-Connection ~ 5500 2900
+	5300 2900 5700 2900
 Wire Wire Line
-	5500 2900 5700 2900
+	4900 2600 4900 2700
+Wire Wire Line
+	4900 2700 5300 2700
+Connection ~ 5300 2700
+Wire Wire Line
+	5300 2700 5300 2900
 $EndSCHEMATC

@@ -1,4 +1,4 @@
-update=do 21 nov 2019 15:35:51 CET
+update=vr 22 nov 2019 08:50:02 CET
 version=1
 last_client=kicad
 [general]
@@ -262,7 +262,7 @@ dPairGap=0.25
 dPairViaGap=0.25
 [schematic_editor]
 version=1
-PageLayoutDescrFile=/home/maarten/projecten/persoonlijk/earth-rover/electronics/kicad-libraries/pagelayout_custom.kicad_wks
+PageLayoutDescrFile=../kicad-libraries/page-layouts/pagelayout_custom.kicad_wks
 PlotDirectoryName=
 SubpartIdSeparator=0
 SubpartFirstId=65

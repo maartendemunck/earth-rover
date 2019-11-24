@@ -1,0 +1,729 @@
+EESchema Schematic File Version 4
+LIBS:human-machine-interface-cache
+EELAYER 30 0
+EELAYER END
+$Descr A4 8268 11693 portrait
+encoding utf-8
+Sheet 1 1
+Title "Earth Rover"
+Date "2019-11-24"
+Rev "1"
+Comp "Vijfendertig BVBA"
+Comment1 "Maarten De Munck"
+Comment2 "Human Machine Interface (HMI)"
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L earth-rover-custom-symbols:Alps_RKJXK122000D JS2
+U 1 1 5DD8541E
+P 3950 8800
+F 0 "JS2" H 3892 9065 50  0000 C CNN
+F 1 "Alps_RKJXK122000D" H 3892 8974 50  0000 C CNN
+F 2 "" H 4000 8475 50  0001 C CNN
+F 3 "https://www.alps.com/prod/info/E/HTML/MultiControl/Potentiometer/RKJXK/RKJXK122000D.html" H 4000 8475 50  0001 C CNN
+	1    3950 8800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW3
+U 1 1 5DD8E18E
+P 4050 8100
+F 0 "SW3" H 4050 8385 50  0000 C CNN
+F 1 "SW_Push" H 4050 8294 50  0000 C CNN
+F 2 "" H 4050 8300 50  0001 C CNN
+F 3 "~" H 4050 8300 50  0001 C CNN
+	1    4050 8100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J3
+U 1 1 5DD8EDC7
+P 2450 4300
+F 0 "J3" H 2650 4550 50  0000 R CNN
+F 1 "Conn_01x04_Male" H 2650 3950 50  0000 R CNN
+F 2 "" H 2450 4300 50  0001 C CNN
+F 3 "~" H 2450 4300 50  0001 C CNN
+	1    2450 4300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0101
+U 1 1 5DE5FAEF
+P 3750 8150
+F 0 "#PWR0101" H 3750 7900 50  0001 C CNN
+F 1 "GND" H 3755 7977 50  0000 C CNN
+F 2 "" H 3750 8150 50  0001 C CNN
+F 3 "" H 3750 8150 50  0001 C CNN
+	1    3750 8150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 8150 3750 8100
+Wire Wire Line
+	3750 8100 3850 8100
+$Comp
+L power:+5V #PWR0102
+U 1 1 5DE61BC1
+P 7350 4800
+F 0 "#PWR0102" H 7350 4650 50  0001 C CNN
+F 1 "+5V" H 7365 4973 50  0000 C CNN
+F 2 "" H 7350 4800 50  0001 C CNN
+F 3 "" H 7350 4800 50  0001 C CNN
+	1    7350 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR0103
+U 1 1 5DE67080
+P 7350 5800
+F 0 "#PWR0103" H 7350 5650 50  0001 C CNN
+F 1 "+3.3V" H 7365 5973 50  0000 C CNN
+F 2 "" H 7350 5800 50  0001 C CNN
+F 3 "" H 7350 5800 50  0001 C CNN
+	1    7350 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7350 5900 7350 5800
+$Comp
+L Device:R R2
+U 1 1 5DE76EA2
+P 4350 7800
+F 0 "R2" H 4420 7846 50  0000 L CNN
+F 1 "10k" H 4420 7755 50  0000 L CNN
+F 2 "" V 4280 7800 50  0001 C CNN
+F 3 "~" H 4350 7800 50  0001 C CNN
+	1    4350 7800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4250 8100 4350 8100
+Wire Wire Line
+	4350 8100 4350 7950
+$Comp
+L power:+3.3V #PWR0104
+U 1 1 5DE78F83
+P 4350 7600
+F 0 "#PWR0104" H 4350 7450 50  0001 C CNN
+F 1 "+3.3V" H 4365 7773 50  0000 C CNN
+F 2 "" H 4350 7600 50  0001 C CNN
+F 3 "" H 4350 7600 50  0001 C CNN
+	1    4350 7600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 7600 4350 7650
+Connection ~ 4350 8100
+$Comp
+L power:GND #PWR0105
+U 1 1 5DE93E90
+P 4450 9500
+F 0 "#PWR0105" H 4450 9250 50  0001 C CNN
+F 1 "GND" H 4455 9327 50  0000 C CNN
+F 2 "" H 4450 9500 50  0001 C CNN
+F 3 "" H 4450 9500 50  0001 C CNN
+	1    4450 9500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 9500 4450 9400
+Wire Wire Line
+	4450 9400 4350 9400
+Wire Wire Line
+	4450 9400 4450 9000
+Wire Wire Line
+	4450 9000 4350 9000
+Connection ~ 4450 9400
+$Comp
+L power:+3.3V #PWR0106
+U 1 1 5DE96346
+P 4550 8700
+F 0 "#PWR0106" H 4550 8550 50  0001 C CNN
+F 1 "+3.3V" H 4565 8873 50  0000 C CNN
+F 2 "" H 4550 8700 50  0001 C CNN
+F 3 "" H 4550 8700 50  0001 C CNN
+	1    4550 8700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 8800 4550 8800
+Wire Wire Line
+	4550 8800 4550 8700
+Wire Wire Line
+	4350 9200 4550 9200
+Wire Wire Line
+	4550 9200 4550 8800
+Connection ~ 4550 8800
+Wire Wire Line
+	7050 4900 7350 4900
+Wire Wire Line
+	7350 4900 7350 4800
+NoConn ~ 7050 5200
+NoConn ~ 7050 5500
+Wire Wire Line
+	7050 6000 7150 6000
+Wire Wire Line
+	7150 6000 7150 5900
+Wire Wire Line
+	7050 5900 7150 5900
+Connection ~ 7150 5900
+Wire Wire Line
+	7050 7400 7150 7400
+Wire Wire Line
+	7150 7400 7150 7600
+Wire Wire Line
+	7150 7600 7250 7600
+Wire Wire Line
+	7250 7600 7250 7700
+Wire Wire Line
+	7250 7700 7350 7700
+Wire Wire Line
+	7350 7700 7350 7800
+Wire Wire Line
+	7050 7600 7150 7600
+Connection ~ 7150 7600
+Wire Wire Line
+	7050 7700 7250 7700
+Connection ~ 7250 7700
+$Comp
+L power:GND #PWR0107
+U 1 1 5DF98BEA
+P 7350 7800
+F 0 "#PWR0107" H 7350 7550 50  0001 C CNN
+F 1 "GND" H 7355 7627 50  0000 C CNN
+F 2 "" H 7350 7800 50  0001 C CNN
+F 3 "" H 7350 7800 50  0001 C CNN
+	1    7350 7800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4350 9300 5250 9300
+Wire Wire Line
+	4350 8900 5050 8900
+Text Notes 2400 4125 2    50   ~ 0
+To Nextion NX4827K043\n4.3” TFT LCD Touch Display:
+Text Notes 2400 4225 2    50   ~ 0
++5V
+Text Notes 2400 4325 2    50   ~ 0
+TX
+Text Notes 2400 4425 2    50   ~ 0
+RX
+Text Notes 2400 4525 2    50   ~ 0
+GND
+$Comp
+L power:GND #PWR0108
+U 1 1 5E017990
+P 2850 4600
+F 0 "#PWR0108" H 2850 4350 50  0001 C CNN
+F 1 "GND" H 2855 4427 50  0000 C CNN
+F 2 "" H 2850 4600 50  0001 C CNN
+F 3 "" H 2850 4600 50  0001 C CNN
+	1    2850 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0109
+U 1 1 5E01812E
+P 2850 4100
+F 0 "#PWR0109" H 2850 3950 50  0001 C CNN
+F 1 "+5V" H 2865 4273 50  0000 C CNN
+F 2 "" H 2850 4100 50  0001 C CNN
+F 3 "" H 2850 4100 50  0001 C CNN
+	1    2850 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 4200 2850 4200
+Wire Wire Line
+	2850 4200 2850 4100
+Wire Wire Line
+	2650 4500 2850 4500
+Wire Wire Line
+	2850 4500 2850 4600
+NoConn ~ 5450 6200
+NoConn ~ 5450 5200
+NoConn ~ 5450 5300
+NoConn ~ 5450 5800
+NoConn ~ 5450 5900
+NoConn ~ 5450 5700
+NoConn ~ 5450 5600
+Wire Wire Line
+	5450 6500 5250 6500
+Wire Wire Line
+	5450 6600 5050 6600
+Wire Wire Line
+	5450 6900 4850 6900
+Wire Wire Line
+	4350 8100 4850 8100
+Wire Wire Line
+	4850 6900 4850 8100
+Wire Wire Line
+	5050 8900 5050 6600
+Wire Wire Line
+	5250 9300 5250 6500
+Wire Wire Line
+	3450 6300 3450 5800
+Wire Wire Line
+	3450 6300 5450 6300
+Wire Wire Line
+	5450 6400 3250 6400
+Wire Wire Line
+	3250 6400 3250 5900
+Wire Wire Line
+	3650 5700 3650 6100
+Wire Wire Line
+	3650 6100 5450 6100
+Wire Wire Line
+	3850 5600 3850 6000
+Wire Wire Line
+	3850 6000 5450 6000
+Wire Wire Line
+	2650 4300 3450 4300
+Wire Wire Line
+	3450 4300 3450 4900
+Wire Wire Line
+	3450 4900 5450 4900
+Wire Wire Line
+	2650 4400 3250 4400
+Wire Wire Line
+	3250 4400 3250 5000
+Wire Wire Line
+	2450 5600 3850 5600
+Wire Wire Line
+	2450 5700 3650 5700
+Wire Wire Line
+	3250 5900 2450 5900
+Wire Wire Line
+	3450 5800 2450 5800
+Wire Wire Line
+	3050 6200 3050 5400
+Wire Wire Line
+	2450 6200 3050 6200
+Wire Wire Line
+	3050 5400 5450 5400
+Wire Wire Line
+	2850 6100 2850 5500
+Wire Wire Line
+	2450 6100 2850 6100
+Wire Wire Line
+	1950 5200 1950 5300
+Wire Wire Line
+	1950 6600 1950 6500
+$Comp
+L power:GND #PWR0110
+U 1 1 5DEA5377
+P 1950 6600
+F 0 "#PWR0110" H 1950 6350 50  0001 C CNN
+F 1 "GND" H 1955 6427 50  0000 C CNN
+F 2 "" H 1950 6600 50  0001 C CNN
+F 3 "" H 1950 6600 50  0001 C CNN
+	1    1950 6600
+	-1   0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR0111
+U 1 1 5DEA4C70
+P 1950 5200
+F 0 "#PWR0111" H 1950 5050 50  0001 C CNN
+F 1 "+3.3V" H 1965 5373 50  0000 C CNN
+F 2 "" H 1950 5200 50  0001 C CNN
+F 3 "" H 1950 5200 50  0001 C CNN
+	1    1950 5200
+	-1   0    0    -1  
+$EndComp
+$Comp
+L RF:NRF24L01_Breakout U2
+U 1 1 5DD7973E
+P 1950 5900
+F 0 "U2" H 2100 6450 50  0000 L CNN
+F 1 "NRF24L01+ breakout" H 2100 5350 50  0000 L CNN
+F 2 "RF_Module:nRF24L01_Breakout" H 2100 6500 50  0001 L CIN
+F 3 "http://www.nordicsemi.com/eng/content/download/2730/34105/file/nRF24L01_Product_Specification_v2_0.pdf" H 1950 5800 50  0001 C CNN
+	1    1950 5900
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	2850 5500 5450 5500
+Wire Wire Line
+	3250 5000 5450 5000
+Wire Wire Line
+	3050 6700 5450 6700
+Wire Wire Line
+	2850 6800 5450 6800
+Wire Wire Line
+	5450 7000 2650 7000
+Wire Wire Line
+	2150 9300 3050 9300
+Wire Wire Line
+	3050 9300 3050 6700
+Wire Wire Line
+	2150 8900 2850 8900
+Wire Wire Line
+	2850 8900 2850 6800
+Wire Wire Line
+	2650 7000 2650 8100
+Wire Wire Line
+	2150 8100 2650 8100
+Connection ~ 2350 8800
+Wire Wire Line
+	2350 9200 2150 9200
+Wire Wire Line
+	2350 8800 2350 9200
+Wire Wire Line
+	2350 8800 2150 8800
+Wire Wire Line
+	2350 8700 2350 8800
+$Comp
+L power:+3.3V #PWR0112
+U 1 1 5DE9EC21
+P 2350 8700
+F 0 "#PWR0112" H 2350 8550 50  0001 C CNN
+F 1 "+3.3V" H 2365 8873 50  0000 C CNN
+F 2 "" H 2350 8700 50  0001 C CNN
+F 3 "" H 2350 8700 50  0001 C CNN
+	1    2350 8700
+	1    0    0    -1  
+$EndComp
+Connection ~ 2250 9400
+Wire Wire Line
+	2250 9000 2250 9400
+Wire Wire Line
+	2150 9000 2250 9000
+Wire Wire Line
+	2250 9400 2250 9500
+Wire Wire Line
+	2150 9400 2250 9400
+$Comp
+L power:GND #PWR0113
+U 1 1 5DE99FED
+P 2250 9500
+F 0 "#PWR0113" H 2250 9250 50  0001 C CNN
+F 1 "GND" H 2255 9327 50  0000 C CNN
+F 2 "" H 2250 9500 50  0001 C CNN
+F 3 "" H 2250 9500 50  0001 C CNN
+	1    2250 9500
+	1    0    0    -1  
+$EndComp
+Connection ~ 2150 8100
+Wire Wire Line
+	2150 7600 2150 7650
+$Comp
+L power:+3.3V #PWR0114
+U 1 1 5DE797C1
+P 2150 7600
+F 0 "#PWR0114" H 2150 7450 50  0001 C CNN
+F 1 "+3.3V" H 2165 7773 50  0000 C CNN
+F 2 "" H 2150 7600 50  0001 C CNN
+F 3 "" H 2150 7600 50  0001 C CNN
+	1    2150 7600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2150 8100 2150 7950
+Wire Wire Line
+	2050 8100 2150 8100
+$Comp
+L Device:R R1
+U 1 1 5DE767E7
+P 2150 7800
+F 0 "R1" H 2220 7846 50  0000 L CNN
+F 1 "10k" H 2220 7755 50  0000 L CNN
+F 2 "" V 2080 7800 50  0001 C CNN
+F 3 "~" H 2150 7800 50  0001 C CNN
+	1    2150 7800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1550 8100 1650 8100
+Wire Wire Line
+	1550 8150 1550 8100
+$Comp
+L power:GND #PWR0115
+U 1 1 5DE5F2F2
+P 1550 8150
+F 0 "#PWR0115" H 1550 7900 50  0001 C CNN
+F 1 "GND" H 1555 7977 50  0000 C CNN
+F 2 "" H 1550 8150 50  0001 C CNN
+F 3 "" H 1550 8150 50  0001 C CNN
+	1    1550 8150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_Push SW2
+U 1 1 5DD8DA84
+P 1850 8100
+F 0 "SW2" H 1850 8385 50  0000 C CNN
+F 1 "SW_Push" H 1850 8294 50  0000 C CNN
+F 2 "" H 1850 8300 50  0001 C CNN
+F 3 "~" H 1850 8300 50  0001 C CNN
+	1    1850 8100
+	1    0    0    -1  
+$EndComp
+$Comp
+L earth-rover-custom-symbols:Alps_RKJXK122000D JS1
+U 1 1 5DD84466
+P 1750 8800
+F 0 "JS1" H 1692 9065 50  0000 C CNN
+F 1 "Alps_RKJXK122000D" H 1692 8974 50  0000 C CNN
+F 2 "" H 1800 8475 50  0001 C CNN
+F 3 "https://www.alps.com/prod/info/E/HTML/MultiControl/Potentiometer/RKJXK/RKJXK122000D.html" H 1800 8475 50  0001 C CNN
+	1    1750 8800
+	-1   0    0    -1  
+$EndComp
+Text Notes 1450 9850 0    50   ~ 0
+Left joystick and shift button
+Text Notes 3650 9850 0    50   ~ 0
+Right joystick and shift button
+Text Notes 1200 1050 0    50   ~ 0
+SW1: On/Off switch\nWhen the HMI is switched off, the micro USB connector J1\ncan be used to charge the powerbank
+Text Notes 2730 2560 3    50   ~ 0
+GND Out
+Text Notes 2430 2550 3    50   ~ 0
+To powerbank:
+Text Notes 2830 2560 3    50   ~ 0
++5V Out
+Text Notes 2630 2550 3    50   ~ 0
++5V In (Charge)
+Text Notes 2530 2550 3    50   ~ 0
+GND In (Charge)
+Wire Wire Line
+	3600 1400 3600 1300
+Connection ~ 3600 1400
+Wire Wire Line
+	3700 1400 3600 1400
+Wire Wire Line
+	3700 1300 3700 1400
+Wire Wire Line
+	3600 1600 3600 1400
+Wire Wire Line
+	3400 1600 3600 1600
+Connection ~ 3600 1900
+Wire Wire Line
+	3700 1900 3700 2000
+Wire Wire Line
+	3600 1900 3700 1900
+Wire Wire Line
+	3600 1900 3600 2000
+Wire Wire Line
+	2700 1900 3600 1900
+Wire Wire Line
+	2700 2300 2700 1900
+Wire Wire Line
+	2800 1500 3000 1500
+Wire Wire Line
+	2800 2300 2800 1500
+Wire Wire Line
+	2600 1400 2600 2300
+Wire Wire Line
+	2300 1400 2600 1400
+Wire Wire Line
+	1700 1500 1900 1500
+Wire Wire Line
+	2500 2200 2500 2300
+Wire Wire Line
+	1400 2200 2500 2200
+Wire Wire Line
+	1400 2100 1400 2200
+$Comp
+L power:GND #PWR0116
+U 1 1 5DDF6EDD
+P 3600 2000
+F 0 "#PWR0116" H 3600 1750 50  0001 C CNN
+F 1 "GND" H 3605 1827 50  0000 C CNN
+F 2 "" H 3600 2000 50  0001 C CNN
+F 3 "" H 3600 2000 50  0001 C CNN
+	1    3600 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:PWR_FLAG #FLG0102
+U 1 1 5DDF79D3
+P 3700 2000
+F 0 "#FLG0102" H 3700 2075 50  0001 C CNN
+F 1 "PWR_FLAG" H 3700 2173 50  0001 C CNN
+F 2 "" H 3700 2000 50  0001 C CNN
+F 3 "~" H 3700 2000 50  0001 C CNN
+	1    3700 2000
+	1    0    0    1   
+$EndComp
+$Comp
+L power:+5V #PWR0117
+U 1 1 5DDFAC1D
+P 3600 1300
+F 0 "#PWR0117" H 3600 1150 50  0001 C CNN
+F 1 "+5V" H 3615 1473 50  0000 C CNN
+F 2 "" H 3600 1300 50  0001 C CNN
+F 3 "" H 3600 1300 50  0001 C CNN
+	1    3600 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:PWR_FLAG #FLG0103
+U 1 1 5DDFA702
+P 3700 1300
+F 0 "#FLG0103" H 3700 1375 50  0001 C CNN
+F 1 "PWR_FLAG" H 3700 1473 50  0001 C CNN
+F 2 "" H 3700 1300 50  0001 C CNN
+F 3 "~" H 3700 1300 50  0001 C CNN
+	1    3700 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_DPDT_x2 SW1
+U 2 1 5DDAD789
+P 2100 1500
+F 0 "SW1" H 2100 1785 50  0000 C CNN
+F 1 "SW_DPDT_x2" H 2100 1694 50  0000 C CNN
+F 2 "" H 2100 1500 50  0001 C CNN
+F 3 "~" H 2100 1500 50  0001 C CNN
+	2    2100 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Switch:SW_DPDT_x2 SW1
+U 1 1 5DDAD09C
+P 3200 1500
+F 0 "SW1" H 3200 1785 50  0000 C CNN
+F 1 "SW_DPDT_x2" H 3200 1694 50  0000 C CNN
+F 2 "" H 3200 1500 50  0001 C CNN
+F 3 "~" H 3200 1500 50  0001 C CNN
+	1    3200 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J2
+U 1 1 5DDABAC3
+P 2600 2500
+F 0 "J2" V 2725 2700 50  0000 L CNN
+F 1 "Conn_01x04_Male" V 2650 2700 50  0000 L CNN
+F 2 "" H 2600 2500 50  0001 C CNN
+F 3 "~" H 2600 2500 50  0001 C CNN
+	1    2600 2500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:USB_B_Micro J1
+U 1 1 5DD9045B
+P 1400 1700
+F 0 "J1" H 1457 2167 50  0000 C CNN
+F 1 "USB_B_Micro" H 1457 2076 50  0000 C CNN
+F 2 "" H 1550 1650 50  0001 C CNN
+F 3 "~" H 1550 1650 50  0001 C CNN
+	1    1400 1700
+	1    0    0    -1  
+$EndComp
+NoConn ~ 5450 7100
+NoConn ~ 5450 7200
+NoConn ~ 5450 7300
+NoConn ~ 5450 7400
+NoConn ~ 5450 7500
+NoConn ~ 5450 7600
+NoConn ~ 5450 7700
+NoConn ~ 1700 1700
+NoConn ~ 1700 1800
+NoConn ~ 1700 1900
+NoConn ~ 1300 2100
+NoConn ~ 2300 1600
+NoConn ~ 3400 1400
+$Comp
+L Jumper:Jumper_2_Open JP1
+U 1 1 5E5A2A7E
+P 4350 4300
+F 0 "JP1" H 4350 4535 50  0000 C CNN
+F 1 "Jumper_2_Open" H 4350 4444 50  0000 C CNN
+F 2 "" H 4350 4300 50  0001 C CNN
+F 3 "~" H 4350 4300 50  0001 C CNN
+	1    4350 4300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR01
+U 1 1 5E5A401E
+P 4050 4400
+F 0 "#PWR01" H 4050 4150 50  0001 C CNN
+F 1 "GND" H 4055 4227 50  0000 C CNN
+F 2 "" H 4050 4400 50  0001 C CNN
+F 3 "" H 4050 4400 50  0001 C CNN
+	1    4050 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 5E5A44E6
+P 4750 4050
+F 0 "R3" H 4820 4096 50  0000 L CNN
+F 1 "10k" H 4820 4005 50  0000 L CNN
+F 2 "" V 4680 4050 50  0001 C CNN
+F 3 "~" H 4750 4050 50  0001 C CNN
+	1    4750 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR02
+U 1 1 5E5A4B34
+P 4750 3800
+F 0 "#PWR02" H 4750 3650 50  0001 C CNN
+F 1 "+3.3V" H 4765 3973 50  0000 C CNN
+F 2 "" H 4750 3800 50  0001 C CNN
+F 3 "" H 4750 3800 50  0001 C CNN
+	1    4750 3800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 4400 4050 4300
+Wire Wire Line
+	4050 4300 4150 4300
+Wire Wire Line
+	4550 4300 4750 4300
+Wire Wire Line
+	4750 4300 4750 4200
+Wire Wire Line
+	4750 3900 4750 3800
+Wire Wire Line
+	5450 5100 4750 5100
+Wire Wire Line
+	4750 5100 4750 4300
+Connection ~ 4750 4300
+Text Notes 4650 4000 2    50   ~ 0
+Close JP1 to reset EEPROM
+$Comp
+L earth-rover-custom-symbols:Teensy3.2 U1
+U 1 1 5E5F65CA
+P 5650 4900
+F 0 "U1" H 6250 5187 60  0000 C CNN
+F 1 "Teensy3.2" H 6250 5081 60  0000 C CNN
+F 2 "" H 9050 3750 60  0000 C CNN
+F 3 "" H 9050 3750 60  0000 C CNN
+	1    5650 4900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7150 5900 7350 5900
+Wire Notes Line
+	1100 700  3800 700 
+Wire Notes Line
+	3800 700  3800 3300
+Wire Notes Line
+	3800 3300 1100 3300
+Wire Notes Line
+	1100 3300 1100 700 
+Text Notes 1150 3250 0    50   ~ 0
+POWER (using USB powerbank)
+Text Label 3500 4900 0    50   ~ 0
+Nextion_TX
+Text Label 3300 5000 0    50   ~ 0
+Nextion_RX
+Text Label 5200 9300 2    50   ~ 0
+JS_Right_X
+Text Label 5000 8900 2    50   ~ 0
+JS_Right_Y
+Text Label 4800 8100 2    50   ~ 0
+BTN_Right
+Text Label 2600 8100 2    50   ~ 0
+BTN_Left
+Text Label 2800 8900 2    50   ~ 0
+JS_Left_Y
+Text Label 3000 9300 2    50   ~ 0
+JS_Left_X
+$EndSCHEMATC

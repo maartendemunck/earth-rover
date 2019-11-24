@@ -1,0 +1,15 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP Alps_RKJXK122000D
+D Alps  RKJXK122000D ThumbPointer™ (Stick Controller)
+K joystick thumbpointer thumbstick analog stick XY
+F https://www.alps.com/prod/info/E/HTML/MultiControl/Potentiometer/RKJXK/RKJXK122000D.html
+$ENDCMP
+#
+$CMP AnalogMiniJoystick
+D Analog mini joystick (without switch)
+K joystick thumbstick analog stick XY
+F ~
+$ENDCMP
+#
+#End Doc Library

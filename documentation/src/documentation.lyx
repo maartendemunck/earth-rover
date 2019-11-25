@@ -1,5 +1,5 @@
-#LyX 2.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 544
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -9,6 +9,9 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{10pt plus 5pt minus 3pt}
 \sloppy
+% Added by lyx2lyx
+\renewcommand{\textendash}{--}
+\renewcommand{\textemdash}{---}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -26,8 +29,6 @@
 \font_osf false
 \font_sf_scale 100 100
 \font_tt_scale 100 100
-\use_microtype false
-\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -68,7 +69,6 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
-\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -77,10 +77,7 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\is_math_indent 0
-\math_numbering_side default
-\quotes_style english
-\dynamic_quotes 0
+\quotes_language english
 \papercolumns 1
 \papersides 2
 \paperpagestyle plain
@@ -266,7 +263,7 @@ status open
 \backslash
 center
 \backslash
-small
+footnotesize
 \end_layout
 
 \end_inset
@@ -349,7 +346,7 @@ Touchscreen
 \begin_inset Text
 
 \begin_layout Plain Layout
-Touchscreen TX
+GPS TX
 \end_layout
 
 \end_inset
@@ -387,7 +384,7 @@ Touchscreen
 \begin_inset Text
 
 \begin_layout Plain Layout
-Touchscreen RX
+GPS RX
 \end_layout
 
 \end_inset
@@ -418,7 +415,7 @@ Touchscreen RX
 \begin_inset Text
 
 \begin_layout Plain Layout
-Reset
+
 \end_layout
 
 \end_inset
@@ -427,7 +424,7 @@ Reset
 \begin_inset Text
 
 \begin_layout Plain Layout
-Reset EEPROM settings
+
 \end_layout
 
 \end_inset
@@ -695,7 +692,7 @@ GPS
 \begin_inset Text
 
 \begin_layout Plain Layout
-GPS TX
+Touchscreen TX
 \end_layout
 
 \end_inset
@@ -735,7 +732,7 @@ GPS
 \begin_inset Text
 
 \begin_layout Plain Layout
-GPS RX
+Touchscreen RX
 \end_layout
 
 \end_inset
@@ -848,7 +845,7 @@ LED
 \begin_inset Text
 
 \begin_layout Plain Layout
-LED
+LED & Reset
 \end_layout
 
 \end_inset
@@ -857,7 +854,7 @@ LED
 \begin_inset Text
 
 \begin_layout Plain Layout
-Status LED
+Status LED & EEPROM reset
 \end_layout
 
 \end_inset
@@ -1134,7 +1131,7 @@ A6, (CS), PWM
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Input
 \end_layout
 
 \end_inset
@@ -1143,7 +1140,7 @@ A6, (CS), PWM
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Right shift button
 \end_layout
 
 \end_inset
@@ -1172,7 +1169,7 @@ A7, (RX1), (CS), PWM
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Input
 \end_layout
 
 \end_inset
@@ -1181,7 +1178,7 @@ A7, (RX1), (CS), PWM
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+Left shift button
 \end_layout
 
 \end_inset
@@ -1448,7 +1445,7 @@ status open
 \backslash
 center
 \backslash
-small
+footnotesize
 \end_layout
 
 \end_inset
@@ -1604,7 +1601,7 @@ GPS RX
 \begin_inset Text
 
 \begin_layout Plain Layout
-Reset
+Lighting
 \end_layout
 
 \end_inset
@@ -1613,7 +1610,7 @@ Reset
 \begin_inset Text
 
 \begin_layout Plain Layout
-Reset EEPROM settings
+Position lamps
 \end_layout
 
 \end_inset
@@ -1624,6 +1621,8 @@ Reset EEPROM settings
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\emph on
 3
 \end_layout
 
@@ -1633,11 +1632,7 @@ Reset EEPROM settings
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\emph on
-PWM
-\emph default
-, CAN TX
+PWM, CAN TX
 \end_layout
 
 \end_inset
@@ -1655,7 +1650,7 @@ Lighting
 \begin_inset Text
 
 \begin_layout Plain Layout
-Front position and head lamps
+Stop lamps
 \end_layout
 
 \end_inset
@@ -1666,6 +1661,8 @@ Front position and head lamps
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\emph on
 4
 \end_layout
 
@@ -1675,11 +1672,7 @@ Front position and head lamps
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\emph on
-PWM
-\emph default
-, CAN RX
+PWM, CAN RX
 \end_layout
 
 \end_inset
@@ -1697,7 +1690,7 @@ Lighting
 \begin_inset Text
 
 \begin_layout Plain Layout
-Rear position and stop lamps
+Turn signal left
 \end_layout
 
 \end_inset
@@ -1708,6 +1701,8 @@ Rear position and stop lamps
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\emph on
 5
 \end_layout
 
@@ -1717,11 +1712,7 @@ Rear position and stop lamps
 \begin_inset Text
 
 \begin_layout Plain Layout
-
-\emph on
-PWM
-\emph default
-, (TX1)
+PWM, (TX1)
 \end_layout
 
 \end_inset
@@ -1779,7 +1770,7 @@ Lighting
 \begin_inset Text
 
 \begin_layout Plain Layout
-Turn signal left
+Front position and head lamps
 \end_layout
 
 \end_inset
@@ -2052,7 +2043,7 @@ LED
 \begin_inset Text
 
 \begin_layout Plain Layout
-LED
+LED & Reset
 \end_layout
 
 \end_inset
@@ -2061,7 +2052,7 @@ LED
 \begin_inset Text
 
 \begin_layout Plain Layout
-Status LED
+Status LED & EEPROM reset
 \end_layout
 
 \end_inset
@@ -2644,9 +2635,6 @@ Figure
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:rc-software-block-diagram"
-plural "false"
-caps "false"
-noprefix "false"
 
 \end_inset
 
@@ -2717,7 +2705,6 @@ The HMI and the VCU communicate via Nordic Semiconductor nRF24L01+ modules,
 LatexCommand href
 name "https://tmrh20.github.io/RF24/"
 target "https://tmrh20.github.io/RF24/"
-literal "false"
 
 \end_inset
 
@@ -2726,7 +2713,6 @@ literal "false"
 LatexCommand href
 name "https://github.com/nRF24/RF24"
 target "https://github.com/nRF24/RF24"
-literal "false"
 
 \end_inset
 
@@ -2778,9 +2764,6 @@ reference "tab:communication-vcu-to-hmi-1"
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:communication-vcu-to-hmi-2"
-plural "false"
-caps "false"
-noprefix "false"
 
 \end_inset
 
@@ -6248,9 +6231,6 @@ Table
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:communication-nextion-to-hmi"
-plural "false"
-caps "false"
-noprefix "false"
 
 \end_inset
 
@@ -7527,9 +7507,6 @@ Table
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:nextion-widgets-and-variables"
-plural "false"
-caps "false"
-noprefix "false"
 
 \end_inset
 

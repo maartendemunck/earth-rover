@@ -1,0 +1,608 @@
+EESchema Schematic File Version 4
+LIBS:vehicle-control-unit-cache
+EELAYER 30 0
+EELAYER END
+$Descr A4 8268 11693 portrait
+encoding utf-8
+Sheet 2 3
+Title "Earth Rover"
+Date "2019-11-29"
+Rev "1"
+Comp "Vijfendertig BVBA"
+Comment1 "Maarten De Munck"
+Comment2 "Vehicle Control Unit"
+Comment3 "Automotive Lighting"
+Comment4 ""
+$EndDescr
+$Comp
+L Transistor_Array:ULN2803A U?
+U 1 1 5DE029FD
+P 3200 4000
+F 0 "U?" H 3200 4567 50  0000 C CNN
+F 1 "ULN2803A" H 3200 4476 50  0000 C CNN
+F 2 "" H 3250 3350 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/uln2803a.pdf" H 3300 3800 50  0001 C CNN
+	1    3200 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:IRF540N Q?
+U 1 1 5DE047D6
+P 3300 6900
+F 0 "Q?" H 3504 6946 50  0000 L CNN
+F 1 "IRF540N" H 3504 6855 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 3550 6825 50  0001 L CIN
+F 3 "http://www.irf.com/product-info/datasheets/data/irf540n.pdf" H 3300 6900 50  0001 L CNN
+	1    3300 6900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE05301
+P 3000 7150
+F 0 "R?" H 3070 7196 50  0000 L CNN
+F 1 "10k" H 3070 7105 50  0000 L CNN
+F 2 "" V 2930 7150 50  0001 C CNN
+F 3 "~" H 3000 7150 50  0001 C CNN
+	1    3000 7150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE05680
+P 2750 6900
+F 0 "R?" V 2543 6900 50  0000 C CNN
+F 1 "100" V 2634 6900 50  0000 C CNN
+F 2 "" V 2680 6900 50  0001 C CNN
+F 3 "~" H 2750 6900 50  0001 C CNN
+	1    2750 6900
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE05B60
+P 3200 6350
+F 0 "R?" H 3270 6396 50  0000 L CNN
+F 1 "R" H 3270 6305 50  0000 L CNN
+F 2 "" V 3130 6350 50  0001 C CNN
+F 3 "~" H 3200 6350 50  0001 C CNN
+	1    3200 6350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE05ED0
+P 3600 6350
+F 0 "R?" H 3670 6396 50  0000 L CNN
+F 1 "R" H 3670 6305 50  0000 L CNN
+F 2 "" V 3530 6350 50  0001 C CNN
+F 3 "~" H 3600 6350 50  0001 C CNN
+	1    3600 6350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE06587
+P 3200 5950
+F 0 "D?" V 3239 5833 50  0000 R CNN
+F 1 "LED" V 3148 5833 50  0000 R CNN
+F 2 "" H 3200 5950 50  0001 C CNN
+F 3 "~" H 3200 5950 50  0001 C CNN
+	1    3200 5950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE06CA4
+P 3600 5950
+F 0 "D?" V 3639 5833 50  0000 R CNN
+F 1 "LED" V 3548 5833 50  0000 R CNN
+F 2 "" H 3600 5950 50  0001 C CNN
+F 3 "~" H 3600 5950 50  0001 C CNN
+	1    3600 5950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x06_Male J?
+U 1 1 5DE075DD
+P 5500 4800
+F 0 "J?" H 5700 5150 50  0000 R CNN
+F 1 "Conn_01x06_Male" H 5472 4683 50  0001 R CNN
+F 2 "" H 5500 4800 50  0001 C CNN
+F 3 "~" H 5500 4800 50  0001 C CNN
+	1    5500 4800
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE08B62
+P 4300 3050
+F 0 "D?" V 4375 3025 50  0000 R TNN
+F 1 "Red 10mm" H 4300 3150 50  0000 C BNN
+F 2 "" H 4300 3050 50  0001 C CNN
+F 3 "~" H 4300 3050 50  0001 C CNN
+	1    4300 3050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE0A330
+P 4300 2450
+F 0 "D?" V 4375 2425 50  0000 R TNN
+F 1 "Red 10mm" H 4300 2550 50  0000 C BNN
+F 2 "" H 4300 2450 50  0001 C CNN
+F 3 "~" H 4300 2450 50  0001 C CNN
+	1    4300 2450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE0EAFE
+P 5700 2450
+F 0 "D?" V 5775 2425 50  0000 R TNN
+F 1 "Orange 10mm" H 5700 2550 50  0000 C BNN
+F 2 "" H 5700 2450 50  0001 C CNN
+F 3 "~" H 5700 2450 50  0001 C CNN
+	1    5700 2450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE0EB12
+P 5700 3550
+F 0 "R?" H 5770 3596 50  0000 L CNN
+F 1 "R" H 5770 3505 50  0000 L CNN
+F 2 "" V 5630 3550 50  0001 C CNN
+F 3 "~" H 5700 3550 50  0001 C CNN
+	1    5700 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5DE0EB26
+P 6100 3550
+F 0 "R?" H 6170 3596 50  0000 L CNN
+F 1 "R" H 6170 3505 50  0000 L CNN
+F 2 "" V 6030 3550 50  0001 C CNN
+F 3 "~" H 6100 3550 50  0001 C CNN
+	1    6100 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 6100 3200 6200
+Wire Wire Line
+	3600 6100 3600 6200
+Wire Wire Line
+	3600 6500 3600 6600
+Wire Wire Line
+	3600 6600 3400 6600
+Wire Wire Line
+	3200 6600 3200 6500
+Wire Wire Line
+	3400 6600 3400 6700
+Connection ~ 3400 6600
+Wire Wire Line
+	3400 6600 3200 6600
+Wire Wire Line
+	3100 6900 3000 6900
+Wire Wire Line
+	3000 7000 3000 6900
+Connection ~ 3000 6900
+Wire Wire Line
+	3000 6900 2900 6900
+$Comp
+L power:GND #PWR?
+U 1 1 5DE2147C
+P 3000 7400
+F 0 "#PWR?" H 3000 7150 50  0001 C CNN
+F 1 "GND" H 3005 7227 50  0000 C CNN
+F 2 "" H 3000 7400 50  0001 C CNN
+F 3 "" H 3000 7400 50  0001 C CNN
+	1    3000 7400
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DE219A4
+P 3400 7400
+F 0 "#PWR?" H 3400 7150 50  0001 C CNN
+F 1 "GND" H 3405 7227 50  0000 C CNN
+F 2 "" H 3400 7400 50  0001 C CNN
+F 3 "" H 3400 7400 50  0001 C CNN
+	1    3400 7400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 7400 3400 7100
+Wire Wire Line
+	3000 7400 3000 7300
+Wire Wire Line
+	2600 6900 2200 6900
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DE22B0F
+P 3400 5600
+F 0 "#PWR?" H 3400 5450 50  0001 C CNN
+F 1 "+BATT" H 3415 5773 50  0000 C CNN
+F 2 "" H 3400 5600 50  0001 C CNN
+F 3 "" H 3400 5600 50  0001 C CNN
+	1    3400 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 5600 3400 5700
+Wire Wire Line
+	3400 5700 3600 5700
+Wire Wire Line
+	3600 5700 3600 5800
+Wire Wire Line
+	3400 5700 3200 5700
+Wire Wire Line
+	3200 5700 3200 5800
+Connection ~ 3400 5700
+Wire Wire Line
+	4300 3200 4300 3300
+Connection ~ 4300 3300
+Wire Wire Line
+	4300 2600 4300 2900
+Wire Wire Line
+	6100 3400 6100 2600
+Wire Wire Line
+	5700 3400 5700 3200
+Wire Wire Line
+	5700 2900 5700 2600
+Wire Wire Line
+	5700 3700 5700 3800
+Wire Wire Line
+	5700 3800 5900 3800
+Wire Wire Line
+	6100 3800 6100 3700
+Wire Wire Line
+	5100 3800 5100 4000
+Wire Wire Line
+	5100 4000 3600 4000
+Connection ~ 5100 3800
+Wire Wire Line
+	5900 3800 5900 4100
+Wire Wire Line
+	5900 4100 3600 4100
+Connection ~ 5900 3800
+Wire Wire Line
+	5900 3800 6100 3800
+$Comp
+L Device:LED D?
+U 1 1 5DE0EB08
+P 5700 3050
+F 0 "D?" V 5775 3025 50  0000 R TNN
+F 1 "Orange 5mm" H 5700 3150 50  0000 C BNN
+F 2 "" H 5700 3050 50  0001 C CNN
+F 3 "~" H 5700 3050 50  0001 C CNN
+	1    5700 3050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE0EB1C
+P 6100 2450
+F 0 "D?" V 6175 2425 50  0000 R TNN
+F 1 "White 5mm" H 6100 2550 50  0000 C BNN
+F 2 "" H 6100 2450 50  0001 C CNN
+F 3 "~" H 6100 2450 50  0001 C CNN
+	1    6100 2450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DE93A99
+P 4300 2100
+F 0 "#PWR?" H 4300 1950 50  0001 C CNN
+F 1 "+BATT" H 4315 2273 50  0000 C CNN
+F 2 "" H 4300 2100 50  0001 C CNN
+F 3 "" H 4300 2100 50  0001 C CNN
+	1    4300 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DE9402F
+P 5100 2100
+F 0 "#PWR?" H 5100 1950 50  0001 C CNN
+F 1 "+BATT" H 5115 2273 50  0000 C CNN
+F 2 "" H 5100 2100 50  0001 C CNN
+F 3 "" H 5100 2100 50  0001 C CNN
+	1    5100 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DE945F6
+P 5900 2100
+F 0 "#PWR?" H 5900 1950 50  0001 C CNN
+F 1 "+BATT" H 5915 2273 50  0000 C CNN
+F 2 "" H 5900 2100 50  0001 C CNN
+F 3 "" H 5900 2100 50  0001 C CNN
+	1    5900 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 2100 5900 2200
+Wire Wire Line
+	5900 2200 5700 2200
+Wire Wire Line
+	5700 2200 5700 2300
+Wire Wire Line
+	5900 2200 6100 2200
+Wire Wire Line
+	6100 2200 6100 2300
+Connection ~ 5900 2200
+Wire Wire Line
+	5100 2100 5100 2200
+Connection ~ 5100 2200
+Wire Wire Line
+	4300 2100 4300 2300
+Wire Wire Line
+	2800 3800 2700 3800
+Wire Wire Line
+	2200 3900 2600 3900
+Wire Wire Line
+	2800 4000 2500 4000
+Wire Wire Line
+	2200 4100 2400 4100
+Wire Wire Line
+	2700 3800 2700 4200
+Wire Wire Line
+	2700 4200 2800 4200
+Connection ~ 2700 3800
+Wire Wire Line
+	2700 3800 2200 3800
+Wire Wire Line
+	2600 3900 2600 4300
+Wire Wire Line
+	2600 4300 2800 4300
+Connection ~ 2600 3900
+Wire Wire Line
+	2600 3900 2800 3900
+Wire Wire Line
+	2500 4000 2500 4400
+Wire Wire Line
+	2500 4400 2800 4400
+Connection ~ 2500 4000
+Wire Wire Line
+	2500 4000 2200 4000
+Wire Wire Line
+	2400 4100 2400 4500
+Wire Wire Line
+	2400 4500 2800 4500
+Connection ~ 2400 4100
+Wire Wire Line
+	2400 4100 2800 4100
+Text Notes 5550 4625 0    50   ~ 0
++BATT
+Text Notes 5550 4725 0    50   ~ 0
+Position lamps
+Text Notes 5550 4825 0    50   ~ 0
+Stop lamps
+Text Notes 5550 4925 0    50   ~ 0
+Left turn signal
+Text Notes 5550 5025 0    50   ~ 0
+Right turn signal
+Text Notes 5550 5125 0    50   ~ 0
+GND
+Text Notes 5550 4500 0    50   ~ 0
+To trailer connector:
+Wire Wire Line
+	5300 4600 5200 4600
+Wire Wire Line
+	5200 4600 5200 4500
+Wire Wire Line
+	5300 5100 5200 5100
+Wire Wire Line
+	5200 5100 5200 5200
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DEBDC35
+P 5200 4500
+F 0 "#PWR?" H 5200 4350 50  0001 C CNN
+F 1 "+BATT" H 5215 4673 50  0000 C CNN
+F 2 "" H 5200 4500 50  0001 C CNN
+F 3 "" H 5200 4500 50  0001 C CNN
+	1    5200 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DEBE138
+P 5200 5200
+F 0 "#PWR?" H 5200 4950 50  0001 C CNN
+F 1 "GND" H 5205 5027 50  0000 C CNN
+F 2 "" H 5200 5200 50  0001 C CNN
+F 3 "" H 5200 5200 50  0001 C CNN
+	1    5200 5200
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5DEC191A
+P 3200 4800
+F 0 "#PWR?" H 3200 4550 50  0001 C CNN
+F 1 "GND" H 3205 4627 50  0000 C CNN
+F 2 "" H 3200 4800 50  0001 C CNN
+F 3 "" H 3200 4800 50  0001 C CNN
+	1    3200 4800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 4800 3200 4700
+Text HLabel 2200 3800 0    50   Input ~ 0
+POSITION_LAMPS
+Text HLabel 2200 3900 0    50   Input ~ 0
+STOP_LAMPS
+Text HLabel 2200 4000 0    50   Input ~ 0
+LEFT_TURN_SIGNAL
+Text HLabel 2200 4100 0    50   Input ~ 0
+RIGHT_TURN_SIGNAL
+Text Notes 4000 1800 0    50   ~ 0
+Rear position\nand stop lamps
+Text Notes 4800 1800 0    50   ~ 0
+Left turn signals
+Text Notes 5600 1800 0    50   ~ 0
+Right turn signals
+Text HLabel 2200 6900 0    50   Input ~ 0
+HEADLAMPS
+Text Notes 1700 5500 0    50   ~ 0
+Headlamps\nDipped and main beam using PWM
+Wire Wire Line
+	5300 2200 5300 2300
+Wire Wire Line
+	5100 2200 5300 2200
+Wire Wire Line
+	5100 3800 5300 3800
+Wire Wire Line
+	5300 3800 5300 3700
+Wire Wire Line
+	5300 3400 5300 2600
+$Comp
+L Device:R R?
+U 1 1 5DE0CEAF
+P 5300 3550
+F 0 "R?" H 5370 3596 50  0000 L CNN
+F 1 "R" H 5370 3505 50  0000 L CNN
+F 2 "" V 5230 3550 50  0001 C CNN
+F 3 "~" H 5300 3550 50  0001 C CNN
+	1    5300 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE0C5C7
+P 5300 2450
+F 0 "D?" V 5375 2425 50  0000 R TNN
+F 1 "White 5mm" H 5300 2550 50  0000 C BNN
+F 2 "" H 5300 2450 50  0001 C CNN
+F 3 "~" H 5300 2450 50  0001 C CNN
+	1    5300 2450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4900 2200 4900 2300
+Wire Wire Line
+	5100 2200 4900 2200
+$Comp
+L Device:R R?
+U 1 1 5DE0C01C
+P 4900 3550
+F 0 "R?" H 4970 3596 50  0000 L CNN
+F 1 "R" H 4970 3505 50  0000 L CNN
+F 2 "" V 4830 3550 50  0001 C CNN
+F 3 "~" H 4900 3550 50  0001 C CNN
+	1    4900 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 3700 4900 3800
+Wire Wire Line
+	4900 3400 4900 3200
+Wire Wire Line
+	4900 3800 5100 3800
+Wire Wire Line
+	4900 2900 4900 2600
+$Comp
+L Device:LED D?
+U 1 1 5DE0B3F5
+P 4900 3050
+F 0 "D?" V 4975 3025 50  0000 R TNN
+F 1 "Orange 5mm" H 4900 3150 50  0000 C BNN
+F 2 "" H 4900 3050 50  0001 C CNN
+F 3 "~" H 4900 3050 50  0001 C CNN
+	1    4900 3050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5DE0AB28
+P 4900 2450
+F 0 "D?" V 4975 2425 50  0000 R TNN
+F 1 "Orange 10mm" H 4900 2550 50  0000 C BNN
+F 2 "" H 4900 2450 50  0001 C CNN
+F 3 "~" H 4900 2450 50  0001 C CNN
+	1    4900 2450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4500 3900 4500 3700
+Wire Wire Line
+	3600 3900 4500 3900
+Wire Wire Line
+	4300 3300 4500 3300
+Wire Wire Line
+	4500 3300 4500 3400
+$Comp
+L Device:R R?
+U 1 1 5DE09B97
+P 4500 3550
+F 0 "R?" H 4570 3596 50  0000 L CNN
+F 1 "R" H 4570 3505 50  0000 L CNN
+F 2 "" V 4430 3550 50  0001 C CNN
+F 3 "~" H 4500 3550 50  0001 C CNN
+	1    4500 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 3800 4100 3700
+Wire Wire Line
+	3600 3800 4100 3800
+Wire Wire Line
+	4100 3300 4300 3300
+Wire Wire Line
+	4100 3400 4100 3300
+$Comp
+L Device:R R?
+U 1 1 5DE096EB
+P 4100 3550
+F 0 "R?" H 4170 3596 50  0000 L CNN
+F 1 "R" H 4170 3505 50  0000 L CNN
+F 2 "" V 4030 3550 50  0001 C CNN
+F 3 "~" H 4100 3550 50  0001 C CNN
+	1    4100 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+BATT #PWR?
+U 1 1 5DE4AC10
+P 3700 3500
+F 0 "#PWR?" H 3700 3350 50  0001 C CNN
+F 1 "+BATT" H 3715 3673 50  0000 C CNN
+F 2 "" H 3700 3500 50  0001 C CNN
+F 3 "" H 3700 3500 50  0001 C CNN
+	1    3700 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 3500 3700 3700
+Wire Wire Line
+	3700 3700 3600 3700
+Wire Wire Line
+	5300 4700 4900 4700
+Wire Wire Line
+	4900 4700 4900 4200
+Wire Wire Line
+	4900 4200 3600 4200
+Wire Wire Line
+	3600 4300 4800 4300
+Wire Wire Line
+	4800 4300 4800 4800
+Wire Wire Line
+	4800 4800 5300 4800
+Wire Wire Line
+	5300 4900 4700 4900
+Wire Wire Line
+	4700 4900 4700 4400
+Wire Wire Line
+	4700 4400 3600 4400
+Wire Wire Line
+	3600 4500 4600 4500
+Wire Wire Line
+	4600 4500 4600 5000
+Wire Wire Line
+	4600 5000 5300 5000
+$EndSCHEMATC

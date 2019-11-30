@@ -12,4 +12,10 @@ K joystick thumbstick analog stick XY
 F ~
 $ENDCMP
 #
+$CMP Jumper_3_Bridged12
+D Jumper, 3-pole, pins 1+2 closed/bridged
+K Jumper SPDT
+F ~
+$ENDCMP
+#
 #End Doc Library

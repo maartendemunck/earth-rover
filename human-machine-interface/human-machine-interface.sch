@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:human-machine-interface-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 8268 11693 portrait
@@ -20,7 +19,7 @@ U 1 1 5DD8541E
 P 3700 2100
 F 0 "JS1" H 3642 2365 50  0000 C CNN
 F 1 "Alps_RKJXK122000D" H 3642 2274 50  0000 C CNN
-F 2 "" H 3750 1775 50  0001 C CNN
+F 2 "earth-rover-custom-footprints:Alps_RKJXK122000D" H 3750 1775 50  0001 C CNN
 F 3 "https://www.alps.com/prod/info/E/HTML/MultiControl/Potentiometer/RKJXK/RKJXK122000D.html" H 3750 1775 50  0001 C CNN
 	1    3700 2100
 	-1   0    0    -1  
@@ -361,7 +360,7 @@ U 1 1 5DD84466
 P 1650 2100
 F 0 "JS2" H 1592 2365 50  0000 C CNN
 F 1 "Alps_RKJXK122000D" H 1592 2274 50  0000 C CNN
-F 2 "" H 1700 1775 50  0001 C CNN
+F 2 "earth-rover-custom-footprints:Alps_RKJXK122000D" H 1700 1775 50  0001 C CNN
 F 3 "https://www.alps.com/prod/info/E/HTML/MultiControl/Potentiometer/RKJXK/RKJXK122000D.html" H 1700 1775 50  0001 C CNN
 	1    1650 2100
 	-1   0    0    -1  
@@ -697,7 +696,7 @@ U 1 1 5E5F65CA
 P 4700 4000
 F 0 "U1" H 5300 4287 60  0000 C CNN
 F 1 "Teensy3.2" H 5300 4181 60  0000 C CNN
-F 2 "" H 8100 2850 60  0000 C CNN
+F 2 "" H 8100 2850 60  0001 C CNN
 F 3 "" H 8100 2850 60  0000 C CNN
 	1    4700 4000
 	1    0    0    -1  
@@ -1033,12 +1032,12 @@ Wire Wire Line
 	4900 3200 4900 2600
 Wire Wire Line
 	4100 2600 4900 2600
+Text Notes 4500 7100 0    50   ~ 0
+Teensy 3.2 SOM
 Wire Bus Line
 	2950 3300 3500 3300
 Wire Bus Line
 	3500 3300 5200 3300
 Wire Bus Line
 	3500 3300 3500 9200
-Text Notes 4500 7100 0    50   ~ 0
-Teensy 3.2 SOM
 $EndSCHEMATC

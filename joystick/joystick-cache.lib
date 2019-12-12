@@ -1,0 +1,66 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# Connector_Conn_01x04_Male
+#
+DEF Connector_Conn_01x04_Male J 0 40 Y N 1 F N
+F0 "J" 0 200 50 H V C CNN
+F1 "Connector_Conn_01x04_Male" 0 -300 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+$FPLIST
+ Connector*:*_1x??_*
+$ENDFPLIST
+DRAW
+S 34 -195 0 -205 1 1 6 F
+S 34 -95 0 -105 1 1 6 F
+S 34 5 0 -5 1 1 6 F
+S 34 105 0 95 1 1 6 F
+P 2 1 1 6 50 -200 34 -200 N
+P 2 1 1 6 50 -100 34 -100 N
+P 2 1 1 6 50 0 34 0 N
+P 2 1 1 6 50 100 34 100 N
+X Pin_1 1 200 100 150 L 50 50 1 1 P
+X Pin_2 2 200 0 150 L 50 50 1 1 P
+X Pin_3 3 200 -100 150 L 50 50 1 1 P
+X Pin_4 4 200 -200 150 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# earth-rover-symbols_AnalogMiniJoystick
+#
+DEF earth-rover-symbols_AnalogMiniJoystick JS 0 40 Y N 1 F N
+F0 "JS" 0 250 50 H V C CNN
+F1 "earth-rover-symbols_AnalogMiniJoystick" 0 150 50 H V C CNN
+F2 "" 50 -325 50 H I C CNN
+F3 "" 50 -325 50 H I C CNN
+ALIAS Alps_RKJXK122000D
+$FPLIST
+ Potentiometer*
+$ENDFPLIST
+DRAW
+S -300 100 300 -700 0 1 0 f
+S -190 -200 -110 0 0 1 10 N
+S 150 -340 -50 -260 0 1 10 N
+P 2 0 1 0 -300 -100 -250 -100 N
+P 2 0 1 0 -250 -100 -210 -100 N
+P 2 0 1 0 -250 -100 -210 -100 N
+P 2 0 1 0 50 -400 50 -360 N
+P 2 0 1 0 50 -400 50 -360 N
+P 3 0 1 0 50 -400 50 -500 -300 -500 N
+P 4 0 1 0 -195 -100 -240 -120 -240 -80 -195 -100 F
+P 4 0 1 0 -50 -300 -100 -300 -100 -400 -300 -400 N
+P 4 0 1 0 50 -345 70 -390 30 -390 50 -345 F
+P 4 0 1 0 150 -300 200 -300 200 -600 -300 -600 N
+P 5 0 1 0 -300 -200 -250 -200 -250 -250 -150 -250 -150 -200 N
+P 5 0 1 0 -300 0 -250 0 -250 50 -150 50 -150 0 N
+X 1 1 -400 0 100 R 50 50 1 1 P
+X 2 2 -400 -100 100 R 50 50 1 1 P
+X 3 3 -400 -200 100 R 50 50 1 1 P
+X 4 4 -400 -400 100 R 50 50 1 1 P
+X 5 5 -400 -500 100 R 50 50 1 1 P
+X 6 6 -400 -600 100 R 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+#End Library

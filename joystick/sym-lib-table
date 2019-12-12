@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name earth-rover-symbols)(type Legacy)(uri ${KIPRJMOD}/../kicad-libraries/earth-rover-custom-symbols.lib)(options "")(descr ""))
+)

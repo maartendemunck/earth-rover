@@ -1,13 +1,12 @@
 EESchema Schematic File Version 4
-LIBS:human-machine-interface-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 1 1
 Title "Earth Rover"
-Date "2019-12-12"
-Rev "4"
+Date "2019-12-14"
+Rev "5"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Human Machine Interface (HMI)"
@@ -99,142 +98,72 @@ F 3 "http://www.nordicsemi.com/eng/content/download/2730/34105/file/nRF24L01_Pro
 $EndComp
 Text Notes 3600 2750 0    50   ~ 0
 Right joystick
-Text Notes 4200 7750 0    50   ~ 0
-SW1: On/Off switch\nWhen switched off, micro USB connector J1 can be used to charge the powerbank
-Text Notes 5980 9310 3    50   ~ 0
-GND Out
-Text Notes 5680 9300 3    50   ~ 0
-To powerbank:
-Text Notes 6080 9310 3    50   ~ 0
-+5V Out
-Text Notes 5880 9300 3    50   ~ 0
-+5V In (Charge)
-Text Notes 5780 9300 3    50   ~ 0
-GND In (Charge)
-Wire Wire Line
-	7050 8150 7050 8050
-Connection ~ 7050 8150
-Wire Wire Line
-	7150 8150 7050 8150
-Wire Wire Line
-	7150 8050 7150 8150
-Wire Wire Line
-	7050 8350 7050 8150
-Wire Wire Line
-	6850 8350 7050 8350
-Connection ~ 7050 8650
-Wire Wire Line
-	7050 8650 7050 8850
-Wire Wire Line
-	5950 8650 7050 8650
-Wire Wire Line
-	5950 9050 5950 8650
-Wire Wire Line
-	6050 8250 6450 8250
-Wire Wire Line
-	6050 9050 6050 8250
-Wire Wire Line
-	5850 8150 5850 9050
-Wire Wire Line
-	5750 8950 5750 9050
-Wire Wire Line
-	4450 8950 5750 8950
-Wire Wire Line
-	4450 8850 4450 8950
 $Comp
 L power:GND #PWR0116
 U 1 1 5DDF6EDD
-P 7050 8950
-F 0 "#PWR0116" H 7050 8700 50  0001 C CNN
-F 1 "GND" H 7055 8777 50  0000 C CNN
-F 2 "" H 7050 8950 50  0001 C CNN
-F 3 "" H 7050 8950 50  0001 C CNN
-	1    7050 8950
+P 6250 9750
+F 0 "#PWR0116" H 6250 9500 50  0001 C CNN
+F 1 "GND" H 6255 9577 50  0000 C CNN
+F 2 "" H 6250 9750 50  0001 C CNN
+F 3 "" H 6250 9750 50  0001 C CNN
+	1    6250 9750
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:PWR_FLAG #FLG0102
 U 1 1 5DDF79D3
-P 7150 8950
-F 0 "#FLG0102" H 7150 9025 50  0001 C CNN
-F 1 "PWR_FLAG" H 7150 9123 50  0001 C CNN
-F 2 "" H 7150 8950 50  0001 C CNN
-F 3 "~" H 7150 8950 50  0001 C CNN
-	1    7150 8950
-	1    0    0    1   
+P 5650 8100
+F 0 "#FLG0102" H 5650 8175 50  0001 C CNN
+F 1 "PWR_FLAG" H 5650 8273 50  0001 C CNN
+F 2 "" H 5650 8100 50  0001 C CNN
+F 3 "~" H 5650 8100 50  0001 C CNN
+	1    5650 8100
+	-1   0    0    -1  
 $EndComp
 $Comp
 L power:+5V #PWR0117
 U 1 1 5DDFAC1D
-P 7050 8050
-F 0 "#PWR0117" H 7050 7900 50  0001 C CNN
-F 1 "+5V" H 7065 8223 50  0000 C CNN
-F 2 "" H 7050 8050 50  0001 C CNN
-F 3 "" H 7050 8050 50  0001 C CNN
-	1    7050 8050
+P 7450 8000
+F 0 "#PWR0117" H 7450 7850 50  0001 C CNN
+F 1 "+5V" H 7465 8173 50  0000 C CNN
+F 2 "" H 7450 8000 50  0001 C CNN
+F 3 "" H 7450 8000 50  0001 C CNN
+	1    7450 8000
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:PWR_FLAG #FLG0103
 U 1 1 5DDFA702
-P 7150 8050
-F 0 "#FLG0103" H 7150 8125 50  0001 C CNN
-F 1 "PWR_FLAG" H 7150 8223 50  0001 C CNN
-F 2 "" H 7150 8050 50  0001 C CNN
-F 3 "~" H 7150 8050 50  0001 C CNN
-	1    7150 8050
-	1    0    0    -1  
+P 5650 8600
+F 0 "#FLG0103" H 5650 8675 50  0001 C CNN
+F 1 "PWR_FLAG" H 5650 8773 50  0001 C CNN
+F 2 "" H 5650 8600 50  0001 C CNN
+F 3 "~" H 5650 8600 50  0001 C CNN
+	1    5650 8600
+	-1   0    0    1   
 $EndComp
 $Comp
 L Switch:SW_DPDT_x2 SW1
 U 2 1 5DDAD789
-P 5150 8250
-F 0 "SW1" H 5150 8450 50  0000 C CNN
-F 1 "SW_DPDT_x2" H 5150 8444 50  0001 C CNN
-F 2 "" H 5150 8250 50  0001 C CNN
-F 3 "~" H 5150 8250 50  0001 C CNN
-	2    5150 8250
-	1    0    0    -1  
+P 5150 8700
+F 0 "SW1" H 5150 8900 50  0000 C CNN
+F 1 "SW_DPDT_x2" H 5150 8894 50  0001 C CNN
+F 2 "" H 5150 8700 50  0001 C CNN
+F 3 "~" H 5150 8700 50  0001 C CNN
+	2    5150 8700
+	1    0    0    1   
 $EndComp
 $Comp
 L Switch:SW_DPDT_x2 SW1
 U 1 1 5DDAD09C
-P 6650 8250
-F 0 "SW1" H 6650 8450 50  0000 C CNN
-F 1 "SW_DPDT_x2" H 6650 8444 50  0001 C CNN
-F 2 "" H 6650 8250 50  0001 C CNN
-F 3 "~" H 6650 8250 50  0001 C CNN
-	1    6650 8250
-	1    0    0    -1  
+P 5150 8200
+F 0 "SW1" H 5150 8400 50  0000 C CNN
+F 1 "SW_DPDT_x2" H 5150 8394 50  0001 C CNN
+F 2 "" H 5150 8200 50  0001 C CNN
+F 3 "~" H 5150 8200 50  0001 C CNN
+	1    5150 8200
+	1    0    0    1   
 $EndComp
-$Comp
-L Connector:Conn_01x04_Male J2
-U 1 1 5DDABAC3
-P 5850 9250
-F 0 "J2" V 5975 9450 50  0000 L CNN
-F 1 "Conn_01x04_Male" V 5900 9450 50  0001 L CNN
-F 2 "" H 5850 9250 50  0001 C CNN
-F 3 "~" H 5850 9250 50  0001 C CNN
-	1    5850 9250
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Connector:USB_B_Micro J1
-U 1 1 5DD9045B
-P 4450 8450
-F 0 "J1" H 4507 8917 50  0000 C CNN
-F 1 "USB_B_Micro" H 4507 8826 50  0000 C CNN
-F 2 "" H 4600 8400 50  0001 C CNN
-F 3 "~" H 4600 8400 50  0001 C CNN
-	1    4450 8450
-	1    0    0    -1  
-$EndComp
-NoConn ~ 4750 8450
-NoConn ~ 4750 8550
-NoConn ~ 4750 8650
-NoConn ~ 4350 8850
-NoConn ~ 5350 8350
-NoConn ~ 6850 8150
 $Comp
 L Jumper:Jumper_2_Open JP1
 U 1 1 5E5A2A7E
@@ -292,9 +221,9 @@ Wire Wire Line
 Text Notes 3200 9400 2    50   ~ 0
 Reset EEPROM jumper\nClose and boot HMI to erase EEPROM
 Wire Notes Line
-	7650 10050 4150 10050
-Text Notes 4200 10000 0    50   ~ 0
-Power (using USB powerbank)
+	7650 10050 4250 10050
+Text Notes 4300 10000 0    50   ~ 0
+Power
 $Comp
 L Device:CP C3
 U 1 1 5DE51BF3
@@ -460,31 +389,6 @@ F 3 "~" H 3750 1750 50  0001 C CNN
 	1    3750 1550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4750 8250 4950 8250
-$Comp
-L Device:CP C1
-U 1 1 5DF7C826
-P 7250 8500
-F 0 "C1" H 7368 8546 50  0000 L CNN
-F 1 "100u" H 7368 8455 50  0000 L CNN
-F 2 "" H 7288 8350 50  0001 C CNN
-F 3 "~" H 7250 8500 50  0001 C CNN
-	1    7250 8500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7050 8350 7250 8350
-Connection ~ 7050 8350
-Wire Wire Line
-	7050 8650 7250 8650
-Wire Wire Line
-	7150 8950 7150 8850
-Wire Wire Line
-	7150 8850 7050 8850
-Connection ~ 7050 8850
-Wire Wire Line
-	7050 8850 7050 8950
 $Comp
 L Device:CP C5
 U 1 1 5E08027F
@@ -527,16 +431,8 @@ Wire Wire Line
 Wire Wire Line
 	1350 7300 1350 7400
 Connection ~ 2200 9100
-Text Label 4500 8950 0    50   ~ 0
-GND_Charge
-Text Label 5400 8150 0    50   ~ 0
-+5V_Charge
-Text Label 6100 8250 0    50   ~ 0
-+5V_In
 Wire Notes Line
-	4150 10050 4150 7550
-Wire Wire Line
-	5350 8150 5850 8150
+	4250 10050 4250 7700
 Wire Wire Line
 	6500 5550 6500 5650
 Wire Wire Line
@@ -610,7 +506,6 @@ NoConn ~ 4500 6700
 NoConn ~ 4500 6600
 NoConn ~ 4500 6500
 NoConn ~ 4500 6400
-NoConn ~ 4500 6300
 NoConn ~ 4500 6200
 NoConn ~ 4500 4700
 NoConn ~ 4500 4800
@@ -774,9 +669,9 @@ F 3 "" H 6300 6900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Notes Line
-	4150 7550 7650 7550
+	4250 7700 7650 7700
 Wire Notes Line
-	7650 10050 7650 7550
+	7650 10050 7650 7700
 Text Label 3200 9100 2    50   ~ 0
 RESET_EEPROM
 Text Label 3200 7600 2    50   ~ 0
@@ -1015,6 +910,208 @@ Wire Wire Line
 	4100 2300 4200 2300
 Wire Wire Line
 	4200 2300 4200 2700
+$Comp
+L Connector:Barrel_Jack J1
+U 1 1 5DF6931B
+P 4650 9350
+F 0 "J1" H 4707 9675 50  0000 C CNN
+F 1 "Barrel_Jack" H 4707 9584 50  0000 C CNN
+F 2 "" H 4700 9310 50  0001 C CNN
+F 3 "~" H 4700 9310 50  0001 C CNN
+	1    4650 9350
+	1    0    0    -1  
+$EndComp
+$Comp
+L earth-rover-custom-symbols:LM2940CT-5.0 U3
+U 1 1 5DF8B3C4
+P 6650 8100
+F 0 "U3" H 6650 8342 50  0000 C CNN
+F 1 "LM2940CT-5.0" H 6650 8251 50  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 6650 8325 50  0001 C CIN
+F 3 "https://www.ti.com/lit/ds/symlink/lm2940-n.pdf" H 6650 8050 50  0001 C CNN
+	1    6650 8100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C6
+U 1 1 5DF8CA11
+P 7150 8350
+F 0 "C6" H 7268 8396 50  0000 L CNN
+F 1 "47u" H 7268 8305 50  0000 L CNN
+F 2 "" H 7188 8200 50  0001 C CNN
+F 3 "~" H 7150 8350 50  0001 C CNN
+	1    7150 8350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7150 8500 7150 8600
+Wire Wire Line
+	7150 8600 6650 8600
+Wire Wire Line
+	6650 8600 6650 8400
+Wire Wire Line
+	6950 8100 7150 8100
+Wire Wire Line
+	7150 8100 7150 8200
+$Comp
+L Device:CP C1
+U 1 1 5DFA52F7
+P 5850 8350
+F 0 "C1" H 5968 8396 50  0000 L CNN
+F 1 "470n" H 5968 8305 50  0000 L CNN
+F 2 "" H 5888 8200 50  0001 C CNN
+F 3 "~" H 5850 8350 50  0001 C CNN
+	1    5850 8350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5350 8600 5650 8600
+Connection ~ 6650 8600
+$Comp
+L Device:R R4
+U 1 1 5DFB0794
+P 6250 8950
+F 0 "R4" H 6180 8904 50  0000 R CNN
+F 1 "2M, 1%" H 6180 8995 50  0000 R CNN
+F 2 "" V 6180 8950 50  0001 C CNN
+F 3 "~" H 6250 8950 50  0001 C CNN
+	1    6250 8950
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5DFB0F4B
+P 6250 9450
+F 0 "R5" H 6180 9404 50  0000 R CNN
+F 1 "1M, 1%" H 6180 9495 50  0000 R CNN
+F 2 "" V 6180 9450 50  0001 C CNN
+F 3 "~" H 6250 9450 50  0001 C CNN
+	1    6250 9450
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:C C7
+U 1 1 5DFB1648
+P 6750 9450
+F 0 "C7" H 6865 9496 50  0000 L CNN
+F 1 "100n" H 6865 9405 50  0000 L CNN
+F 2 "" H 6788 9300 50  0001 C CNN
+F 3 "~" H 6750 9450 50  0001 C CNN
+	1    6750 9450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6250 9100 6250 9150
+Wire Wire Line
+	6250 9250 6750 9250
+Wire Wire Line
+	6750 9250 6750 9300
+Connection ~ 6250 9250
+Wire Wire Line
+	6250 9250 6250 9300
+Wire Wire Line
+	6250 9600 6250 9650
+Wire Wire Line
+	6250 9650 6750 9650
+Wire Wire Line
+	6750 9650 6750 9600
+Connection ~ 6250 9650
+Wire Wire Line
+	6250 9650 6250 9750
+$Comp
+L power:GND #PWR09
+U 1 1 5E00007F
+P 7450 8700
+F 0 "#PWR09" H 7450 8450 50  0001 C CNN
+F 1 "GND" H 7455 8527 50  0000 C CNN
+F 2 "" H 7450 8700 50  0001 C CNN
+F 3 "" H 7450 8700 50  0001 C CNN
+	1    7450 8700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7450 8600 7450 8700
+Connection ~ 7150 8600
+Wire Wire Line
+	7450 8100 7450 8000
+Connection ~ 7150 8100
+$Comp
+L Device:Battery BT1
+U 1 1 5DF6B312
+P 4550 8450
+F 0 "BT1" H 4442 8496 50  0000 R CNN
+F 1 "6x AA" H 4442 8405 50  0000 R CNN
+F 2 "" V 4550 8510 50  0001 C CNN
+F 3 "~" V 4550 8510 50  0001 C CNN
+	1    4550 8450
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 8200 4950 8200
+Wire Wire Line
+	4550 8650 4550 8700
+Wire Wire Line
+	4550 8700 4950 8700
+Text Label 5000 9250 0    50   ~ 0
+CHARGE_+
+Wire Wire Line
+	5350 8100 5650 8100
+Wire Wire Line
+	5850 8200 5850 8100
+Connection ~ 5850 8100
+Wire Wire Line
+	5850 8100 6250 8100
+Wire Wire Line
+	5850 8500 5850 8600
+Connection ~ 5850 8600
+Wire Wire Line
+	5850 8600 6650 8600
+Wire Wire Line
+	5350 8800 5550 8800
+Wire Wire Line
+	5550 8800 5550 9450
+Wire Wire Line
+	5550 9450 4950 9450
+Wire Wire Line
+	4950 9250 5450 9250
+Wire Wire Line
+	5450 8300 5350 8300
+Wire Wire Line
+	5450 8300 5450 9250
+Text Label 5000 9450 0    50   ~ 0
+CHARGE_GND
+Wire Wire Line
+	6250 8800 6250 8100
+Connection ~ 6250 8100
+Wire Wire Line
+	6250 8100 6350 8100
+Wire Wire Line
+	6250 9150 5850 9150
+Wire Wire Line
+	5850 9150 5850 9750
+Connection ~ 6250 9150
+Wire Wire Line
+	6250 9150 6250 9250
+Wire Wire Line
+	4050 9750 4050 6300
+Wire Wire Line
+	4050 6300 4500 6300
+Wire Wire Line
+	4050 9750 5850 9750
+Text Label 4350 9750 0    50   ~ 0
+BATTERY_MONITOR
+Connection ~ 5650 8100
+Wire Wire Line
+	5650 8100 5850 8100
+Connection ~ 5650 8600
+Wire Wire Line
+	5650 8600 5850 8600
+Wire Wire Line
+	4550 8200 4550 8250
+Wire Wire Line
+	7150 8600 7450 8600
+Wire Wire Line
+	7150 8100 7450 8100
 Wire Bus Line
 	2950 3300 3500 3300
 Wire Bus Line

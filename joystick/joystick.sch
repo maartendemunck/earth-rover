@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 1 1
 Title "Earth Rover"
-Date "2019-12-12"
-Rev "1"
+Date "2019-12-20"
+Rev "2"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Joystick board"
@@ -18,7 +18,7 @@ L earth-rover-symbols:AnalogMiniJoystick JS1
 U 1 1 5DF2B0F3
 P 3850 6750
 F 0 "JS1" H 3850 7025 50  0000 C CNN
-F 1 "AnalogMiniJoystick" H 3850 6925 50  0000 C CNN
+F 1 "Alps Alpine RKJXK122000D" H 3850 6925 50  0000 C CNN
 F 2 "earth-rover-footprints:Alps_RKJXK122000D" H 3900 6425 50  0001 C CNN
 F 3 "~" H 3900 6425 50  0001 C CNN
 	1    3850 6750

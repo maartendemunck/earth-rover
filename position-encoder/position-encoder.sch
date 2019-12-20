@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:position-encoder-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 8268 11693 portrait
@@ -74,7 +73,7 @@ L Device:R R2
 U 1 1 5DCA1A9C
 P 3700 7550
 F 0 "R2" H 3770 7596 50  0000 L CNN
-F 1 "10kΩ" H 3770 7505 50  0000 L CNN
+F 1 "10k(*)" H 3770 7505 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3630 7550 50  0001 C CNN
 F 3 "~" H 3700 7550 50  0001 C CNN
 	1    3700 7550
@@ -85,7 +84,7 @@ L Device:R R1
 U 1 1 5DCA141F
 P 3700 5550
 F 0 "R1" H 3770 5596 50  0000 L CNN
-F 1 "10kΩ" H 3770 5505 50  0000 L CNN
+F 1 "10k(*)" H 3770 5505 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3630 5550 50  0001 C CNN
 F 3 "~" H 3700 5550 50  0001 C CNN
 	1    3700 5550
@@ -302,5 +301,5 @@ Connection ~ 5300 5500
 Wire Wire Line
 	5300 5500 5300 5700
 Text Notes 2500 9150 0    50   ~ 0
-The TLE4905L unipolar magnetic field switches have open collector outputs.\nWhen using 3.3V logic, omit pull-up resistors R1 and R2 and use external pull-up resistors.
+(*) The TLE4905L unipolar magnetic field switches have open collector outputs.\nWhen using 3.3V logic, omit pull-up resistors R1 and R2 and use external pull-up resistors.
 $EndSCHEMATC

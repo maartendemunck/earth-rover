@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 2 3
 Title "Earth Rover"
-Date "2019-12-01"
-Rev "2"
+Date "2019-12-21"
+Rev "4"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Vehicle Control Unit"

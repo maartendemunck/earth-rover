@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 1 1
 Title "Earth Rover"
-Date "2019-12-20"
-Rev "6"
+Date "2019-12-21"
+Rev "7"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Human Machine Interface (HMI)"
@@ -972,7 +972,7 @@ L Device:R R4
 U 1 1 5DFB0794
 P 6250 8950
 F 0 "R4" H 6180 8904 50  0000 R CNN
-F 1 "2M, 1%" H 6180 8995 50  0000 R CNN
+F 1 "2.2M, 1%" H 6180 8995 50  0000 R CNN
 F 2 "" V 6180 8950 50  0001 C CNN
 F 3 "~" H 6250 8950 50  0001 C CNN
 	1    6250 8950

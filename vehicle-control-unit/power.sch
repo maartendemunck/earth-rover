@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 3 3
 Title "Earth Rover"
-Date "2019-12-01"
-Rev "2"
+Date "2019-12-21"
+Rev "4"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Vehicle Control Unit"
@@ -18,7 +18,7 @@ L Device:R R16
 U 1 1 5E01562C
 P 3350 8750
 F 0 "R16" H 3420 8796 50  0000 L CNN
-F 1 "2M, 1%" H 3420 8705 50  0000 L CNN
+F 1 "2.7M, 1%" H 3420 8705 50  0000 L CNN
 F 2 "" V 3280 8750 50  0001 C CNN
 F 3 "~" H 3350 8750 50  0001 C CNN
 	1    3350 8750

@@ -69,4 +69,12 @@ Text Notes 4890 7975 3    50   ~ 0
 X
 Text Notes 4990 7975 3    50   ~ 0
 Y
+Text Label 4400 7250 0    50   ~ 0
+X
+Text Label 4400 6850 0    50   ~ 0
+Y
+Text Label 4400 6950 0    50   ~ 0
+GND
+Text Label 4400 6750 0    50   ~ 0
+V+
 $EndSCHEMATC

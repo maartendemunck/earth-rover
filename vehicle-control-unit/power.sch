@@ -208,10 +208,10 @@ Wire Wire Line
 	3750 8500 3750 8200
 Wire Wire Line
 	2350 8500 3750 8500
-Text Notes 3850 8300 0    50   ~ 0
+Text Notes 3850 8400 0    50   ~ 0
 Jumper selects switch\nor BEC power supply\nto switch VCU power
 Wire Wire Line
-	4200 7300 4500 7300
+	4200 7300 4400 7300
 Wire Wire Line
 	4200 7950 4200 7300
 Wire Wire Line
@@ -366,4 +366,33 @@ Wire Wire Line
 	3350 8950 3350 9050
 Text HLabel 4450 8950 2    50   Output ~ 0
 BATTERY_MONITOR
+$Comp
+L Device:R R20
+U 1 1 5E349CEB
+P 4400 7650
+F 0 "R20" H 4470 7696 50  0000 L CNN
+F 1 "10k" H 4470 7605 50  0000 L CNN
+F 2 "" V 4330 7650 50  0001 C CNN
+F 3 "~" H 4400 7650 50  0001 C CNN
+	1    4400 7650
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR045
+U 1 1 5E34A716
+P 4400 7850
+F 0 "#PWR045" H 4400 7600 50  0001 C CNN
+F 1 "GND" H 4405 7677 50  0000 C CNN
+F 2 "" H 4400 7850 50  0001 C CNN
+F 3 "" H 4400 7850 50  0001 C CNN
+	1    4400 7850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4400 7850 4400 7800
+Wire Wire Line
+	4400 7500 4400 7300
+Connection ~ 4400 7300
+Wire Wire Line
+	4400 7300 4500 7300
 $EndSCHEMATC

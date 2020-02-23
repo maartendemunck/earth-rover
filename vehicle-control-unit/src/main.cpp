@@ -32,10 +32,11 @@
 constexpr uint8_t steering_servo_pin = 20u;    //!< I/O pin used to control the steering servo.
 constexpr uint8_t esc_pin = 21u;               //!< I/O pin used to control the electronic speed controller (ESC).
 constexpr uint8_t gearbox_servo_pin = 22u;     //!< I/O pin used to control the gearbox servo.
-constexpr uint8_t head_lamp_pin = 3u;          //!< I/O pin used to control the head lamps.
-constexpr uint8_t tail_lamp_pin = 4u;          //!< I/O pin used to control the tail lamps.
+constexpr uint8_t head_lamp_pin = 6u;          //!< I/O pin used to control the head lamps.
+constexpr uint8_t tail_lamp_pin = 2u;          //!< I/O pin used to control the tail lamps.
+constexpr uint8_t stop_lamp_pin = 3u;          //!< I/O pin used to control the stop lamps.
+constexpr uint8_t turn_signal_left_pin = 4u;   //!< I/O pin used to control the left turn signal.
 constexpr uint8_t turn_signal_right_pin = 5u;  //!< I/O pin used to control the right turn signal.
-constexpr uint8_t turn_signal_left_pin = 6u;   //!< I/O pin used to control the left turn signal.
 
 constexpr i2c_t3 & imu_i2c = Wire;             //!< I²C interface used by the BNO055 IMU.
 constexpr uint8_t imu_i2c_scl_pin = 19u;       //!< I/O pin used for the I²C interface's SCL signal.
@@ -55,7 +56,8 @@ earth_rover_vcu::SteeringServo steering_servo {steering_servo_pin};
 //! Powertrain device driver.
 earth_rover_vcu::Powertrain powertrain {esc_pin, gearbox_servo_pin};
 //! Automotive lighting device driver.
-earth_rover_vcu::Lighting lighting {head_lamp_pin, tail_lamp_pin, turn_signal_right_pin, turn_signal_left_pin};
+earth_rover_vcu::Lighting lighting {
+  head_lamp_pin, tail_lamp_pin, stop_lamp_pin, turn_signal_right_pin, turn_signal_left_pin};
 //! Position encoder device driver.
 earth_rover_vcu::PositionEncoder<7u, 8u> position_encoder {23000u, 0u, 0u};
 //! IMU device driver.

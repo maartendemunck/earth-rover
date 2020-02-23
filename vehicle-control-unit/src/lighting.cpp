@@ -12,10 +12,11 @@
 namespace earth_rover_vcu
 {
 
-  Lighting::Lighting(uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number,
+  Lighting::Lighting(uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number, uint8_t stop_lamp_pin_number, 
                      uint8_t turn_signal_right_pin_number, uint8_t turn_signal_left_pin_number):
     head_lamp_pin_number{head_lamp_pin_number},
     tail_lamp_pin_number{tail_lamp_pin_number},
+    stop_lamp_pin_number{stop_lamp_pin_number},
     turn_signal_right_pin_number{turn_signal_right_pin_number},
     turn_signal_left_pin_number{turn_signal_left_pin_number}
   {
@@ -36,6 +37,7 @@ namespace earth_rover_vcu
   {
     pinMode(head_lamp_pin_number, OUTPUT);
     pinMode(tail_lamp_pin_number, OUTPUT);
+    pinMode(stop_lamp_pin_number, OUTPUT);
     pinMode(turn_signal_right_pin_number, OUTPUT);
     pinMode(turn_signal_left_pin_number, OUTPUT);
   }
@@ -48,16 +50,16 @@ namespace earth_rover_vcu
       turn_signal_flipped_state = !turn_signal_flipped_state;
       if(hazard_flashers_state == true)
       {
-        analogWrite(turn_signal_right_pin_number, turn_signal_flipped_state * 256);
-        analogWrite(turn_signal_left_pin_number, turn_signal_flipped_state * 256);
+        digitalWrite(turn_signal_right_pin_number, turn_signal_flipped_state);
+        digitalWrite(turn_signal_left_pin_number, turn_signal_flipped_state);
       }
       else if(turn_signal_right_state == true && turn_signal_left_state == false)
       {
-        analogWrite(turn_signal_right_pin_number, turn_signal_flipped_state * 256);
+        digitalWrite(turn_signal_right_pin_number, turn_signal_flipped_state);
       }
       else if(turn_signal_left_state == true && turn_signal_right_state == false)
       {
-        analogWrite(turn_signal_left_pin_number, turn_signal_flipped_state * 256);
+        digitalWrite(turn_signal_left_pin_number, turn_signal_flipped_state);
       }
       since_turn_signal_flipped -= turn_signal_period;
     }
@@ -115,27 +117,17 @@ namespace earth_rover_vcu
     {
       analogWrite(head_lamp_pin_number, 0);
     }
-    // Tail lights at full intensity when braking or at low intensity when dipped beam is on.
-    if(stop_lamps_state == true)
-    {
-      analogWrite(tail_lamp_pin_number, 256);
-    }
-    else if(dipped_beam_state == true)
-    {
-      analogWrite(tail_lamp_pin_number, 60);
-    }
-    else
-    {
-      analogWrite(tail_lamp_pin_number, 0);
-    }
+    // Set tail lamps and stop lamps. Combining both in a single LED will be handled by the hardware.
+    digitalWrite(tail_lamp_pin_number, dipped_beam_state);
+    digitalWrite(stop_lamp_pin_number, stop_lamps_state);
     // Shut turn signals off if requested (on will be handled by the spinOnce loop).
     if(turn_signal_right_state == false && hazard_flashers_state == false)
     {
-      analogWrite(turn_signal_right_pin_number, 0);
+      digitalWrite(turn_signal_right_pin_number, 0);
     }
     if(turn_signal_left_state == false && hazard_flashers_state == false)
     {
-      analogWrite(turn_signal_left_pin_number, 0);
+      digitalWrite(turn_signal_left_pin_number, 0);
     }
   }
 

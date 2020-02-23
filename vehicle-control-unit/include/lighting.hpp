@@ -30,6 +30,7 @@ namespace earth_rover_vcu
 
       uint8_t head_lamp_pin_number;  //!< I/O pin used to control the head lamps.
       uint8_t tail_lamp_pin_number;  //!< I/O pin used to control the tail lamps.
+      uint8_t stop_lamp_pin_number;  //!< I/O pin used to control the stop lamps.
       uint8_t turn_signal_right_pin_number;  //!< I/O pin used to control the right turn signal.
       uint8_t turn_signal_left_pin_number;  //!< I/O pin used to control the left turn signal.
 
@@ -54,7 +55,7 @@ namespace earth_rover_vcu
        *  \param turn_signal_left_pin_number I/O pin used to control the left turn signal.
        */
       Lighting(
-        uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number,
+        uint8_t head_lamp_pin_number, uint8_t tail_lamp_pin_number, uint8_t stop_lamp_pin_number,
         uint8_t turn_signal_right_pin_number, uint8_t turn_signal_left_pin_number);
 
       //! Destructor.

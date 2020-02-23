@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 3 3
 Title "Earth Rover"
-Date "2019-12-21"
-Rev "4"
+Date "2020-02-23"
+Rev "5"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Vehicle Control Unit"
@@ -18,7 +18,7 @@ L Device:R R16
 U 1 1 5E01562C
 P 3350 8750
 F 0 "R16" H 3420 8796 50  0000 L CNN
-F 1 "2.7M, 1%" H 3420 8705 50  0000 L CNN
+F 1 "270k, 1%" H 3420 8705 50  0000 L CNN
 F 2 "" V 3280 8750 50  0001 C CNN
 F 3 "~" H 3350 8750 50  0001 C CNN
 	1    3350 8750
@@ -29,7 +29,7 @@ L Device:R R17
 U 1 1 5E015B81
 P 3350 9250
 F 0 "R17" H 3420 9296 50  0000 L CNN
-F 1 "1M, 1%" H 3420 9205 50  0000 L CNN
+F 1 "100k, 1%" H 3420 9205 50  0000 L CNN
 F 2 "" V 3280 9250 50  0001 C CNN
 F 3 "~" H 3350 9250 50  0001 C CNN
 	1    3350 9250
@@ -38,20 +38,20 @@ $EndComp
 $Comp
 L Device:C C7
 U 1 1 5E015FEC
-P 3850 9250
-F 0 "C7" H 3965 9296 50  0000 L CNN
-F 1 "100n" H 3965 9205 50  0000 L CNN
-F 2 "" H 3888 9100 50  0001 C CNN
-F 3 "~" H 3850 9250 50  0001 C CNN
-	1    3850 9250
+P 3950 9250
+F 0 "C7" H 4065 9296 50  0000 L CNN
+F 1 "100n" H 4065 9205 50  0000 L CNN
+F 2 "" H 3988 9100 50  0001 C CNN
+F 3 "~" H 3950 9250 50  0001 C CNN
+	1    3950 9250
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	3350 9100 3350 9050
 Wire Wire Line
-	3350 9050 3850 9050
+	3350 9050 3950 9050
 Wire Wire Line
-	3850 9050 3850 9100
+	3950 9050 3950 9100
 Connection ~ 3350 9050
 $Comp
 L power:GND #PWR040
@@ -67,9 +67,9 @@ $EndComp
 Wire Wire Line
 	3350 9500 3350 9450
 Wire Wire Line
-	3350 9450 3850 9450
+	3350 9450 3950 9450
 Wire Wire Line
-	3850 9450 3850 9400
+	3950 9450 3950 9400
 Connection ~ 3350 9450
 Wire Wire Line
 	3350 9450 3350 9400
@@ -360,12 +360,10 @@ Wire Wire Line
 Wire Wire Line
 	3350 8900 3350 8950
 Wire Wire Line
-	3350 8950 4450 8950
+	3350 8950 4650 8950
 Connection ~ 3350 8950
 Wire Wire Line
 	3350 8950 3350 9050
-Text HLabel 4450 8950 2    50   Output ~ 0
-BATTERY_MONITOR
 $Comp
 L Device:R R20
 U 1 1 5E349CEB
@@ -395,4 +393,6 @@ Wire Wire Line
 Connection ~ 4400 7300
 Wire Wire Line
 	4400 7300 4500 7300
+Text HLabel 4650 8950 2    50   Output ~ 0
+BATTERY_MONITOR
 $EndSCHEMATC

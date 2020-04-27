@@ -7,5 +7,8 @@
 			"path": "vehicle-control-unit"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"clang-format.executable": "clang-format-11",
+		"editor.formatOnSave": true
+	}
 }

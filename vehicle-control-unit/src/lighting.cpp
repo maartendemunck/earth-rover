@@ -28,6 +28,7 @@ namespace earth_rover_vcu
   {
     pinMode(head_lamp_pin_number, INPUT);
     pinMode(tail_lamp_pin_number, INPUT);
+    pinMode(stop_lamp_pin_number, INPUT);
     pinMode(turn_signal_right_pin_number, INPUT);
     pinMode(turn_signal_left_pin_number, INPUT);
   }

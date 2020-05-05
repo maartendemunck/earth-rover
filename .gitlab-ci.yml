@@ -10,25 +10,25 @@ before_script:
 build-hmi:
   stage: build
   script: "cd human-machine-interface
-           && platformio run -e teensy32
+           && platformio run
            && cp .pio/build/teensy32/firmware.hex firmware-teensy32.hex"
   artifacts:
     paths:
       - human-machine-interface/firmware-teensy32.hex
 
-test-hmi:
-  stage: test
-  script: "cd human-machine-interface
-           && platformio test -e native"
-
 build-vcu:
   stage: build
   script: "cd vehicle-control-unit
-           && platformio run -e teensy32
+           && platformio run
            && cp .pio/build/teensy32/firmware.hex firmware-teensy32.hex"
   artifacts:
     paths:
       - vehicle-control-unit/firmware-teensy32.hex
+
+test-hmi:
+  stage: test
+  script: "cd human-machine-interface
+           && platformio test -e native"
 
 test-vcu:
   stage: test

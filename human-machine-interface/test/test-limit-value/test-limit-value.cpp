@@ -24,7 +24,7 @@ void testLimitValue() {
 
 int main(int argc, char **argv) {
     UNITY_BEGIN();
-    testLimitValue();
+    RUN_TEST(testLimitValue);
     UNITY_END();
 }
 #endif

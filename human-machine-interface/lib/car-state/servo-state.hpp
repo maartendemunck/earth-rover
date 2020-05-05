@@ -11,6 +11,7 @@
 #include "configuration-parameter.hpp"
 #include "limit-value.hpp"
 #include <cstdint>
+#include <utility>
 
 namespace earth_rover_hmi {
 

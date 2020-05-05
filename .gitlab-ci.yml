@@ -2,6 +2,7 @@ image: python:3
 
 stages:
   - build
+  - test
 
 before_script:
   - "pip install -U platformio"
@@ -15,6 +16,11 @@ build-hmi:
     paths:
       - human-machine-interface/firmware-teensy32.hex
 
+test-hmi:
+  stage: test
+  script: "cd human-machine-interface
+           && platformio test -e native"
+
 build-vcu:
   stage: build
   script: "cd vehicle-control-unit
@@ -23,3 +29,8 @@ build-vcu:
   artifacts:
     paths:
       - vehicle-control-unit/firmware-teensy32.hex
+
+test-hmi:
+  stage: test
+  script: "cd vehicle-control-unit
+           && platformio test -e native"

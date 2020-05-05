@@ -13,8 +13,8 @@ namespace earth_rover_hmi {
     //! Container for a configuration parameter.
     /*!
      *  The container stores both the current value of the configuration parameter and the value
-     * stored in the VCU and has a flag indicating whether the value stored in the VCU was already
-     * retrieved or not.
+     *  stored in the VCU and has a flag indicating whether the value stored in the VCU was already
+     *  retrieved or not.
      *
      *  The stored type needs an operator!=.
      *
@@ -33,20 +33,20 @@ namespace earth_rover_hmi {
         //! Constructor.
         /*!
          *  The current value is initialized using the configuration parameter's default
-         * constructor.
+         *  constructor.
          */
         ConfigurationParameter() : value{}, is_available{false}, is_stored{true} { ; }
 
         //! Constructor.
         /*!
          *  Initialize the current value using the given value. If the is_initialized flag is false
-         * (the default), the parameter is reported as unavailable nevertheless. This feature is
-         * needed to prevent errors with configuration parameter types without a default
-         * constructor.
+         *  (the default), the parameter is reported as unavailable nevertheless. This feature is
+         *  needed to prevent errors with configuration parameter types without a default
+         *  constructor.
          *
          *  \param default_value Default value for the configuration parameter.
          *  \param is_available False (default) to mark the configuration parameter as unavailable,
-         * true to mark it as available.
+         *                      true to mark it as available.
          */
         ConfigurationParameter(ConfigurationParameter_t default_value, bool is_available = false)
             : value{default_value}, is_available{is_available}, is_stored{true} {
@@ -60,7 +60,7 @@ namespace earth_rover_hmi {
         /*!
          *  \param new_value New value.
          *  \param is_complete True to mark the stored configuration parameter as available; false
-         * to mark it as unavailable because it's still incomplete.
+         *                     to mark it as unavailable because it's still incomplete.
          */
         void setStoredConfiguration(const ConfigurationParameter_t &new_value,
                                     bool is_complete = true) {

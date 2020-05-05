@@ -10,8 +10,8 @@ before_script:
 build-hmi:
   stage: build
   script: "cd human-machine-interface
-           && platformio run
-           && cp .pio/build/teensy31/firmware.hex firmware-teensy32.hex"
+           && platformio run -e teensy32
+           && cp .pio/build/teensy32/firmware.hex firmware-teensy32.hex"
   artifacts:
     paths:
       - human-machine-interface/firmware-teensy32.hex
@@ -24,13 +24,13 @@ test-hmi:
 build-vcu:
   stage: build
   script: "cd vehicle-control-unit
-           && platformio run
-           && cp .pio/build/teensy31/firmware.hex firmware-teensy32.hex"
+           && platformio run -e teensy32
+           && cp .pio/build/teensy32/firmware.hex firmware-teensy32.hex"
   artifacts:
     paths:
       - vehicle-control-unit/firmware-teensy32.hex
 
-test-hmi:
+test-vcu:
   stage: test
   script: "cd vehicle-control-unit
            && platformio test -e native"

@@ -20,7 +20,7 @@ namespace earth_rover_hmi {
     //! HMI (human machine interface) communicator for the Earth Rover.
     /*!
      *  The HMI communicator handles the communication with the VCU, sending commands and
-     * interpreting responses.
+     *  interpreting responses.
      *
      *  \ingroup HMI
      */

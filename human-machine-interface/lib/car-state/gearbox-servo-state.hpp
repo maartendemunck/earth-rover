@@ -102,7 +102,7 @@ namespace earth_rover_hmi {
          *  \param gear Gear (negative for reverse gears, positive for forward gears).
          *  \return Pulse width (in µs) for that gear of 0 if the gear doesn't exist.
          */
-        uint16_t getPulseWidth(uint8_t gear) {
+        uint16_t getPulseWidth(int8_t gear) {
             if(gear >= -reverse_gears && gear <= forward_gears && (has_neutral_gear || gear != 0)) {
                 if(gear > 0 && !has_neutral_gear) {
                     --gear;

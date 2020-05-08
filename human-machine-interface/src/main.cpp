@@ -32,7 +32,7 @@ earth_rover_hmi::ServoConfigParams steering_servo_defaults{0u, 0u, 0u, 0u, true}
 //! ESC defaults.
 earth_rover_hmi::ServoConfigParams esc_defaults{3u, 0u, 0u, 0u, true};
 //! Gearbox servo pulse widths for the different gears (from low to high).
-uint16_t gearbox_servo_pulse_widths[4]{0u, 0u, 0u};
+uint16_t gearbox_servo_pulse_widths[3]{0u, 0u, 0u};
 //! Gearbox servo defaults.
 earth_rover_hmi::GearboxServoConfigParams<0, 1, 2> gearbox_servo_defaults{
     2u, gearbox_servo_pulse_widths};

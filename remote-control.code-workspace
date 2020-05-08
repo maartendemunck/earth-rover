@@ -9,6 +9,7 @@
     ],
     "settings": {
         "clang-format.executable": "clang-format-11",
+        "C_Cpp.dimInactiveRegions": false,
         "editor.formatOnSave": true,
         "editor.minimap.maxColumn": 100,
         "editor.detectIndentation": false,

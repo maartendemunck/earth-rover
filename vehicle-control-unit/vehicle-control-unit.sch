@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 1 3
 Title "Earth Rover"
-Date "2020-04-25"
-Rev "6"
+Date "2020-06-07"
+Rev "7"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Vehicle Control Unit"
@@ -25,47 +25,47 @@ F5 "RIGHT_TURN_SIGNAL" I L 6450 9500 50
 F6 "HEADLAMPS" I L 6450 9700 50 
 $EndSheet
 $Comp
-L Connector:Conn_01x03_Male J7
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J5
 U 1 1 5DE138CE
 P 7250 6250
-F 0 "J7" H 7222 6228 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 7222 6273 50  0001 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 7250 6250 50  0001 C CNN
+F 0 "J5" H 7222 6228 50  0000 R CNN
+F 1 "Conn_02x03_Male" H 7222 6273 50  0001 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 7250 6250 50  0001 C CNN
 F 3 "~" H 7250 6250 50  0001 C CNN
 	1    7250 6250
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J9
-U 1 1 5DE13CBC
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J5
+U 2 1 5DE13CBC
 P 7250 6850
-F 0 "J9" H 7222 6828 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 7222 6873 50  0001 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 7250 6850 50  0001 C CNN
+F 0 "J5" H 7222 6828 50  0000 R CNN
+F 1 "Conn_02x03_Male" H 7222 6873 50  0001 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 7250 6850 50  0001 C CNN
 F 3 "~" H 7250 6850 50  0001 C CNN
-	1    7250 6850
+	2    7250 6850
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J10
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J6
 U 1 1 5DE14052
 P 7250 7450
-F 0 "J10" H 7222 7428 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 7222 7473 50  0001 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 7250 7450 50  0001 C CNN
+F 0 "J6" H 7222 7428 50  0000 R CNN
+F 1 "Conn_02x03_Male" H 7222 7473 50  0001 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 7250 7450 50  0001 C CNN
 F 3 "~" H 7250 7450 50  0001 C CNN
 	1    7250 7450
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J11
-U 1 1 5DE143DD
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J6
+U 2 1 5DE143DD
 P 7250 8050
-F 0 "J11" H 7222 8028 50  0000 R CNN
-F 1 "Conn_01x03_Male" H 7222 8073 50  0001 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 7250 8050 50  0001 C CNN
+F 0 "J6" H 7222 8028 50  0000 R CNN
+F 1 "Conn_02x03_Male" H 7222 8073 50  0001 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 7250 8050 50  0001 C CNN
 F 3 "~" H 7250 8050 50  0001 C CNN
-	1    7250 8050
+	2    7250 8050
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
@@ -73,10 +73,10 @@ Wire Wire Line
 Wire Wire Line
 	6850 6350 6850 6950
 $Comp
-L power:GND #PWR023
+L power:GND #PWR021
 U 1 1 5DE14910
 P 6850 8250
-F 0 "#PWR023" H 6850 8000 50  0001 C CNN
+F 0 "#PWR021" H 6850 8000 50  0001 C CNN
 F 1 "GND" H 6855 8077 50  0000 C CNN
 F 2 "" H 6850 8250 50  0001 C CNN
 F 3 "" H 6850 8250 50  0001 C CNN
@@ -178,10 +178,10 @@ Wire Wire Line
 	6650 5950 6650 5850
 Connection ~ 6650 5950
 $Comp
-L power:+5V #PWR020
+L power:+5V #PWR018
 U 1 1 5DE1FF8F
 P 6650 5850
-F 0 "#PWR020" H 6650 5700 50  0001 C CNN
+F 0 "#PWR018" H 6650 5700 50  0001 C CNN
 F 1 "+5V" H 6665 6023 50  0000 C CNN
 F 2 "" H 6650 5850 50  0001 C CNN
 F 3 "" H 6650 5850 50  0001 C CNN
@@ -194,16 +194,16 @@ U 1 1 5DE54A8B
 P 5250 2200
 F 0 "U1" H 5850 2487 60  0000 C CNN
 F 1 "Teensy3.2" H 5850 2381 60  0000 C CNN
-F 2 "earth-rover-footprints:Teensy_3.2_with_USB_connector" H 8650 1050 60  0001 C CNN
+F 2 "earth-rover-footprints:Teensy_3.2" H 8650 1050 60  0001 C CNN
 F 3 "" H 8650 1050 60  0000 C CNN
 	1    5250 2200
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR05
+L power:+5V #PWR04
 U 1 1 5DE684B1
 P 6850 2100
-F 0 "#PWR05" H 6850 1950 50  0001 C CNN
+F 0 "#PWR04" H 6850 1950 50  0001 C CNN
 F 1 "+5V" H 6865 2273 50  0000 C CNN
 F 2 "" H 6850 2100 50  0001 C CNN
 F 3 "" H 6850 2100 50  0001 C CNN
@@ -224,10 +224,10 @@ Wire Wire Line
 	6850 3200 6850 3100
 Connection ~ 6850 3200
 $Comp
-L power:+3.3V #PWR011
+L power:+3.3V #PWR08
 U 1 1 5DE6E314
 P 6850 3100
-F 0 "#PWR011" H 6850 2950 50  0001 C CNN
+F 0 "#PWR08" H 6850 2950 50  0001 C CNN
 F 1 "+3.3V" H 6865 3273 50  0000 C CNN
 F 2 "" H 6850 3100 50  0001 C CNN
 F 3 "" H 6850 3100 50  0001 C CNN
@@ -251,10 +251,10 @@ Connection ~ 6850 4900
 Wire Wire Line
 	6850 4900 6850 5000
 $Comp
-L power:GND #PWR019
+L power:GND #PWR017
 U 1 1 5DE7626A
 P 6850 5100
-F 0 "#PWR019" H 6850 4850 50  0001 C CNN
+F 0 "#PWR017" H 6850 4850 50  0001 C CNN
 F 1 "GND" H 6855 4927 50  0000 C CNN
 F 2 "" H 6850 5100 50  0001 C CNN
 F 3 "" H 6850 5100 50  0001 C CNN
@@ -272,21 +272,21 @@ WINCH
 NoConn ~ 5050 4900
 NoConn ~ 5050 5000
 $Comp
-L Connector:Conn_01x03_Male J4
-U 1 1 5DFC88C9
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J3
+U 2 1 5DFC88C9
 P 1250 5000
-F 0 "J4" H 1358 5189 50  0000 C BNN
-F 1 "Conn_01x03_Male" H 1358 5190 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 1250 5000 50  0001 C CNN
+F 0 "J3" H 1358 5189 50  0000 C BNN
+F 1 "Conn_02x03_Male" H 1358 5190 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 1250 5000 50  0001 C CNN
 F 3 "~" H 1250 5000 50  0001 C CNN
-	1    1250 5000
+	2    1250 5000
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR021
+L power:GND #PWR019
 U 1 1 5DFCC639
 P 1550 6700
-F 0 "#PWR021" H 1550 6450 50  0001 C CNN
+F 0 "#PWR019" H 1550 6450 50  0001 C CNN
 F 1 "GND" H 1555 6527 50  0000 C CNN
 F 2 "" H 1550 6700 50  0001 C CNN
 F 3 "" H 1550 6700 50  0001 C CNN
@@ -294,10 +294,10 @@ F 3 "" H 1550 6700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+3.3V #PWR018
+L power:+3.3V #PWR016
 U 1 1 5DFCCB63
 P 1650 4800
-F 0 "#PWR018" H 1650 4650 50  0001 C CNN
+F 0 "#PWR016" H 1650 4650 50  0001 C CNN
 F 1 "+3.3V" H 1665 4973 50  0000 C CNN
 F 2 "" H 1650 4800 50  0001 C CNN
 F 3 "" H 1650 4800 50  0001 C CNN
@@ -313,34 +313,34 @@ Wire Wire Line
 Wire Wire Line
 	1650 5000 1650 4800
 $Comp
-L Connector:Conn_01x03_Male J5
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J3
 U 1 1 5E000766
 P 1250 5500
-F 0 "J5" H 1358 5689 50  0000 C BNN
-F 1 "Conn_01x03_Male" H 1358 5690 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 1250 5500 50  0001 C CNN
+F 0 "J3" H 1358 5689 50  0000 C BNN
+F 1 "Conn_02x03_Male" H 1358 5690 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 1250 5500 50  0001 C CNN
 F 3 "~" H 1250 5500 50  0001 C CNN
 	1    1250 5500
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J6
-U 1 1 5E000E2E
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J4
+U 2 1 5E000E2E
 P 1250 6000
-F 0 "J6" H 1358 6189 50  0000 C BNN
-F 1 "Conn_01x03_Male" H 1358 6190 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 1250 6000 50  0001 C CNN
+F 0 "J4" H 1358 6189 50  0000 C BNN
+F 1 "Conn_02x03_Male" H 1358 6190 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 1250 6000 50  0001 C CNN
 F 3 "~" H 1250 6000 50  0001 C CNN
-	1    1250 6000
+	2    1250 6000
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Conn_01x03_Male J8
+L earth-rover-symbols:Conn_02x03_Male_UnitPerRow J4
 U 1 1 5E0013EA
 P 1250 6500
-F 0 "J8" H 1358 6689 50  0000 C BNN
-F 1 "Conn_01x03_Male" H 1358 6690 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 1250 6500 50  0001 C CNN
+F 0 "J4" H 1358 6689 50  0000 C BNN
+F 1 "Conn_02x03_Male" H 1358 6690 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Horizontal" H 1250 6500 50  0001 C CNN
 F 3 "~" H 1250 6500 50  0001 C CNN
 	1    1250 6500
 	1    0    0    -1  
@@ -376,10 +376,10 @@ Wire Wire Line
 	1650 6500 1450 6500
 Connection ~ 1650 6000
 $Comp
-L power:GND #PWR024
+L power:GND #PWR022
 U 1 1 5DFBDB8E
 P 1950 8600
-F 0 "#PWR024" H 1950 8350 50  0001 C CNN
+F 0 "#PWR022" H 1950 8350 50  0001 C CNN
 F 1 "GND" H 1955 8427 50  0000 C CNN
 F 2 "" H 1950 8600 50  0001 C CNN
 F 3 "" H 1950 8600 50  0001 C CNN
@@ -387,10 +387,10 @@ F 3 "" H 1950 8600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+3.3V #PWR022
+L power:+3.3V #PWR020
 U 1 1 5DFBD20A
 P 1950 7300
-F 0 "#PWR022" H 1950 7150 50  0001 C CNN
+F 0 "#PWR020" H 1950 7150 50  0001 C CNN
 F 1 "+3.3V" H 1965 7473 50  0000 C CNN
 F 2 "" H 1950 7300 50  0001 C CNN
 F 3 "" H 1950 7300 50  0001 C CNN
@@ -409,10 +409,10 @@ F 3 "~" H 1650 9600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR026
+L power:GND #PWR024
 U 1 1 5E17642F
 P 1350 9700
-F 0 "#PWR026" H 1350 9450 50  0001 C CNN
+F 0 "#PWR024" H 1350 9450 50  0001 C CNN
 F 1 "GND" H 1355 9527 50  0000 C CNN
 F 2 "" H 1350 9700 50  0001 C CNN
 F 3 "" H 1350 9700 50  0001 C CNN
@@ -420,10 +420,10 @@ F 3 "" H 1350 9700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+3.3V #PWR025
+L power:+3.3V #PWR023
 U 1 1 5E177C83
 P 1950 9200
-F 0 "#PWR025" H 1950 9050 50  0001 C CNN
+F 0 "#PWR023" H 1950 9050 50  0001 C CNN
 F 1 "+3.3V" H 1965 9373 50  0000 C CNN
 F 2 "" H 1950 9200 50  0001 C CNN
 F 3 "" H 1950 9200 50  0001 C CNN
@@ -431,10 +431,10 @@ F 3 "" H 1950 9200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+3.3V #PWR02
+L power:+3.3V #PWR01
 U 1 1 5DEC4D17
 P 1950 1100
-F 0 "#PWR02" H 1950 950 50  0001 C CNN
+F 0 "#PWR01" H 1950 950 50  0001 C CNN
 F 1 "+3.3V" H 1965 1273 50  0000 C CNN
 F 2 "" H 1950 1100 50  0001 C CNN
 F 3 "" H 1950 1100 50  0001 C CNN
@@ -448,22 +448,22 @@ GPS_SERIAL_TX
 Wire Wire Line
 	1850 1200 1850 1600
 Wire Wire Line
-	1750 3900 1950 3900
-Wire Wire Line
-	1750 3800 1850 3800
-Wire Wire Line
 	1750 2600 1950 2600
 Wire Wire Line
 	1750 2500 1850 2500
+Wire Wire Line
+	1750 3900 1950 3900
+Wire Wire Line
+	1750 3800 1850 3800
 Wire Wire Line
 	1750 1200 1850 1200
 Wire Wire Line
 	1950 1300 1750 1300
 $Comp
-L power:GND #PWR04
+L power:GND #PWR02
 U 1 1 5DE7AFFC
 P 1850 1600
-F 0 "#PWR04" H 1850 1350 50  0001 C CNN
+F 0 "#PWR02" H 1850 1350 50  0001 C CNN
 F 1 "GND" H 1855 1427 50  0000 C CNN
 F 2 "" H 1850 1600 50  0001 C CNN
 F 3 "" H 1850 1600 50  0001 C CNN
@@ -473,112 +473,45 @@ $EndComp
 Wire Wire Line
 	1950 1300 1950 1100
 $Comp
-L Connector:Conn_01x04_Male J1
-U 1 1 5DE7AFF0
+L earth-rover-symbols:Conn_02x04_Male_UnitPerRow J1
+U 2 1 5DE7AFF0
 P 1550 1300
 F 0 "J1" H 1658 1489 50  0000 C BNN
-F 1 "Conn_01x04_Male" H 1658 1490 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 1550 1300 50  0001 C CNN
+F 1 "Conn_02x04_Male_UnitPerRow" H 1658 1490 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Horizontal" H 1550 1300 50  0001 C CNN
 F 3 "~" H 1550 1300 50  0001 C CNN
-	1    1550 1300
+	2    1550 1300
 	1    0    0    -1  
 $EndComp
-Connection ~ 1950 3600
+Connection ~ 1950 2300
 Wire Wire Line
-	1950 3550 1950 3600
+	1950 2250 1950 2300
 Wire Wire Line
-	2250 3600 2550 3600
-Connection ~ 2250 3600
+	2250 2300 2550 2300
+Connection ~ 2250 2300
 Wire Wire Line
-	1950 3600 2250 3600
+	1950 2300 2250 2300
 $Comp
-L power:+3.3V #PWR012
+L power:+3.3V #PWR06
 U 1 1 5DE37E4B
-P 1950 3550
-F 0 "#PWR012" H 1950 3400 50  0001 C CNN
-F 1 "+3.3V" H 1965 3723 50  0000 C CNN
-F 2 "" H 1950 3550 50  0001 C CNN
-F 3 "" H 1950 3550 50  0001 C CNN
-	1    1950 3550
+P 1950 2250
+F 0 "#PWR06" H 1950 2100 50  0001 C CNN
+F 1 "+3.3V" H 1965 2423 50  0000 C CNN
+F 2 "" H 1950 2250 50  0001 C CNN
+F 3 "" H 1950 2250 50  0001 C CNN
+	1    1950 2250
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2550 3600 2550 3650
-Wire Wire Line
-	2250 3650 2250 3600
-Connection ~ 2550 4100
-Wire Wire Line
-	2550 3950 2550 4100
-$Comp
-L Device:R R4
-U 1 1 5DE37E35
-P 2550 3800
-F 0 "R4" H 2620 3846 50  0000 L CNN
-F 1 "10k" H 2620 3755 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2480 3800 50  0001 C CNN
-F 3 "~" H 2550 3800 50  0001 C CNN
-	1    2550 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R3
-U 1 1 5DE37E2B
-P 2250 3800
-F 0 "R3" H 2320 3846 50  0000 L CNN
-F 1 "10k" H 2320 3755 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2180 3800 50  0001 C CNN
-F 3 "~" H 2250 3800 50  0001 C CNN
-	1    2250 3800
-	1    0    0    -1  
-$EndComp
-Text Label 3250 4100 2    50   ~ 0
-IMU_I2C_SCL
-Wire Wire Line
-	1750 4100 2550 4100
-$Comp
-L power:GND #PWR016
-U 1 1 5DE367AE
-P 1850 4200
-F 0 "#PWR016" H 1850 3950 50  0001 C CNN
-F 1 "GND" H 1855 4027 50  0000 C CNN
-F 2 "" H 1850 4200 50  0001 C CNN
-F 3 "" H 1850 4200 50  0001 C CNN
-	1    1850 4200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1950 3900 1950 3600
-Wire Wire Line
-	1850 3800 1850 4200
-$Comp
-L Connector:Conn_01x04_Male J3
-U 1 1 5DE341B1
-P 1550 3900
-F 0 "J3" H 1658 4089 50  0000 C BNN
-F 1 "Conn_01x04_Male" H 1658 4090 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 1550 3900 50  0001 C CNN
-F 3 "~" H 1550 3900 50  0001 C CNN
-	1    1550 3900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2400 2300 2550 2300
-Connection ~ 2400 2300
 Wire Wire Line
 	2550 2300 2550 2350
 Wire Wire Line
-	2250 2300 2400 2300
-Wire Wire Line
 	2250 2350 2250 2300
 Connection ~ 2550 2800
-Connection ~ 2250 2700
 Wire Wire Line
 	2550 2650 2550 2800
-Wire Wire Line
-	2250 2650 2250 2700
 $Comp
 L Device:R R2
-U 1 1 5DE24449
+U 1 1 5DE37E35
 P 2550 2500
 F 0 "R2" H 2620 2546 50  0000 L CNN
 F 1 "10k" H 2620 2455 50  0000 L CNN
@@ -589,7 +522,7 @@ F 3 "~" H 2550 2500 50  0001 C CNN
 $EndComp
 $Comp
 L Device:R R1
-U 1 1 5DE23A94
+U 1 1 5DE37E2B
 P 2250 2500
 F 0 "R1" H 2320 2546 50  0000 L CNN
 F 1 "10k" H 2320 2455 50  0000 L CNN
@@ -599,29 +532,14 @@ F 3 "~" H 2250 2500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text Label 3250 2800 2    50   ~ 0
-ENCODER_B
-Text Label 3250 2700 2    50   ~ 0
-ENCODER_A
+IMU_I2C_SCL
 Wire Wire Line
 	1750 2800 2550 2800
-Wire Wire Line
-	1750 2700 2250 2700
 $Comp
-L power:+5V #PWR06
-U 1 1 5DE22773
-P 1950 2250
-F 0 "#PWR06" H 1950 2100 50  0001 C CNN
-F 1 "+5V" H 1965 2423 50  0000 C CNN
-F 2 "" H 1950 2250 50  0001 C CNN
-F 3 "" H 1950 2250 50  0001 C CNN
-	1    1950 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR010
-U 1 1 5DE22437
+L power:GND #PWR07
+U 1 1 5DE367AE
 P 1850 2900
-F 0 "#PWR010" H 1850 2650 50  0001 C CNN
+F 0 "#PWR07" H 1850 2650 50  0001 C CNN
 F 1 "GND" H 1855 2727 50  0000 C CNN
 F 2 "" H 1850 2900 50  0001 C CNN
 F 3 "" H 1850 2900 50  0001 C CNN
@@ -629,18 +547,100 @@ F 3 "" H 1850 2900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1950 2600 1950 2250
+	1950 2600 1950 2300
 Wire Wire Line
 	1850 2500 1850 2900
 $Comp
-L Connector:Conn_01x04_Male J2
-U 1 1 5DE20F07
+L earth-rover-symbols:Conn_02x04_Male_UnitPerRow J1
+U 1 1 5DE341B1
 P 1550 2600
-F 0 "J2" H 1658 2789 50  0000 C BNN
-F 1 "Conn_01x04_Male" H 1658 2790 50  0001 C CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 1550 2600 50  0001 C CNN
+F 0 "J1" H 1658 2789 50  0000 C BNN
+F 1 "Conn_02x04_Male_UnitPerRow" H 1658 2790 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Horizontal" H 1550 2600 50  0001 C CNN
 F 3 "~" H 1550 2600 50  0001 C CNN
 	1    1550 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2400 3600 2550 3600
+Connection ~ 2400 3600
+Wire Wire Line
+	2550 3600 2550 3650
+Wire Wire Line
+	2250 3600 2400 3600
+Wire Wire Line
+	2250 3650 2250 3600
+Connection ~ 2550 4100
+Connection ~ 2250 4000
+Wire Wire Line
+	2550 3950 2550 4100
+Wire Wire Line
+	2250 3950 2250 4000
+$Comp
+L Device:R R4
+U 1 1 5DE24449
+P 2550 3800
+F 0 "R4" H 2620 3846 50  0000 L CNN
+F 1 "10k" H 2620 3755 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2480 3800 50  0001 C CNN
+F 3 "~" H 2550 3800 50  0001 C CNN
+	1    2550 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 5DE23A94
+P 2250 3800
+F 0 "R3" H 2320 3846 50  0000 L CNN
+F 1 "10k" H 2320 3755 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2180 3800 50  0001 C CNN
+F 3 "~" H 2250 3800 50  0001 C CNN
+	1    2250 3800
+	1    0    0    -1  
+$EndComp
+Text Label 3250 4100 2    50   ~ 0
+ENCODER_B
+Text Label 3250 4000 2    50   ~ 0
+ENCODER_A
+Wire Wire Line
+	1750 4100 2550 4100
+Wire Wire Line
+	1750 4000 2250 4000
+$Comp
+L power:+5V #PWR09
+U 1 1 5DE22773
+P 1950 3550
+F 0 "#PWR09" H 1950 3400 50  0001 C CNN
+F 1 "+5V" H 1965 3723 50  0000 C CNN
+F 2 "" H 1950 3550 50  0001 C CNN
+F 3 "" H 1950 3550 50  0001 C CNN
+	1    1950 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR014
+U 1 1 5DE22437
+P 1850 4200
+F 0 "#PWR014" H 1850 3950 50  0001 C CNN
+F 1 "GND" H 1855 4027 50  0000 C CNN
+F 2 "" H 1850 4200 50  0001 C CNN
+F 3 "" H 1850 4200 50  0001 C CNN
+	1    1850 4200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1950 3900 1950 3550
+Wire Wire Line
+	1850 3800 1850 4200
+$Comp
+L Connector:Conn_01x04_Male J2
+U 1 1 5DE20F07
+P 1550 3900
+F 0 "J2" H 1658 4089 50  0000 C BNN
+F 1 "Conn_01x04_Male" H 1658 4090 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 1550 3900 50  0001 C CNN
+F 3 "~" H 1550 3900 50  0001 C CNN
+	1    1550 3900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -699,19 +699,19 @@ Text Notes 3250 9850 2    50   ~ 0
 Reset EEPROM jumper\nClose and boot VCU to erase EEPROM
 Text Notes 3250 6800 2    50   ~ 0
 Analog sensors
-Text Notes 3250 4300 2    50   ~ 0
+Text Notes 3250 3000 2    50   ~ 0
 Adafruit BNO055 breakout
 Text Notes 3250 1700 2    50   ~ 0
 Adafruit ultimate GPS breakout
 Text Notes 5450 8550 0    50   ~ 0
 Servos\nJumpers select power from system 5V or BEC
-Text Label 4250 3800 0    50   ~ 0
-SENSOR_1
-Text Label 4250 3900 0    50   ~ 0
-SENSOR_2
 Text Label 4250 4600 0    50   ~ 0
-SENSOR_3
+SENSOR_1
 Text Label 4250 4700 0    50   ~ 0
+SENSOR_2
+Text Label 4250 3900 0    50   ~ 0
+SENSOR_3
+Text Label 4250 3800 0    50   ~ 0
 SENSOR_4
 Text Label 3250 6600 2    50   ~ 0
 SENSOR_4
@@ -748,11 +748,11 @@ GPS_SERIAL_TX
 Text Label 4250 2300 0    50   ~ 0
 GPS_SERIAL_RX
 Wire Wire Line
-	1750 4000 2250 4000
+	1750 2700 2250 2700
 Wire Wire Line
-	2250 3950 2250 4000
-Connection ~ 2250 4000
-Text Label 3250 4000 2    50   ~ 0
+	2250 2650 2250 2700
+Connection ~ 2250 2700
+Text Label 3250 2700 2    50   ~ 0
 IMU_I2C_SDA
 Text Label 5450 5850 0    50   ~ 0
 BEC
@@ -814,23 +814,23 @@ Wire Wire Line
 Wire Wire Line
 	5250 7950 7050 7950
 Wire Wire Line
-	2400 2300 2400 2250
+	2400 3600 2400 3550
 $Comp
-L power:+3.3V #PWR07
+L power:+3.3V #PWR010
 U 1 1 5DE32BEA
-P 2400 2250
-F 0 "#PWR07" H 2400 2100 50  0001 C CNN
-F 1 "+3.3V" H 2415 2423 50  0000 C CNN
-F 2 "" H 2400 2250 50  0001 C CNN
-F 3 "" H 2400 2250 50  0001 C CNN
-	1    2400 2250
+P 2400 3550
+F 0 "#PWR010" H 2400 3400 50  0001 C CNN
+F 1 "+3.3V" H 2415 3723 50  0000 C CNN
+F 2 "" H 2400 3550 50  0001 C CNN
+F 3 "" H 2400 3550 50  0001 C CNN
+	1    2400 3550
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:CP C5
+L Device:CP C4
 U 1 1 5DE41454
 P 1250 7950
-F 0 "C5" H 1368 7996 50  0000 L CNN
+F 0 "C4" H 1368 7996 50  0000 L CNN
 F 1 "10u" H 1368 7905 50  0000 L CNN
 F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 7800 50  0001 C CNN
 F 3 "~" H 1250 7950 50  0001 C CNN
@@ -842,10 +842,10 @@ Wire Wire Line
 Wire Wire Line
 	1250 8550 1250 8100
 $Comp
-L Device:CP C4
+L Device:CP C3
 U 1 1 5DE78433
 P 7050 4000
-F 0 "C4" H 7168 4046 50  0000 L CNN
+F 0 "C3" H 7168 4046 50  0000 L CNN
 F 1 "10u" H 7168 3955 50  0000 L CNN
 F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 7088 3850 50  0001 C CNN
 F 3 "~" H 7050 4000 50  0001 C CNN
@@ -853,10 +853,10 @@ F 3 "~" H 7050 4000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:+5V #PWR014
+L power:+5V #PWR012
 U 1 1 5DE78897
 P 7050 3750
-F 0 "#PWR014" H 7050 3600 50  0001 C CNN
+F 0 "#PWR012" H 7050 3600 50  0001 C CNN
 F 1 "+5V" H 7065 3923 50  0000 C CNN
 F 2 "" H 7050 3750 50  0001 C CNN
 F 3 "" H 7050 3750 50  0001 C CNN
@@ -864,10 +864,10 @@ F 3 "" H 7050 3750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR017
+L power:GND #PWR015
 U 1 1 5DE78DA1
 P 7050 4250
-F 0 "#PWR017" H 7050 4000 50  0001 C CNN
+F 0 "#PWR015" H 7050 4000 50  0001 C CNN
 F 1 "GND" H 7055 4077 50  0000 C CNN
 F 2 "" H 7050 4250 50  0001 C CNN
 F 3 "" H 7050 4250 50  0001 C CNN
@@ -878,39 +878,6 @@ Wire Wire Line
 	7050 4250 7050 4150
 Wire Wire Line
 	7050 3850 7050 3750
-$Comp
-L Device:CP C3
-U 1 1 5DE90707
-P 1250 3950
-F 0 "C3" H 1368 3996 50  0000 L CNN
-F 1 "10u" H 1368 3905 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 3800 50  0001 C CNN
-F 3 "~" H 1250 3950 50  0001 C CNN
-	1    1250 3950
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR015
-U 1 1 5DE90FFC
-P 1250 4200
-F 0 "#PWR015" H 1250 3950 50  0001 C CNN
-F 1 "GND" H 1255 4027 50  0000 C CNN
-F 2 "" H 1250 4200 50  0001 C CNN
-F 3 "" H 1250 4200 50  0001 C CNN
-	1    1250 4200
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR013
-U 1 1 5DE917DB
-P 1250 3700
-F 0 "#PWR013" H 1250 3550 50  0001 C CNN
-F 1 "+3.3V" H 1265 3873 50  0000 C CNN
-F 2 "" H 1250 3700 50  0001 C CNN
-F 3 "" H 1250 3700 50  0001 C CNN
-	1    1250 3700
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	1950 9600 3450 9600
 Wire Wire Line
@@ -922,9 +889,9 @@ Wire Wire Line
 Wire Wire Line
 	1450 5100 3450 5100
 Wire Wire Line
-	2550 4100 3450 4100
+	2550 2800 3450 2800
 Wire Wire Line
-	2250 4000 3450 4000
+	2250 2700 3450 2700
 Wire Wire Line
 	3650 3500 5050 3500
 Wire Wire Line
@@ -952,7 +919,7 @@ Wire Wire Line
 Wire Wire Line
 	3650 4700 5050 4700
 Wire Wire Line
-	2550 2800 3450 2800
+	2550 4100 3450 4100
 Wire Wire Line
 	3650 3400 5050 3400
 Wire Wire Line
@@ -972,7 +939,7 @@ Wire Wire Line
 Wire Wire Line
 	3650 2700 5050 2700
 Wire Wire Line
-	2250 2700 3450 2700
+	2250 4000 3450 4000
 Wire Wire Line
 	3650 2500 5050 2500
 Wire Wire Line
@@ -998,9 +965,9 @@ Entry Wire Line
 Entry Wire Line
 	3450 5100 3550 5200
 Entry Wire Line
-	3450 4100 3550 4200
+	3450 2800 3550 2900
 Entry Wire Line
-	3450 4000 3550 4100
+	3450 2700 3550 2800
 Entry Wire Line
 	3650 3500 3550 3600
 Entry Wire Line
@@ -1028,7 +995,7 @@ Entry Wire Line
 Entry Wire Line
 	3650 4700 3550 4800
 Entry Wire Line
-	3450 2800 3550 2900
+	3450 4100 3550 4200
 Entry Wire Line
 	3650 3400 3550 3500
 Entry Wire Line
@@ -1048,7 +1015,7 @@ Entry Wire Line
 Entry Wire Line
 	3650 2700 3550 2800
 Entry Wire Line
-	3450 2700 3550 2800
+	3450 4000 3550 4100
 Entry Wire Line
 	3650 2500 3550 2600
 Entry Wire Line
@@ -1118,82 +1085,78 @@ Text Label 3250 8150 2    50   ~ 0
 NRF24L01_CE
 Text Label 3250 8250 2    50   ~ 0
 NRF24L01_IRQ
+$Comp
+L Device:CP C1
+U 1 1 5DF62BDC
+P 1250 2000
+F 0 "C1" H 1368 2046 50  0000 L CNN
+F 1 "10u" H 1368 1955 50  0000 L CNN
+F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 1850 50  0001 C CNN
+F 3 "~" H 1250 2000 50  0001 C CNN
+	1    1250 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR05
+U 1 1 5DF62BE6
+P 1250 2250
+F 0 "#PWR05" H 1250 2000 50  0001 C CNN
+F 1 "GND" H 1255 2077 50  0000 C CNN
+F 2 "" H 1250 2250 50  0001 C CNN
+F 3 "" H 1250 2250 50  0001 C CNN
+	1    1250 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR03
+U 1 1 5DF62BF0
+P 1250 1750
+F 0 "#PWR03" H 1250 1600 50  0001 C CNN
+F 1 "+3.3V" H 1265 1923 50  0000 C CNN
+F 2 "" H 1250 1750 50  0001 C CNN
+F 3 "" H 1250 1750 50  0001 C CNN
+	1    1250 1750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1250 2150 1250 2250
+Wire Wire Line
+	1250 1750 1250 1850
+$Comp
+L Device:CP C2
+U 1 1 5DF93ACC
+P 1250 3950
+F 0 "C2" H 1368 3996 50  0000 L CNN
+F 1 "10u" H 1368 3905 50  0000 L CNN
+F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 3800 50  0001 C CNN
+F 3 "~" H 1250 3950 50  0001 C CNN
+	1    1250 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR013
+U 1 1 5DF93AD6
+P 1250 4200
+F 0 "#PWR013" H 1250 3950 50  0001 C CNN
+F 1 "GND" H 1255 4027 50  0000 C CNN
+F 2 "" H 1250 4200 50  0001 C CNN
+F 3 "" H 1250 4200 50  0001 C CNN
+	1    1250 4200
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	1250 4100 1250 4200
 Wire Wire Line
 	1250 3700 1250 3800
 $Comp
-L Device:CP C1
-U 1 1 5DF62BDC
-P 1250 1350
-F 0 "C1" H 1368 1396 50  0000 L CNN
-F 1 "10u" H 1368 1305 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 1200 50  0001 C CNN
-F 3 "~" H 1250 1350 50  0001 C CNN
-	1    1250 1350
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR03
-U 1 1 5DF62BE6
-P 1250 1600
-F 0 "#PWR03" H 1250 1350 50  0001 C CNN
-F 1 "GND" H 1255 1427 50  0000 C CNN
-F 2 "" H 1250 1600 50  0001 C CNN
-F 3 "" H 1250 1600 50  0001 C CNN
-	1    1250 1600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR01
-U 1 1 5DF62BF0
-P 1250 1100
-F 0 "#PWR01" H 1250 950 50  0001 C CNN
-F 1 "+3.3V" H 1265 1273 50  0000 C CNN
-F 2 "" H 1250 1100 50  0001 C CNN
-F 3 "" H 1250 1100 50  0001 C CNN
-	1    1250 1100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1250 1500 1250 1600
-Wire Wire Line
-	1250 1100 1250 1200
-$Comp
-L Device:CP C2
-U 1 1 5DF93ACC
-P 1250 2650
-F 0 "C2" H 1368 2696 50  0000 L CNN
-F 1 "10u" H 1368 2605 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm" H 1288 2500 50  0001 C CNN
-F 3 "~" H 1250 2650 50  0001 C CNN
-	1    1250 2650
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR09
-U 1 1 5DF93AD6
-P 1250 2900
-F 0 "#PWR09" H 1250 2650 50  0001 C CNN
-F 1 "GND" H 1255 2727 50  0000 C CNN
-F 2 "" H 1250 2900 50  0001 C CNN
-F 3 "" H 1250 2900 50  0001 C CNN
-	1    1250 2900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1250 2800 1250 2900
-Wire Wire Line
-	1250 2400 1250 2500
-$Comp
-L power:+5V #PWR08
+L power:+5V #PWR011
 U 1 1 5DFA1431
-P 1250 2400
-F 0 "#PWR08" H 1250 2250 50  0001 C CNN
-F 1 "+5V" H 1265 2573 50  0000 C CNN
-F 2 "" H 1250 2400 50  0001 C CNN
-F 3 "" H 1250 2400 50  0001 C CNN
-	1    1250 2400
+P 1250 3700
+F 0 "#PWR011" H 1250 3550 50  0001 C CNN
+F 1 "+5V" H 1265 3873 50  0000 C CNN
+F 2 "" H 1250 3700 50  0001 C CNN
+F 3 "" H 1250 3700 50  0001 C CNN
+	1    1250 3700
 	1    0    0    -1  
 $EndComp
 Text Label 4650 1000 0    50   ~ 0
@@ -1218,7 +1181,7 @@ Wire Wire Line
 	4050 1100 5450 1100
 Text Label 4650 1100 0    50   ~ 0
 BATTERY_MONITOR
-Text Notes 3250 3000 2    50   ~ 0
+Text Notes 3250 4300 2    50   ~ 0
 Position encoder
 Wire Bus Line
 	5150 6250 5150 9900

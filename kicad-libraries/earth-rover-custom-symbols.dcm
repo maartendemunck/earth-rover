@@ -12,6 +12,24 @@ K joystick thumbstick analog stick XY
 F ~
 $ENDCMP
 #
+$CMP Conn_02x03_Male_UnitPerRow
+D Generic connector, double row, 02x03
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_02x04_Male_UnitPerRow
+D Generic connector, double row, 02x04
+K connector
+F ~
+$ENDCMP
+#
+$CMP Conn_02x06_Male_UnitPerRow
+D Generic connector, double row, 02x06
+K connector
+F ~
+$ENDCMP
+#
 $CMP Jumper_3_Bridged12
 D Jumper, 3-pole, pins 1+2 closed/bridged
 K Jumper SPDT

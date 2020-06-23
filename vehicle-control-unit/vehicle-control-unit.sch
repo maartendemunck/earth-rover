@@ -1056,7 +1056,7 @@ U 1 1 5DE53FE2
 P 1950 7950
 F 0 "U2" H 1900 8450 50  0000 R BNN
 F 1 "NRF24L01+ breakout" H 1900 7450 50  0000 R TNN
-F 2 "RF_Module:nRF24L01_Breakout" H 2100 8550 50  0001 L CIN
+F 2 "earth-rover-footprints:nRF24L01_Breakout_LargerHoles" H 2100 8550 50  0001 L CIN
 F 3 "http://www.nordicsemi.com/eng/content/download/2730/34105/file/nRF24L01_Product_Specification_v2_0.pdf" H 1950 7850 50  0001 C CNN
 	1    1950 7950
 	-1   0    0    -1  

@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/maarten/projecten/persoonlijk/earth-rover/electronics/human-machine-interface/human-machine-interface.sch)
-    (date "do 11 jun 2020 22:10:49 CEST")
+    (date "di 23 jun 2020 16:11:07 CEST")
     (tool "Eeschema 5.1.6+dfsg1-1")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -17,7 +17,7 @@
   (components
     (comp (ref U1)
       (value NRF24L01+)
-      (footprint RF_Module:nRF24L01_Breakout)
+      (footprint earth-rover-footprints:nRF24L01_Breakout_LargerHoles)
       (datasheet http://www.nordicsemi.com/eng/content/download/2730/34105/file/nRF24L01_Product_Specification_v2_0.pdf)
       (libsource (lib RF) (part NRF24L01_Breakout) (description "Ultra low power 2.4GHz RF Transceiver, Carrier PCB"))
       (sheetpath (names /) (tstamps /))

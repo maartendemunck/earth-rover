@@ -1,4 +1,4 @@
-update=ma 08 jun 2020 16:34:07 CEST
+update=ma 22 jun 2020 17:26:36 CEST
 version=1
 last_client=kicad
 [general]
@@ -12,16 +12,6 @@ NetIExt=net
 version=1
 LibDir=
 [eeschema/libraries]
-[schematic_editor]
-version=1
-PageLayoutDescrFile=../kicad-libraries/page-layouts/pagelayout_custom.kicad_wks
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=Pcbnew
-SpiceAjustPassiveValues=0
-LabSize=50
-ERC_TestSimilarLabels=1
 [pcbnew]
 version=1
 PageLayoutDescrFile=../kicad-libraries/page-layouts/pagelayout_custom.kicad_wks
@@ -249,3 +239,13 @@ uViaDrill=0.35
 dPairWidth=0.15
 dPairGap=0.15
 dPairViaGap=0.25
+[schematic_editor]
+version=1
+PageLayoutDescrFile=../kicad-libraries/page-layouts/pagelayout_custom.kicad_wks
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=Pcbnew
+SpiceAjustPassiveValues=0
+LabSize=50
+ERC_TestSimilarLabels=1

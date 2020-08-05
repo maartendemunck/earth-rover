@@ -5,8 +5,8 @@ $Descr A4 8268 11693 portrait
 encoding utf-8
 Sheet 2 3
 Title "Earth Rover"
-Date "2020-06-07"
-Rev "7"
+Date "2020-08-05"
+Rev "9"
 Comp "Vijfendertig BVBA"
 Comment1 "Maarten De Munck"
 Comment2 "Vehicle Control Unit"
@@ -141,7 +141,7 @@ L Device:R R12
 U 1 1 5EA8801C
 P 4500 7850
 F 0 "R12" H 4570 7896 50  0000 L CNN
-F 1 "150E" H 4570 7805 50  0000 L CNN
+F 1 "180E" H 4570 7805 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4430 7850 50  0001 C CNN
 F 3 "~" H 4500 7850 50  0001 C CNN
 	1    4500 7850
@@ -152,7 +152,7 @@ L Device:R R13
 U 1 1 5EA5792D
 P 5100 7850
 F 0 "R13" H 5170 7896 50  0000 L CNN
-F 1 "150E" H 5170 7805 50  0000 L CNN
+F 1 "180E" H 5170 7805 50  0000 L CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 5030 7850 50  0001 C CNN
 F 3 "~" H 5100 7850 50  0001 C CNN
 	1    5100 7850

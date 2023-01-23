@@ -1,0 +1,2 @@
+# Exclude Doxygen generated documentation.
+doc/html

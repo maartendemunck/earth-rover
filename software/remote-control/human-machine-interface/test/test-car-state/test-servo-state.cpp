@@ -6,33 +6,33 @@
 void testServoConfigParams() {
     using earth_rover_hmi::ServoConfigParams;
 
-    // Configuration parameters.
+    // Config parameters.
     uint8_t input_channel = 2u;
     uint16_t pulse_width_minimum = 1000u;
     uint16_t pulse_width_center = 1500u;
     uint16_t pulse_width_maximum = 2000u;
     bool enforce_pulse_width_limits = true;
 
-    // Create a servo configuration.
+    // Create a servo config.
     ServoConfigParams servo_config_1{input_channel, pulse_width_minimum, pulse_width_center,
                                      pulse_width_maximum, enforce_pulse_width_limits};
-    // Check all configuration values.
+    // Check all config values.
     TEST_ASSERT_EQUAL_UINT8(input_channel, servo_config_1.input_channel);
     TEST_ASSERT_EQUAL_UINT16(pulse_width_minimum, servo_config_1.pulse_width_minimum);
     TEST_ASSERT_EQUAL_UINT16(pulse_width_center, servo_config_1.pulse_width_center);
     TEST_ASSERT_EQUAL_UINT16(pulse_width_maximum, servo_config_1.pulse_width_maximum);
     TEST_ASSERT_EQUAL(enforce_pulse_width_limits, servo_config_1.enforce_pulse_width_limits);
-    // A configuration should not be different from itself.
+    // A config should not be different from itself.
     TEST_ASSERT_FALSE(servo_config_1 != servo_config_1);
 
-    // Different configuration parameters.
+    // Different config parameters.
     uint8_t input_channel_ne = input_channel + 1u;
     uint16_t pulse_width_minimum_ne = pulse_width_minimum + 100u;
     uint16_t pulse_width_center_ne = pulse_width_center + 100u;
     uint16_t pulse_width_maximum_ne = pulse_width_maximum + 100u;
     bool enforce_pulse_width_limits_ne = !enforce_pulse_width_limits;
 
-    // Create servo configurations, changing each individual field, one at a time and verify that
+    // Create servo configs, changing each individual field, one at a time and verify that
     // they are considered different.
     ServoConfigParams servo_config_2{input_channel_ne, pulse_width_minimum, pulse_width_center,
                                      pulse_width_maximum, enforce_pulse_width_limits};

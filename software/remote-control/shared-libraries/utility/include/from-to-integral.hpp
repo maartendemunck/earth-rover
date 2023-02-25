@@ -1,16 +1,15 @@
-//! Convert enum types to their underlying integral types and vice versa (template implementation).
-/*!
- *  \ingroup VCU
- *  \file
- *  \author Maarten De Munck <maarten@vijfendertig.be>
- */
+// Copyright 2019-2023 Vijfendertig BV.
+//
+// This file is part of the Earth Rover project, which is licensed under the 3-Clause BSD License.
+// See the file LICENSE.md or go to https://opensource.org/license/bsd-3-clause/ for full license
+// details.
 
-#ifndef __EARTH_ROVER_VCU__FROM_TO_INTEGRAL__
-#define __EARTH_ROVER_VCU__FROM_TO_INTEGRAL__
+#ifndef __EARTH_ROVER__FROM_TO_INTEGRAL__
+#define __EARTH_ROVER__FROM_TO_INTEGRAL__
 
 #include <type_traits>
 
-namespace earth_rover_vcu {
+namespace earth_rover {
 
     //! Convert an integral type to an enum type.
     /*!
@@ -36,6 +35,6 @@ namespace earth_rover_vcu {
         return static_cast<typename std::underlying_type<Enum>::type>(value);
     }
 
-}  // namespace earth_rover_vcu
+}  // namespace earth_rover
 
 #endif

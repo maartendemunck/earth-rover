@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv) {
     UNITY_BEGIN();
-    RUN_TEST(testConfigurationParameter);
+    RUN_TEST(testConfigParameter);
     RUN_TEST(testServoConfigParams);
     RUN_TEST(testServoState);
     RUN_TEST(testGearboxServoConfigParams);

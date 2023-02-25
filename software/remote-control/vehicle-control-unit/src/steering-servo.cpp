@@ -35,7 +35,7 @@ namespace earth_rover_vcu {
             data[4] = configuration.maximum_pulse_width & 0x00ff;
             data[5] = (configuration.maximum_pulse_width & 0xff00) >> 8;
             data[6] = input_channel;
-            for(unsigned index = 7; index < size; ++index) {
+            for(uint16_t index = 7; index < size; ++index) {
                 data[index] = 0xff;
             }
             // Reset changed and save flags (we write this configuration to EEPROM, so changes are

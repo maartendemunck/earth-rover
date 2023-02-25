@@ -26,21 +26,21 @@
  *  Pin assignments.
  */
 
-constexpr uint8_t steering_servo_pin = 20u;    //!< I/O pin used to control the steering servo.
-constexpr uint8_t esc_pin = 21u;               //!< I/O pin used to control the ESC or throttle.
-constexpr uint8_t gearbox_servo_pin = 22u;     //!< I/O pin used to control the gearbox servo.
-constexpr uint8_t head_lamp_pin = 6u;          //!< I/O pin used to control the head lamps.
-constexpr uint8_t tail_lamp_pin = 2u;          //!< I/O pin used to control the tail lamps.
-constexpr uint8_t stop_lamp_pin = 3u;          //!< I/O pin used to control the stop lamps.
-constexpr uint8_t turn_signal_left_pin = 4u;   //!< I/O pin used to control the left turn signal.
+constexpr uint8_t steering_servo_pin = 20u;  //!< I/O pin used to control the steering servo.
+constexpr uint8_t esc_pin = 21u;  //!< I/O pin used to control the ESC or throttle.
+constexpr uint8_t gearbox_servo_pin = 22u;  //!< I/O pin used to control the gearbox servo.
+constexpr uint8_t head_lamp_pin = 6u;  //!< I/O pin used to control the head lamps.
+constexpr uint8_t tail_lamp_pin = 2u;  //!< I/O pin used to control the tail lamps.
+constexpr uint8_t stop_lamp_pin = 3u;  //!< I/O pin used to control the stop lamps.
+constexpr uint8_t turn_signal_left_pin = 4u;  //!< I/O pin used to control the left turn signal.
 constexpr uint8_t turn_signal_right_pin = 5u;  //!< I/O pin used to control the right turn signal.
 
-constexpr i2c_t3 &imu_i2c = Wire;         //!< I²C interface used by the BNO055 IMU.
+constexpr i2c_t3 &imu_i2c = Wire;  //!< I²C interface used by the BNO055 IMU.
 constexpr uint8_t imu_i2c_scl_pin = 19u;  //!< I/O pin used for the I²C interface's SCL signal.
 constexpr uint8_t imu_i2c_sda_pin = 18u;  //!< I/O pin used for the I²C interface's SDA signal.
 
-constexpr uint8_t spi_sck_pin = 14u;   //!< I/O pin used for the SPI's SCK signal.
-constexpr uint8_t rf24_ce_pin = 10u;   //!< I/O pin used for the nRF24L01+'s CE signal.
+constexpr uint8_t spi_sck_pin = 14u;  //!< I/O pin used for the SPI's SCK signal.
+constexpr uint8_t rf24_ce_pin = 10u;  //!< I/O pin used for the nRF24L01+'s CE signal.
 constexpr uint8_t rf24_csn_pin = 15u;  //!< I/O pin used for the nRF24L01+'s CSN signal.
 
 /*
@@ -69,7 +69,7 @@ auto vcu = earth_rover_vcu::makeVcu(steering_servo, powertrain, lighting, positi
 //! VCU communicator.
 earth_rover_vcu::VcuCommunicator<decltype(vcu)> communicator{rf24_ce_pin, rf24_csn_pin, vcu};
 //! VCU configuration.
-auto configuration_manager = earth_rover_vcu::makeVcuConfigurationManager(
+auto configuration_manager = earth_rover::makeVcuConfigurationManager(
     steering_servo, powertrain, position_encoder, imu, radio_configuration, 0u, 2048u);
 
 /*

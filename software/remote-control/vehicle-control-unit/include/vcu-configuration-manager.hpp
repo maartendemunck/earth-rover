@@ -12,7 +12,7 @@
 #include <EEPROM.h>
 #include <cstdint>
 
-namespace earth_rover_vcu {
+namespace earth_rover {
 
     //! EEPROM configuration manager for the Earth Rover.
     /*!
@@ -39,28 +39,28 @@ namespace earth_rover_vcu {
 
         //! Configuration record types.
         enum class RecordType : uint8_t {
-            Odometer,                    //!< Odometer value.
+            Odometer,  //!< Odometer value.
             PositionEncoderCalibration,  //!< Calibration of the position encoder.
-            ImuCalibration,              //!< Calibration of the IMU.
+            ImuCalibration,  //!< Calibration of the IMU.
             SteeringServoConfiguration,  //!< Configuration of the steering servo.
             PowertrainConfiguration,  //!< Configuration of the powertrain (ESC and gearbox servo).
-            RadioConfiguration        //!< Configuration of the radios.
+            RadioConfiguration  //!< Configuration of the radios.
         };
         static constexpr uint8_t record_type_count{
             6u};  //!< Number of record types (for array sizes).
 
         uint32_t eeprom_offset;  //!< Location of the configuration area in the EEPROM memory.
-        uint32_t eeprom_size;    //!< Size of the configuration area in the EEPROM memory.
+        uint32_t eeprom_size;  //!< Size of the configuration area in the EEPROM memory.
 
         uint16_t used_record_indices[record_type_count];  //!< Used (active) configuration records.
-        uint16_t newest_record_index;                     //!< Most recent record index used.
-        uint32_t newest_record_sequence;                  //!< Most recent sequence number used.
+        uint16_t newest_record_index;  //!< Most recent record index used.
+        uint32_t newest_record_sequence;  //!< Most recent sequence number used.
 
-        Steering_t &steering;                 //!< Reference to the steering servo.
-        Powertrain_t &powertrain;             //!< Reference to the powertrain.
+        Steering_t &steering;  //!< Reference to the steering servo.
+        Powertrain_t &powertrain;  //!< Reference to the powertrain.
         PositionEncoder_t &position_encoder;  //!< Reference to the position encoder.
-        Imu_t &imu;                           //!< Reference to the IMU.
-        Radio_t &radio;                       //!< Reference to the radio configuration.
+        Imu_t &imu;  //!< Reference to the IMU.
+        Radio_t &radio;  //!< Reference to the radio configuration.
 
         //! Calculate the Fletcher-16 checksum.
         /*!
@@ -344,6 +344,6 @@ namespace earth_rover_vcu {
             steering, powertrain, position_encoder, imu, radio, eeprom_offset, eeprom_size);
     }
 
-}  // namespace earth_rover_vcu
+}  // namespace earth_rover
 
 #endif

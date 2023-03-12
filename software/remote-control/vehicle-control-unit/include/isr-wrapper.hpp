@@ -1,50 +1,31 @@
-//! Wrapper to use any std::function objects as an ISR (interface and template implementation).
-/*!
- *  \ingroup VCU
- *  \file
- *  \author Maarten De Munck <maarten@vijfendertig.be>
- */
+// Copyright 2019-2023 Vijfendertig BV.
+//
+// This file is part of the Earth Rover project, which is licensed under the 3-Clause BSD License.
+// See the file LICENSE.md or go to https://opensource.org/license/bsd-3-clause/ for full license
+// details.
 
-#ifndef __EARTH_ROVER_VCU__ISR_WRAPPER__
-#define __EARTH_ROVER_VCU__ISR_WRAPPER__
+#ifndef __EARTH_ROVER__ISR_WRAPPER__
+#define __EARTH_ROVER__ISR_WRAPPER__
 
 #include <functional>
 
-namespace earth_rover_vcu {
+namespace earth_rover {
 
-    //! Wrapper to use any std::function object as an ISR (intterupt service routine).
-    /*!
-     *  Of course, the general ISR programming guidelines still apply: they should be as short and
-     * fast as possible.
-     *
-     *  \tparam irq Interrupt number.
-     *
-     *  \ingroup VCU
-     */
     template <uint8_t irq> class ISRWrapper {
 
       private:
-        bool our_handler_active;           //!< True if our ISR is active.
-        static std::function<void()> isr;  //!< Active ISR for our interrupt.
+        bool our_handler_active;
+        static std::function<void()> isr;
 
       public:
-        //! Constructor.
-        ISRWrapper() : our_handler_active{false} { ; }
-
-        //! Destructor.
-        /*!
-         *  If our interrupt handler is still active, disable it.
-         */
-        ~ISRWrapper() {
-            detachISR();  // detachISR function checks whether our handler is active or not.
+        ISRWrapper() : our_handler_active{false} {
+            ;
         }
 
-        //! Attach an ISR (if no ISR is attached yet).
-        /*!
-         *  \param new_isr ISR as an std::function object.
-         *  \param mode When to trigger the interrupt.
-         *  \return True if the new ISR is attached, false if another ISR was attached before.
-         */
+        ~ISRWrapper() {
+            detachISR();
+        }
+
         bool attachISR(std::function<void()> new_isr, int mode) {
             bool attached_isr{false};
             if(!isr) {
@@ -53,30 +34,20 @@ namespace earth_rover_vcu {
                 attachInterrupt(irq, &ISRWrapper<irq>::ISR, mode);
                 attached_isr = true;
             }
-            // Return true (success) if our new handler is active or false (failure) if another
-            // handler was active.
-            return attached_isr;
+            bool error = !attached_isr;
+            return error;
         }
 
-        //! Detach our ISR (if our ISR is attached).
-        /*!
-         *  \return True if our handler is detached, false if another ISR is attached.
-         */
         bool detachISR() {
             if(our_handler_active) {
                 detachInterrupt(irq);
                 isr = std::function<void()>();
                 our_handler_active = false;
             }
-            // Return true (succes) if no handler is active or false (failure) is another object's
-            // handler is active.
-            return !isr;
+            bool error = !isr;
+            return error;
         }
 
-        //! Static ISR function.
-        /*!
-         *  This function calls the std::function object currently attached to this interrupt.
-         */
         static void ISR() {
             if(isr) {
                 isr();
@@ -86,6 +57,6 @@ namespace earth_rover_vcu {
 
     template <uint8_t irq> std::function<void()> ISRWrapper<irq>::isr{};
 
-}  // namespace earth_rover_vcu
+}  // namespace earth_rover
 
 #endif

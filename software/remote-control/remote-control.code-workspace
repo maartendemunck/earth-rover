@@ -30,7 +30,9 @@
             "type_traits": "cpp",
             "iterator": "cpp",
             "cstdint": "cpp",
-            "algorithm": "cpp"
+            "algorithm": "cpp",
+            "istream": "cpp",
+            "ostream": "cpp"
         }
     }
 }

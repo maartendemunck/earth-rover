@@ -31,7 +31,7 @@ namespace earth_rover {
         const Direction direction;
         uint8_t power_level;
         uint8_t fhss_channel_index;
-        elapsedMillis elapsed_time_since_last_channel_hop;
+        elapsedMillis elapsed_time_since_channel_hop;
         bool channel_changed_since_sync_message;
         elapsedMillis elapsed_time_since_sync_message;
 
@@ -81,9 +81,11 @@ namespace earth_rover {
             fhss_channel_index
                 = (fhss_channel_index + 1) % (sizeof(fhss_channels) / sizeof(fhss_channels[0]));
             device.setChannel(fhss_channels[fhss_channel_index]);
-            elapsed_time_since_last_channel_hop = 0u;
+            elapsed_time_since_channel_hop = 0u;
             channel_changed_since_sync_message = true;
         }
+
+        virtual bool hopToNextChannelIfNeeded() = 0;
 
         bool sendMessage(uint8_t message_buffer[message_payload_size]) {
             digitalWrite(LED_BUILTIN, 1);
@@ -111,7 +113,9 @@ namespace earth_rover {
 
         bool readIncomingMessage(uint8_t message_buffer[message_payload_size]) {
             if(incomingMessageAvailable()) {
+                digitalWrite(LED_BUILTIN, 1);
                 device.read(message_buffer, message_payload_size);
+                digitalWrite(LED_BUILTIN, 0);
                 return false;
             }
             else {
@@ -138,8 +142,9 @@ namespace earth_rover {
             : Base{ce_pin, csn_pin, Base::Direction::Downstream} {
             ;
         }
+        virtual ~PrimaryCommunicator() = default;
 
-        bool hopToNextChannelIfNeeded() {
+        virtual bool hopToNextChannelIfNeeded() override {
             if(Base::channel_changed_since_sync_message == false
                && Base::elapsed_time_since_sync_message >= Base::sync_message_interval - 10u) {
                 Base::hopToNextChannel();
@@ -152,7 +157,7 @@ namespace earth_rover {
 
         bool isSyncMessageNeeded() {
             if(Base::channel_changed_since_sync_message == true
-               && Base::elapsed_time_since_last_channel_hop >= 5u
+               && Base::elapsed_time_since_channel_hop >= 5u
                && Base::elapsed_time_since_sync_message >= Base::sync_message_interval) {
                 return true;
             }
@@ -164,11 +169,45 @@ namespace earth_rover {
 
     template <uint8_t message_payload_size>
     class SecondaryCommunicator : public Communicator<message_payload_size> {
+        using Base = Communicator<message_payload_size>;
+
+      private:
+        static constexpr uint32_t fhss_timeout{
+            (sizeof(Base::fhss_channels) / sizeof(Base::fhss_channels[0]))
+            * Base::sync_message_interval};
+        bool fhss_is_synced_with_primary;
+
       public:
         SecondaryCommunicator(uint8_t ce_pin, uint8_t csn_pin)
-            : Communicator<message_payload_size>{
-                ce_pin, csn_pin, Communicator<message_payload_size>::Direction::Upstream} {
+            : Base{ce_pin, csn_pin, Base::Direction::Upstream}, fhss_is_synced_with_primary{false} {
             ;
+        }
+        virtual ~SecondaryCommunicator() = default;
+
+        virtual bool hopToNextChannelIfNeeded() override {
+            if((fhss_is_synced_with_primary == true
+                && Base::elapsed_time_since_channel_hop >= Base::sync_message_interval)
+               || (fhss_is_synced_with_primary == false
+                   && Base::elapsed_time_since_channel_hop >= fhss_timeout)) {
+                Base::hopToNextChannel();
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        void markSyncMessageReception() {
+            Base::elapsed_time_since_channel_hop = 10u;
+            Base::elapsed_time_since_sync_message = 0u;
+            fhss_is_synced_with_primary = true;
+        }
+
+        bool checkSynchronisation() {
+            if(Base::elapsed_time_since_sync_message > fhss_timeout) {
+                fhss_is_synced_with_primary = false;
+            }
+            return fhss_is_synced_with_primary;
         }
     };
 

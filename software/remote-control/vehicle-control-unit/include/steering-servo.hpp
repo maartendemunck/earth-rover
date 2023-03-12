@@ -1,146 +1,48 @@
-//! Steering servo device driver for the Earth Rover's VCU (interface and inline part of the
-//! implementation).
-/*!
- *  \ingroup VCU
- *  \file
- *  \author Maarten De Munck <maarten@vijfendertig.be>
- */
+// Copyright 2019-2023 Vijfendertig BV.
+//
+// This file is part of the Earth Rover project, which is licensed under the 3-Clause BSD License.
+// See the file LICENSE.md or go to https://opensource.org/license/bsd-3-clause/ for full license
+// details.
 
-#ifndef __EARTH_ROVER_VCU__STEERING_SERVO__
-#define __EARTH_ROVER_VCU__STEERING_SERVO__
+#ifndef __EARTH_ROVER__STEERING_SERVO__
+#define __EARTH_ROVER__STEERING_SERVO__
 
 #include "configured-servo.hpp"
+#include "eeprom-configuration-database-object.hpp"
 #include <cstdint>
 
-namespace earth_rover_vcu {
+namespace earth_rover {
 
-    //! Steering servo device driver for the Earth Rover's VCU.
-    /*!
-     *  This class abstracts the steering device used in the Earth Rover.
-     *
-     *  \ingroup VCU
-     */
-    class SteeringServo {
+    class SteeringServo : public EepromConfigDatabaseObject {
+
       public:
-        //! Steering servo configuration.
-        struct Configuration {
-            uint16_t pulse_width_left;    //!< Pulse width to steer to the left.
-            uint16_t pulse_width_center;  //!< Pulse width to drive straight.
-            uint16_t pulse_width_right;   //!< Pulse width to steer to the right.
+        struct Config {
+            uint16_t pulse_width_left;
+            uint16_t pulse_width_center;
+            uint16_t pulse_width_right;
         };
 
       private:
-        uint8_t pin_number;              //!< I/O pin used to control the steering servo.
-        ConfiguredServo steering_servo;  //!< Steering servo controller.
-        uint8_t input_channel;           //!< Steering servo input channel.
-        bool input_channel_changed;      //!< True if the input channel changed.
-        bool save_required;              //!< True if the configuration should be saved to EEPROM.
-        int16_t
-            current_steering_angle;  //!< Current (normalized) steering angle (-1000...0...+1000).
+        uint8_t pin_number;
+        ConfiguredServo steering_servo;
+        int16_t current_steering_angle;
 
       public:
-        //! Constructor.
-        /*!
-         *  \param pin_number Output pin used to control the steering servo.
-         */
         SteeringServo(uint8_t pin_number);
+        virtual ~SteeringServo() = default;
 
-        //! Default destructor.
-        ~SteeringServo() = default;
+        void setup();
+        void spinOnce();
 
-        //! Initialize the steering servo.
-        inline void setup() {
-            current_steering_angle = 0;
-            steering_servo.setup();
-            steering_servo.setPosition(current_steering_angle);
-        }
+        void setNormalizedSteeringAngle(int16_t steering_angle);
 
-        //! Spinning loop.
-        /*!
-         *  \internal
-         *  The steering servo's spinning loop does nothing.
-         */
-        inline void spinOnce() { ; }
-
-        //! Set the (normalized) steering angle.
-        /*!
-         *  \param steering_angle Normalized (-1000 = full left, 0 = center, +1000 = full right)
-         * steering angle.
-         */
-        inline void setNormalizedSteeringAngle(int16_t steering_angle) {
-            steering_servo.setPosition(steering_angle);
-            current_steering_angle = steering_angle;
-        }
-
-        //! Configure the steering servo.
-        /*!
-         *  \param pulse_width_left Pulse width to maximally steer to the left.
-         *  \param pulse_width_center Pulse width to steer straight.
-         *  \param pulse_width_right Pulse width to maximally steer to the right.
-         */
         void configureSteeringServo(uint16_t pulse_width_left, uint16_t pulse_width_center,
                                     uint16_t pulse_width_right);
-
-        //! Get the current configuration.
-        /*!
-         *  \return The current configuration of the steering servo.
-         */
-        Configuration getConfiguration() {
-            auto configuration = steering_servo.getConfiguration();
-            return Configuration{configuration.minimum_pulse_width,
-                                 configuration.center_pulse_width,
-                                 configuration.maximum_pulse_width};
-        }
-
-        //! Set the steering servo's input channel.
-        /*!
-         *  \param new_input_channel New steering input channel.
-         */
-        void setInputChannel(uint8_t new_input_channel) {
-            if(new_input_channel != input_channel) {
-                input_channel = new_input_channel;
-                input_channel_changed = true;
-            }
-        }
-
-        //! Get the steering servo's input channel.
-        /*!
-         *  \return The steering input channel.
-         */
-        uint8_t getInputChannel() { return input_channel; }
-
-        //! Save the steering servo's configuration to EEPROM.
-        void saveConfiguration() {
-            if(steering_servo.isConfigurationChanged() || input_channel_changed) {
-                save_required = true;
-            }
-        }
-
-        //! Check whether the steering servo's configuration should be written to EEPROM.
-        /*!
-         *  \return True if the steering servo's configuration should be written to EEPROM.
-         */
-        bool saveRequired() { return save_required; }
-
-        //! Save the configuration to a buffer.
-        /*!
-         *  \param data Pointer to the buffer.
-         *  \param size Size of the buffer.
-         *  \return true if the configuration is written; false if not (if the buffer isn't large
-         * enough).
-         */
-        bool serialize(uint8_t *data, uint16_t size);
-
-        //! Load the configuration from a buffer.
-        /*!
-         *  \param data Pointer to the buffer.
-         *  \param size Size of the buffer.
-         *  \return true if the configuration is applied; false if not (buffer not large enough or
-         * checksum wrong).
-         */
-        bool deserialize(uint8_t *data, uint16_t size);
+        Config getConfig();
+        virtual SerializationResult serialize(uint8_t *data, uint16_t size) override;
+        virtual bool deserialize(uint8_t *data, uint16_t size) override;
     };
 
-}  // namespace earth_rover_vcu
+}  // namespace earth_rover
 
 #endif

@@ -1,90 +1,58 @@
-//! Adafruit Bosch BNO055 IMU device driver for the Earth Rover's VCU (interface and template
-//! implementation).
-/*!
- *  \ingroup VCU
- *  \file
- *  \author Maarten De Munck <maarten@vijfendertig.be>
- */
+// Copyright 2019-2023 Vijfendertig BV.
+//
+// This file is part of the Earth Rover project, which is licensed under the 3-Clause BSD License.
+// See the file LICENSE.md or go to https://opensource.org/license/bsd-3-clause/ for full license
+// details.
 
-#ifndef __EARTH_ROVER_VCU__ADAFRUIT_BNO055_WRAPPER__
-#define __EARTH_ROVER_VCU__ADAFRUIT_BNO055_WRAPPER__
+#ifndef __EARTH_ROVER__ADAFRUIT_BNO055_WRAPPER__
+#define __EARTH_ROVER__ADAFRUIT_BNO055_WRAPPER__
 
 #include "adafruit-bno055.hpp"
+#include "eeprom-configuration-database-object.hpp"
 #include <cstdint>
 
-namespace earth_rover_vcu {
+namespace earth_rover {
 
-    //! Euler angles type.
-    /*!
-     *  \ingroup VCU
-     */
     struct EulerAngles_t {
-        float yaw;    //!< Yaw (rotation around the vertical axis).
-        float pitch;  //!< Pitch (rotation around the transverse axis).
-        float roll;   //!< Roll (rotation around the longitudinal axis).
+        float yaw;
+        float pitch;
+        float roll;
     };
 
-    //! Wrapper for an AdafruitBNO055 instance, providing a device-independent IMU interface.
-    /*!
-     *  \tparam I2CDevice_t I²C device type.
-     *
-     *  \ingroup VCU
-     */
-    template <typename I2CDevice_t> class AdafruitBNO055Wrapper {
+    template <typename I2CDevice_t>
+    class AdafruitBNO055Wrapper : public EepromConfigDatabaseObject {
 
       private:
-        I2CDevice_t &i2c_device;  //!< I²C device used to communicatie with the Adafruit BNO055 IMU.
-        const uint8_t i2c_scl_pin;                  //!< I/O pin used for the I²C SCL signal.
-        const uint8_t i2c_sda_pin;                  //!< I/O pin used for the I²C SDA signal.
-        AdafruitBNO055<I2CDevice_t> bno055_device;  //!< Adafruit BNO055 device driver.
-        bool bno055_device_configured;              //!< True if the device is configured.
-        bool calibration_is_stored_in_eeprom;  //!< True if the calibration values are stored in
-                                               //!< EEPROM.
-        elapsedMillis
-            since_last_calibration_save;  //!< Time since the calibration was stored in EEPROM.
+        I2CDevice_t &i2c_device;
+        const uint8_t i2c_scl_pin;
+        const uint8_t i2c_sda_pin;
+        AdafruitBNO055<I2CDevice_t> bno055_device;
+        bool bno055_device_is_configured;
+        elapsedMillis time_since_last_calibration_save;
 
       public:
-        //! Constructor.
-        /*!
-         *  \param i2c_device I²C device used to communicatie with the Adafruit BNO055 IMU.
-         *  \param i2c_scl_pin I/O pin used for the I²C SCL signal.
-         *  \param i2c_sda_pin I/O pin used for the I²C SDA signal.
-         */
         AdafruitBNO055Wrapper(I2CDevice_t &i2c_device, uint8_t i2c_scl_pin, uint8_t i2c_sda_pin)
             : i2c_device{i2c_device}, i2c_scl_pin{i2c_scl_pin}, i2c_sda_pin{i2c_sda_pin},
               bno055_device{i2c_device, decltype(bno055_device)::BNO055_ADDRESS_A},
-              bno055_device_configured{false}, calibration_is_stored_in_eeprom{false} {
+              bno055_device_is_configured{false} {
             ;
         }
 
-        //! Default destructor.
-        ~AdafruitBNO055Wrapper() = default;
-
-        //! Initialize the I2C device and the Adafruit BNO055 IMU.
         void setup() {
-            if(!bno055_device_configured) {
+            if(!bno055_device_is_configured) {
                 i2c_device.begin(I2C_MASTER, 0x00, i2c_scl_pin, i2c_sda_pin, I2C_PULLUP_EXT, 400000,
                                  I2C_OP_MODE_ISR);
                 bno055_device.setup();
-                bno055_device_configured = true;
+                bno055_device_is_configured = true;
             }
         }
 
-        //! Spinning loop.
-        /*!
-         *  \internal
-         *  The Adafruit BNO055's spinning loop does nothing.
-         */
-        void spinOnce() { ; }
+        void spinOnce() {
+            ;
+        }
 
-        //! Get the orientation of the vehicle in Euler angles, corrected for the orientation of the
-        //! IMU in the vehicle.
-        /*!
-         *  \return The orientation of the vehicle in Euler angles.
-         */
         EulerAngles_t getOrientation() {
             EulerAngles_t angles;
-            // Get Euler angles from the Adafruit BNO055 IMU.
             auto angles_raw = bno055_device.getEulerAngles();
             // Adjust Euler angles for the orientation of the Adafruit BNO055 IMU in the car.
             angles.yaw = -angles_raw.yaw - (M_PI / 2.);
@@ -96,43 +64,19 @@ namespace earth_rover_vcu {
             return angles;
         }
 
-        //! Check whether the Adafruit BNO055 IMU is fully calibrated.
-        /*!
-         *  \return True if the IMU is fully calibrated, false if not.
-         */
         bool isFullyCalibrated() {
             auto calibration_status = bno055_device.getCalibrationStatus();
-            /*
-            Serial.printf("BNO055 calib: sys = %u, acc = %u, gyr = %u, mag = %u\n",
-              uint16_t(calibration_status.system), uint16_t(calibration_status.accelerometer),
-              uint16_t(calibration_status.gyroscope), uint16_t(calibration_status.magnetometer));
-            */
             return (calibration_status.system == 3 && calibration_status.accelerometer == 3
                     && calibration_status.gyroscope == 3 && calibration_status.magnetometer == 3);
         }
 
-        //! Check whether the IMU calibration should be written to the EEPROM.
-        /*!
-         *  The calibration is written to EEPROM if the sensor is fully calibrated and the value was
-         * never written to EEPROM or the calibration was written to EEPROM longer than 10 minutes
-         * ago. \return True if the IMU calibration should be written to the EEPROM.
-         */
-        bool saveRequired() {
-            return (calibration_is_stored_in_eeprom == false
-                    || since_last_calibration_save >= 10u * 60u * 1000u)
+        bool isSaveRequested() override {
+            return (EepromConfigDatabaseObject::isSaveRequested()
+                    || time_since_last_calibration_save >= 10u * 60u * 1000u)
                    && (isFullyCalibrated() == true);
         }
 
-        //! Save the configuration to a buffer.
-        /*!
-         *  The buffer should be at least 22 bytes. If not, no configuration is written.
-         *
-         *  \param data Pointer to the buffer.
-         *  \param size Size of the buffer.
-         *  \return true if the configuration is written; false if not (if the buffer isn't large
-         * enough).
-         */
-        bool serialize(uint8_t *data, uint16_t size) {
+        SerializationResult serialize(uint8_t *data, uint16_t size) {
             if(size >= 22u) {
                 typename AdafruitBNO055<I2CDevice_t>::bno055_calibration_values_t
                     calibration_values;
@@ -162,24 +106,14 @@ namespace earth_rover_vcu {
                 for(unsigned index = 22; index < size; ++index) {
                     data[index] = 0xffu;
                 }
-                calibration_is_stored_in_eeprom
-                    = true;  // The calibration will be stored in the EEPROM.
-                since_last_calibration_save = 0u;
-                return true;
+                time_since_last_calibration_save = 0u;
+                return SerializationResult::SAVE_IN_NEW_RECORD;
             }
             else {
-                return false;
+                return SerializationResult::ERROR;
             }
         }
 
-        //! Load the configuration from a buffer.
-        /*!
-         *  The buffer should be at least 22 bytes. If not, no configuration is read or applied.
-         *
-         *  \param data Pointer to the buffer.
-         *  \param size Size of the buffer.
-         *  \return true if the configuration is applied; false if not (buffer not large enough).
-         */
         bool deserialize(uint8_t *data, uint16_t size) {
             if(size >= 22u) {
                 typename decltype(bno055_device)::bno055_calibration_values_t calibration_values;
@@ -194,23 +128,19 @@ namespace earth_rover_vcu {
                 calibration_values.gyro_offset_z = (data[17] << 8) | data[16];
                 calibration_values.accel_radius = (data[19] << 8) | data[18];
                 calibration_values.mag_radius = (data[21] << 8) | data[20];
-                if(!bno055_device_configured) {
-                    setup();  // If the device is not yet configured, configure it now, before
-                              // writing the calibration to it.
+                if(!bno055_device_is_configured) {
+                    setup();
                 }
                 bno055_device.setCalibrationValues(calibration_values);
-                // We read the calibration from the EEPROM, so it is stored there, but allow for
-                // recalibration.
-                calibration_is_stored_in_eeprom = true;
-                since_last_calibration_save = 0u;
-                return true;
+                time_since_last_calibration_save = 0u;
+                return false;
             }
             else {
-                return false;
+                return true;
             }
         }
     };
 
-}  // namespace earth_rover_vcu
+}  // namespace earth_rover
 
 #endif

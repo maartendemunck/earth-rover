@@ -21,8 +21,8 @@ namespace earth_rover {
 
       protected:
         static constexpr uint8_t fhss_channels[]{
-            0, 4, 8,  12, 16, 20, 24, 28, 32, 36, 1, 5, 9,  13, 17, 21, 25, 29, 33, 37,
-            2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 3, 7, 11, 15, 19, 23, 27, 31, 35, 39};
+            0, 8,  16, 24, 32, 40, 48, 56, 64, 72, 74, 66, 58, 50, 42, 34, 26, 18, 10, 2,
+            4, 12, 20, 28, 36, 44, 52, 60, 68, 76, 78, 70, 62, 54, 46, 38, 30, 22, 14, 6};
         static constexpr uint8_t sync_message_interval{50u};
         static constexpr uint8_t downstream_pipe_name[]{'H', 'M', 'I', '0'};  // TODO: move to main.
         static constexpr uint8_t upstream_pipe_name[]{'V', 'C', 'U', '0'};  // TODO: move to main.

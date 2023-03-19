@@ -140,7 +140,7 @@ namespace earth_rover {
                && (new_page == HmiPage::Speedometer || new_page == HmiPage::Orientation
                    || new_page == HmiPage::Location)) {
                 hmi_state.requestConfigSave();
-                car_state.requestConfigSave();
+                car_state.requestConfigSaveByVcu();
             }
         }
 
@@ -201,12 +201,9 @@ namespace earth_rover {
             else if(page == HmiPage::GearboxSettings) {
                 switch(setting) {
                     case 1:
-                        car_state.setGearPulseWidth(0, value);
-                        break;
-                    case 2:
                         car_state.setGearPulseWidth(1, value);
                         break;
-                    case 3:
+                    case 2:
                         car_state.setGearPulseWidth(2, value);
                         break;
                 }

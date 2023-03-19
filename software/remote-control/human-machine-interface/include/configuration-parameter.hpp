@@ -14,17 +14,16 @@ namespace earth_rover {
       private:
         ConfigParameter_t current_value;
         bool saved_value_is_available;
-        bool is_saved_in_vcu;
+        bool is_sent_to_vcu;
 
       public:
-        ConfigParameter()
-            : current_value{}, saved_value_is_available{false}, is_saved_in_vcu{true} {
+        ConfigParameter() : current_value{}, saved_value_is_available{false}, is_sent_to_vcu{true} {
             ;
         }
 
         ConfigParameter(ConfigParameter_t default_value, bool saved_value_is_available = false)
             : current_value{default_value}, saved_value_is_available{saved_value_is_available},
-              is_saved_in_vcu{true} {
+              is_sent_to_vcu{true} {
             ;
         }
 
@@ -40,7 +39,7 @@ namespace earth_rover {
 
         void setCurrentConfig(ConfigParameter_t new_value) {
             if(new_value != current_value) {
-                is_saved_in_vcu = false;
+                is_sent_to_vcu = false;
                 current_value = new_value;
             }
         }
@@ -49,12 +48,12 @@ namespace earth_rover {
             return current_value;
         }
 
-        bool isCurrentConfigSavedInVcu() {
-            return is_saved_in_vcu;
+        bool isCurrentConfigSentToVcu() {
+            return is_sent_to_vcu;
         }
 
-        void markCurrentConfigSaved() {
-            is_saved_in_vcu = true;
+        void markCurrentConfigSentToVcu() {
+            is_sent_to_vcu = true;
         }
     };
 

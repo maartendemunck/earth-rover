@@ -91,10 +91,10 @@ namespace earth_rover {
         void spinOnce();
 
         bool isConfigAvailable();
-        bool isCurrentConfigSaved();
-        void requestConfigSave();
-        bool isConfigSaveRequested();
-        void markConfigSaved();
+        bool isCurrentConfigSentToVcu();
+        void requestConfigSaveByVcu();
+        bool isConfigSaveByVcuRequested();
+        void markConfigSavedByVcu();
 
         void setSteeringInput(int16_t steering);
         int16_t getCurrentSteeringPosition();
@@ -104,8 +104,8 @@ namespace earth_rover {
         void setSavedSteeringConfig(const ServoConfigParams &saved_config);
         bool isSteeringConfigAvailable();
         const ServoConfigParams &getSteeringConfig();
-        bool isCurrentSteeringConfigSaved();
-        void markSteeringConfigSaved();
+        bool isCurrentSteeringConfigSentToVcu();
+        void markSteeringConfigSentToVcu();
 
         void setThrottleInput(int16_t throttle);
         int16_t getCurrentThrottlePosition();
@@ -115,8 +115,8 @@ namespace earth_rover {
         void setSavedThrottleConfig(const ServoConfigParams &saved_config);
         bool isThrottleConfigAvailable();
         const ServoConfigParams &getThrottleConfig();
-        bool isCurrentThrottleConfigSaved();
-        void markThrottleConfigSaved();
+        bool isCurrentThrottleConfigSentToVcu();
+        void markThrottleConfigSentToVcu();
 
         void setCurrentGear(int16_t gear);
         int8_t getCurrentGear();
@@ -125,16 +125,16 @@ namespace earth_rover {
                                    bool complete);
         bool isGearboxConfigAvailable();
         const TwoSpeedGearboxServoConfigParams &getGearboxConfig();
-        bool isCurrentGearboxConfigSaved();
-        void markGearboxConfigSaved();
+        bool isCurrentGearboxConfigSentToVcu();
+        void markGearboxConfigSentToVcu();
 
         void setHmiRadioPower(uint8_t power_level);
         void setVcuRadioPower(uint8_t power_level);
         void setSavedRadioConfig(const RadioConfigParams &saved_config);
         bool isRadioConfigAvailable();
         const RadioConfigParams &getRadioConfig();
-        bool isCurrentRadioConfigSaved();
-        void markRadioConfigSaved();
+        bool isCurrentRadioConfigSentToVcu();
+        void markRadioConfigSentToVcu();
 
         void setTurnSignalRight(bool state);
         void setTurnSignalLeft(bool state);

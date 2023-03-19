@@ -24,7 +24,6 @@ namespace earth_rover {
                 uint16_t pulse_width_forward;
             } esc;
             struct {
-                uint16_t pulse_width_neutral;
                 uint16_t pulse_width_low;
                 uint16_t pulse_width_high;
             } gearbox;
@@ -54,8 +53,7 @@ namespace earth_rover {
 
         void configureESC(uint16_t pulse_width_reverse, uint16_t pulse_width_stop,
                           uint16_t pulse_width_forward);
-        void configureGearboxServo(uint16_t pulse_width_neutral, uint16_t pulse_width_low,
-                                   uint16_t pulse_width_high);
+        void configureGearboxServo(uint16_t pulse_width_low, uint16_t pulse_width_high);
         void configureGearboxServo(int8_t gear, uint16_t pulse_width);
         Config getConfig();
 

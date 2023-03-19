@@ -81,12 +81,12 @@ namespace earth_rover {
             if(!car_state.isConfigAvailable()) {
                 error |= requestNextConfigParameter();
             }
-            else if(!car_state.isCurrentConfigSaved()) {
+            else if(!car_state.isCurrentConfigSentToVcu()) {
                 error |= sendNextConfigParameter();
             }
-            else if(car_state.isConfigSaveRequested() && !error) {
-                if((error |= sendSaveConfigMessage())) {
-                    car_state.markConfigSaved();
+            else if(car_state.isConfigSaveByVcuRequested() && !error) {
+                if(!(error |= sendSaveConfigMessage())) {
+                    car_state.markConfigSavedByVcu();
                 }
             }
         }
@@ -121,24 +121,24 @@ namespace earth_rover {
 
     bool HmiCommunicator::sendNextConfigParameter() {
         bool error{false};
-        if(!car_state.isCurrentSteeringConfigSaved()) {
-            if((error |= sendCurrentSteeringConfig())) {
-                car_state.markSteeringConfigSaved();
+        if(!car_state.isCurrentSteeringConfigSentToVcu()) {
+            if(!(error |= sendCurrentSteeringConfig())) {
+                car_state.markSteeringConfigSentToVcu();
             }
         }
-        else if(!car_state.isCurrentThrottleConfigSaved()) {
-            if((error |= sendCurrentThrottleConfig())) {
-                car_state.markThrottleConfigSaved();
+        else if(!car_state.isCurrentThrottleConfigSentToVcu()) {
+            if(!(error |= sendCurrentThrottleConfig())) {
+                car_state.markThrottleConfigSentToVcu();
             }
         }
-        else if(!car_state.isCurrentGearboxConfigSaved()) {
-            if((error |= sendCurrentGearboxConfig())) {
-                car_state.markGearboxConfigSaved();
+        else if(!car_state.isCurrentGearboxConfigSentToVcu()) {
+            if(!(error |= sendCurrentGearboxConfig())) {
+                car_state.markGearboxConfigSentToVcu();
             }
         }
-        else if(!car_state.isCurrentRadioConfigSaved()) {
-            if((error |= sendCurrentRadioConfig())) {
-                car_state.markRadioConfigSaved();
+        else if(!car_state.isCurrentRadioConfigSentToVcu()) {
+            if(!(error |= sendCurrentRadioConfig())) {
+                car_state.markRadioConfigSentToVcu();
             }
         }
         return error;
@@ -190,8 +190,9 @@ namespace earth_rover {
         buffer[5] = 2;
         buffer[6] = (config.getPulseWidthForGear(2) & 0x00ff);
         buffer[7] = (config.getPulseWidthForGear(2) & 0xff00) >> 8;
-        buffer[8] = 0x00;
+        buffer[8] = 0xff;
         auto error = sendMessage(buffer, false);
+        Serial.printf("Sent gearbox message; error = %d\n", error);
         return error;
     }
 

@@ -12,7 +12,7 @@ namespace earth_rover {
         : esc_pin_number{esc_pin_number}, esc{esc_pin_number, 1000u, 1500u, 2000u, true},
           gearbox_servo_pin_number{gearbox_servo_pin_number},
           gearbox_servo{gearbox_servo_pin_number, 1000u, 1500u, 2000u, false},
-          gearbox_pulse_widths{1480u, 1150u, 1800u}, current_throttle_setting{0}, current_gear{0} {
+          gearbox_pulse_widths{1450u, 1100u, 1800u}, current_throttle_setting{0}, current_gear{0} {
         ;
     }
 
@@ -61,9 +61,8 @@ namespace earth_rover {
         markChanged();
     }
 
-    void Powertrain::configureGearboxServo(uint16_t pulse_width_neutral, uint16_t pulse_width_low,
-                                           uint16_t pulse_width_high) {
-        gearbox_pulse_widths[0] = pulse_width_neutral;
+    void Powertrain::configureGearboxServo(uint16_t pulse_width_low, uint16_t pulse_width_high) {
+        gearbox_pulse_widths[0] = (pulse_width_low + pulse_width_high) / 2;
         gearbox_pulse_widths[1] = pulse_width_low;
         gearbox_pulse_widths[2] = pulse_width_high;
         gearbox_servo.setPulseWidth(gearbox_pulse_widths[current_gear]);
@@ -71,12 +70,13 @@ namespace earth_rover {
     }
 
     void Powertrain::configureGearboxServo(int8_t gear, uint16_t pulse_width) {
-        if(gear >= 0 && gear <= 2) {
+        if(gear > 0 && gear <= 2) {
             gearbox_pulse_widths[gear] = pulse_width;
+            gearbox_pulse_widths[0] = (gearbox_pulse_widths[1] + gearbox_pulse_widths[2]) / 2;
             if(gear == current_gear) {
                 gearbox_servo.setPulseWidth(gearbox_pulse_widths[current_gear]);
-                markChanged();
             }
+            markChanged();
         }
     }
 
@@ -86,7 +86,6 @@ namespace earth_rover {
         config.esc.pulse_width_reverse = esc_config.minimum_pulse_width;
         config.esc.pulse_width_stop = esc_config.center_pulse_width;
         config.esc.pulse_width_forward = esc_config.maximum_pulse_width;
-        config.gearbox.pulse_width_neutral = gearbox_pulse_widths[0];
         config.gearbox.pulse_width_low = gearbox_pulse_widths[1];
         config.gearbox.pulse_width_high = gearbox_pulse_widths[2];
         return config;

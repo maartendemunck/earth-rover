@@ -258,21 +258,14 @@ namespace earth_rover {
             bool error{false};
             buffer[0] = static_cast<uint8_t>(ResponseMessageType::GearboxServoConfig);
             auto config = vcu.getPowertrainConfig();
-            buffer[1] = 0x28;  // No reverse gears, has neutral, two forward gears.
-            buffer[2] = 0;
-            buffer[3] = config.gearbox.pulse_width_neutral & 0x00ff;
-            buffer[4] = (config.gearbox.pulse_width_neutral & 0xff00) >> 8;
-            buffer[5] = 1;
-            buffer[6] = config.gearbox.pulse_width_low & 0x00ff;
-            buffer[7] = (config.gearbox.pulse_width_low & 0xff00) >> 8;
+            buffer[1] = (2 << 4) | (0 << 3) | (0 << 0);  // 2 forward, no neutral, no reverse.
+            buffer[2] = 1;
+            buffer[3] = config.gearbox.pulse_width_low & 0x00ff;
+            buffer[4] = (config.gearbox.pulse_width_low & 0xff00) >> 8;
+            buffer[5] = 2;
+            buffer[6] = config.gearbox.pulse_width_high & 0x00ff;
+            buffer[7] = (config.gearbox.pulse_width_high & 0xff00) >> 8;
             buffer[8] = 0xffu;
-            error |= sendMessage(buffer);
-            buffer[2] = 2;
-            buffer[3] = config.gearbox.pulse_width_high & 0x00ff;
-            buffer[4] = (config.gearbox.pulse_width_high & 0xff00) >> 8;
-            buffer[5] = 0x80;  // Unused
-            buffer[6] = 0x00;
-            buffer[7] = 0x00;
             error |= sendMessage(buffer);
             return error;
         }

@@ -36,23 +36,23 @@ namespace earth_rover {
         return config_received_from_vcu;
     }
 
-    bool CarState::isCurrentConfigSaved() {
-        return steering_servo.isCurrentConfigSavedInVcu() && esc.isCurrentConfigSavedInVcu()
-               && gearbox_servo.isCurrentConfigSavedInVcu() && radio.isCurrentConfigSavedInVcu();
+    bool CarState::isCurrentConfigSentToVcu() {
+        return steering_servo.isCurrentConfigSentToVcu() && esc.isCurrentConfigSentToVcu()
+               && gearbox_servo.isCurrentConfigSentToVcu() && radio.isCurrentConfigSentToVcu();
     }
 
-    void CarState::requestConfigSave() {
+    void CarState::requestConfigSaveByVcu() {
         // Prevent overwriting the config before the VCU config is received.
         if(config_received_from_vcu) {
             config_save_requested = true;
         }
     }
 
-    bool CarState::isConfigSaveRequested() {
+    bool CarState::isConfigSaveByVcuRequested() {
         return config_save_requested;
     }
 
-    void CarState::markConfigSaved() {
+    void CarState::markConfigSavedByVcu() {
         config_save_requested = false;
     }
 
@@ -96,12 +96,12 @@ namespace earth_rover {
         return steering_servo.getCurrentConfig();
     }
 
-    bool CarState::isCurrentSteeringConfigSaved() {
-        return steering_servo.isCurrentConfigSavedInVcu();
+    bool CarState::isCurrentSteeringConfigSentToVcu() {
+        return steering_servo.isCurrentConfigSentToVcu();
     }
 
-    void CarState::markSteeringConfigSaved() {
-        steering_servo.markCurrentConfigSaved();
+    void CarState::markSteeringConfigSentToVcu() {
+        steering_servo.markCurrentConfigSentToVcu();
     }
 
     void CarState::setThrottleInput(int16_t throttle) {
@@ -143,12 +143,12 @@ namespace earth_rover {
         return esc.getCurrentConfig();
     }
 
-    bool CarState::isCurrentThrottleConfigSaved() {
-        return esc.isCurrentConfigSavedInVcu();
+    bool CarState::isCurrentThrottleConfigSentToVcu() {
+        return esc.isCurrentConfigSentToVcu();
     }
 
-    void CarState::markThrottleConfigSaved() {
-        esc.markCurrentConfigSaved();
+    void CarState::markThrottleConfigSentToVcu() {
+        esc.markCurrentConfigSentToVcu();
     }
 
     void CarState::setCurrentGear(int16_t gear) {
@@ -179,12 +179,12 @@ namespace earth_rover {
         return gearbox_servo.getCurrentConfig();
     }
 
-    bool CarState::isCurrentGearboxConfigSaved() {
-        return gearbox_servo.isCurrentConfigSavedInVcu();
+    bool CarState::isCurrentGearboxConfigSentToVcu() {
+        return gearbox_servo.isCurrentConfigSentToVcu();
     }
 
-    void CarState::markGearboxConfigSaved() {
-        gearbox_servo.markCurrentConfigSaved();
+    void CarState::markGearboxConfigSentToVcu() {
+        gearbox_servo.markCurrentConfigSentToVcu();
     }
 
     void CarState::setHmiRadioPower(uint8_t power_level) {
@@ -212,12 +212,12 @@ namespace earth_rover {
         return radio.getCurrentConfig();
     }
 
-    bool CarState::isCurrentRadioConfigSaved() {
-        return radio.isCurrentConfigSavedInVcu();
+    bool CarState::isCurrentRadioConfigSentToVcu() {
+        return radio.isCurrentConfigSentToVcu();
     }
 
-    void CarState::markRadioConfigSaved() {
-        radio.markCurrentConfigSaved();
+    void CarState::markRadioConfigSentToVcu() {
+        radio.markCurrentConfigSentToVcu();
     }
 
     void CarState::setTurnSignalRight(bool state) {

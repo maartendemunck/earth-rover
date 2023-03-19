@@ -42,11 +42,11 @@ namespace earth_rover {
 
     class ServoState : public ConfigParameter<ServoConfigParams> {
       private:
-        int16_t position;
+        int16_t position{0};
 
       public:
-        ServoState(ServoConfigParams default_config)
-            : ConfigParameter{std::move(default_config)}, position{0} {
+        explicit ServoState(ServoConfigParams default_config)
+            : ConfigParameter{std::move(default_config)} {
             ;
         }
 

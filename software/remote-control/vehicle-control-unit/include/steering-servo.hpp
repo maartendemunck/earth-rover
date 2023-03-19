@@ -28,7 +28,7 @@ namespace earth_rover {
         int16_t current_steering_angle;
 
       public:
-        SteeringServo(uint8_t pin_number);
+        explicit SteeringServo(uint8_t pin_number);
         virtual ~SteeringServo() = default;
 
         void setup();

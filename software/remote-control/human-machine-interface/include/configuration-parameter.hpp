@@ -21,7 +21,8 @@ namespace earth_rover {
             ;
         }
 
-        ConfigParameter(ConfigParameter_t default_value, bool saved_value_is_available = false)
+        explicit ConfigParameter(ConfigParameter_t default_value,
+                                 bool saved_value_is_available = false)
             : current_value{default_value}, saved_value_is_available{saved_value_is_available},
               is_sent_to_vcu{true} {
             ;

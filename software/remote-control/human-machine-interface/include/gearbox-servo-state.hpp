@@ -24,7 +24,7 @@ namespace earth_rover {
         uint16_t pulse_widths[total_gears];
 
       public:
-        GearboxServoConfigParams(const uint16_t pulse_widths[total_gears]) {
+        explicit GearboxServoConfigParams(const uint16_t pulse_widths[total_gears]) {
             static_assert(reverse_gears <= 7, "no more than 7 reverse gears supported");
             static_assert(forward_gears <= 15, "no more than 15 forward gears supported");
             setPulseWidthsForAllGears(pulse_widths);
@@ -88,7 +88,7 @@ namespace earth_rover {
         int8_t current_gear{has_neutral_gear ? 0 : 1};
 
       public:
-        GearboxServoState(GearboxServoConfigParams_t default_config)
+        explicit GearboxServoState(GearboxServoConfigParams_t default_config)
             : ConfigParameter<GearboxServoConfigParams_t>{std::move(default_config)} {
             static_assert(forward_gears > 0, "At least one forward gear is required");
         }

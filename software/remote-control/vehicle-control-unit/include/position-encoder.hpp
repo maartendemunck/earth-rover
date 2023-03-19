@@ -29,7 +29,8 @@ namespace earth_rover {
         static constexpr uint16_t serialized_resolution{16};
 
       public:
-        PositionEncoder(uint16_t pulses_per_km, uint32_t odometer = 0u, uint32_t tripmeter = 0u)
+        explicit PositionEncoder(uint16_t pulses_per_km, uint32_t odometer = 0u,
+                                 uint32_t tripmeter = 0u)
             : pulses_per_km{pulses_per_km}, odometer{odometer},
               odometer_eeprom{odometer}, tripmeter{tripmeter} {
             ;

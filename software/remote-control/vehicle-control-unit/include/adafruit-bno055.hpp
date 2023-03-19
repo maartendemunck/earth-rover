@@ -194,7 +194,7 @@ namespace earth_rover {
         bno055_operation_mode_t bno055_operation_mode;
 
       public:
-        AdafruitBNO055(I2CDevice &i2c_device, uint8_t i2c_address = BNO055_ADDRESS_A)
+        explicit AdafruitBNO055(I2CDevice &i2c_device, uint8_t i2c_address = BNO055_ADDRESS_A)
             : i2c_device{i2c_device}, i2c_address{i2c_address},
               bno055_operation_mode{bno055_operation_mode_t::OPERATION_MODE_CONFIG} {
             ;

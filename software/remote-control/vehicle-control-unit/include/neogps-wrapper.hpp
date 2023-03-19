@@ -22,7 +22,7 @@ namespace earth_rover {
         gps_fix current_gps_fix;
 
       public:
-        NeoGpsWrapper(SerialDevice &serial_device, int8_t rx_pin = -1, int8_t tx_pin = -1)
+        explicit NeoGpsWrapper(SerialDevice &serial_device, int8_t rx_pin = -1, int8_t tx_pin = -1)
             : serial_device{serial_device}, rx_pin{rx_pin}, tx_pin{tx_pin}, gps_device{} {
             ;
         }

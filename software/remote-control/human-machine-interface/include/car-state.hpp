@@ -29,17 +29,17 @@ namespace earth_rover {
 
       public:
         struct Lighting {
-            bool turn_signal_right;
-            bool turn_signal_left;
-            bool dipped_beam;
-            bool high_beam;
-            bool hazard_flashers;
+            bool turn_signal_right{false};
+            bool turn_signal_left{false};
+            bool dipped_beam{false};
+            bool high_beam{false};
+            bool hazard_flashers{false};
         };
 
         struct Speedometer {
-            float speed_kmh;
-            float odometer_km;
-            float tripmeter_km;
+            float speed_kmh{0.};
+            float odometer_km{0.};
+            float tripmeter_km{0.};
             bool operator!=(const Speedometer &rhs) {
                 return (speed_kmh != rhs.speed_kmh || odometer_km != rhs.odometer_km
                         || tripmeter_km != rhs.tripmeter_km);
@@ -47,9 +47,9 @@ namespace earth_rover {
         };
 
         struct Orientation {
-            float yaw_deg;
-            float pitch_deg;
-            float roll_deg;
+            float yaw_deg{0.};
+            float pitch_deg{0.};
+            float roll_deg{0.};
             bool operator!=(const Orientation &rhs) {
                 return (yaw_deg != rhs.yaw_deg || pitch_deg != rhs.pitch_deg
                         || roll_deg != rhs.roll_deg);

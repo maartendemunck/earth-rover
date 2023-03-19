@@ -33,7 +33,6 @@ namespace earth_rover {
         HmiState(uint16_t eeprom_block_offset, uint16_t eeprom_block_size,
                  AnalogInput steering_input, AnalogInput throttle_input,
                  DiscretizedAnalogInput gearbox_input);
-        ~HmiState() = default;
 
         void setup();
         void spinOnce();

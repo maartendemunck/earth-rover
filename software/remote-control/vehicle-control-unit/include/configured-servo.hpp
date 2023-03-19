@@ -46,11 +46,11 @@ namespace earth_rover {
         const uint8_t pin_number;
         Servo servo;
         Config config;
-        bool config_is_changed;
+        bool config_is_changed{false};
         uint16_t current_pulse_width;
 
       public:
-        ConfiguredServo(uint8_t pin_number);
+        explicit ConfiguredServo(uint8_t pin_number);
         ConfiguredServo(uint8_t pin_number, uint16_t minimum_pulse_width,
                         uint16_t maximum_pulse_width, uint16_t center_pulse_width,
                         bool enforce_pulse_width_limits);

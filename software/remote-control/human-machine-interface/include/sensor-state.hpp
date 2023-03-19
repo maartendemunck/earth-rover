@@ -22,16 +22,14 @@ namespace earth_rover {
       private:
         const unsigned long maximum_age_ms;
         SensorMeasurement_t measurement;
-        bool valid;
-        bool updated;
+        bool valid{false};
+        bool updated{false};
         elapsedMillis since_update;
 
       public:
-        SensorState(unsigned long maximum_age_ms) : maximum_age_ms{maximum_age_ms}, valid{false} {
+        explicit SensorState(unsigned long maximum_age_ms) : maximum_age_ms{maximum_age_ms} {
             ;
         }
-
-        ~SensorState() = default;
 
         void set(SensorMeasurement_t new_measurement, bool new_valid = true) {
             if(new_valid == true) {

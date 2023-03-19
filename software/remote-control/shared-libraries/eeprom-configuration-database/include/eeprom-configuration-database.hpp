@@ -22,13 +22,13 @@ namespace earth_rover {
         const uint32_t eeprom_block_offset;
         const uint32_t eeprom_block_size;
 
-        bool is_database_initialised;
+        bool is_database_initialised{false};
 
         uint16_t current_record_indices[record_type_count];
-        uint16_t last_record_index;
-        uint32_t last_record_sequence;
+        uint16_t last_record_index{UINT16_MAX};
+        uint32_t last_record_sequence{0u};
 
-        uint8_t getTypeFromRecord(uint8_t *record) {
+        uint8_t getTypeFromRecord(const uint8_t *record) {
             return record[0];
         }
 
@@ -73,7 +73,7 @@ namespace earth_rover {
             record[record_size - 1] = 0xff;
         }
 
-        uint16_t calculateFletcher16Checksum(uint8_t *record) {
+        uint16_t calculateFletcher16Checksum(const uint8_t *record) {
             constexpr uint32_t initial_value{0u};
             static_assert(initial_value
                                   + UINT8_MAX * ((record_size - 2) + 1) * (record_size - 2) / 2
@@ -87,7 +87,7 @@ namespace earth_rover {
             return ((sum2 % 0xff) << 8) | (sum1 % 0xff);
         }
 
-        bool isChecksumValid(uint8_t *record) {
+        bool isChecksumValid(const uint8_t *record) {
             if(record[1] == 0x00) {
                 return true;
             }
@@ -120,15 +120,11 @@ namespace earth_rover {
 
       public:
         EepromConfigDatabase(uint32_t eeprom_block_offset, uint32_t eeprom_block_size)
-            : eeprom_block_offset{eeprom_block_offset}, eeprom_block_size{eeprom_block_size},
-              is_database_initialised{false}, last_record_index{UINT16_MAX}, last_record_sequence{
-                                                                                 0u} {
+            : eeprom_block_offset{eeprom_block_offset}, eeprom_block_size{eeprom_block_size} {
             for(uint8_t record_type = 0; record_type < record_type_count; ++record_type) {
                 current_record_indices[record_type] = 0xffffu;
             }
         }
-
-        ~EepromConfigDatabase() = default;
 
         void initialiseDatabase() {
             const uint16_t record_count = eeprom_block_size / record_size;
@@ -175,7 +171,7 @@ namespace earth_rover {
             else {
                 record_type_exists = false;
             }
-            auto action = object.serialize(&record[6], record_data_size);
+            auto action = object.serialize(getPointerToData(record), record_data_size);
             if(!record_type_exists || action == SerializationResult::SAVE_IN_NEW_RECORD) {
                 saveTypeInRecord(record_type, record);
                 uint32_t sequence = ++last_record_sequence;
@@ -219,7 +215,7 @@ namespace earth_rover {
             EEPROM.get(eeprom_block_offset + current_record_indices[record_type] * record_size,
                        record);
             if(isChecksumValid(record)) {
-                bool error = object.deserialize(&record[6], record_data_size);
+                bool error = object.deserialize(getPointerToData(record), record_data_size);
                 if(error == false) {
                     object.markSaved();
                 }

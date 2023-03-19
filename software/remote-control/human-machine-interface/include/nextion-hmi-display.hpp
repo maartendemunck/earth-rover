@@ -50,7 +50,8 @@ namespace earth_rover {
       public:
         NextionHmiDisplay(SerialDevice_t &serial_device, CarState &car_state, HmiState &hmi_state)
             : serial_device{serial_device}, rx_buffer_pointer{0u}, car_state{car_state},
-              hmi_state{hmi_state}, config_pages_available{false}, display_config_complete{false} {
+              hmi_state{hmi_state}, current_page{HmiPage::Speedometer},
+              config_pages_available{false}, display_config_complete{false} {
             ;
         }
 

@@ -22,7 +22,6 @@ namespace earth_rover {
 
       public:
         HmiCommunicator(uint8_t ce_pin, uint8_t csn_pin, CarState &car_state);
-        ~HmiCommunicator() = default;
         void spinOnce();
 
       private:

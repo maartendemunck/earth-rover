@@ -204,7 +204,7 @@ namespace earth_rover {
                     case 1:
                         car_state.setGearPulseWidth(1, value);
                         break;
-                    case 2:
+                    case 3:
                         car_state.setGearPulseWidth(2, value);
                         break;
                 }

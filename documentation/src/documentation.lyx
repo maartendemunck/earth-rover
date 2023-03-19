@@ -7204,7 +7204,7 @@ Configuration parameter ID (uint16):
 \begin_inset Text
 
 \begin_layout Plain Layout
-13h 02h: pulse width high speed
+13h 03h: pulse width high speed
 \end_layout
 
 \end_inset
